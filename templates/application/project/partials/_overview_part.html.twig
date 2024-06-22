@@ -1,0 +1,70 @@
+<div id="charts-wrapper" class="mt-2 charts-wrapper">
+    {% set assessment = assessmentStream is defined ? assessmentStream.assessment : assessment ?? null %}
+    {% if is_granted('IS_AUTHENTICATED_FULLY') and assessment is defined  %}
+        <input type="hidden" id="load-charts-data-url" value="{{ path("app_reporting_overviewPartial", {id: assessment.project.id}) }}">
+        {% if businessFunctionScore is defined %}
+            {% set unvalidatedToggleIsActive = app.request.cookies.get('unvalidated-score-toggle') == 'true' %}
+            {% if not assessment.project.isTemplate %}
+                <div class="row col-sm-12">
+                    <div class="form-check form-check-inline unvalidated-score-button mb-2 ajax-loaded-score">
+                        <div class="toggle btn mr-1 btn-light child-toggle unvalidated-score-toggle {{ unvalidatedToggleIsActive ? 'on' : 'off' }}" data-toggle="toggle" role="button">
+                            <input class="form-check-input" type="checkbox" data-toggle="toggle" data-style="mr-1">
+                            <div class="toggle-group">
+                                <label class="btn btn-primary toggle-on">On</label>
+                                <label class="btn btn-light toggle-off">Off</label>
+                                <span class="toggle-handle btn btn-light"></span>
+                            </div>
+                        </div>
+                        <label class="toggle-label" class="form-check-label"> {{ "application.reporting.unvalidated_score_toggle"|trans({},'application') }} </label>
+                    </div>
+                </div>
+                {% endif %}
+
+
+            {% set metamodel = assessment.project.metamodel %}
+            {# Dataset 1 #}
+            {% for businessFunction, answerValues in businessFunctionScore %}
+                <input type="hidden" id="{{ businessFunction }}" value="{{ answerValues }}" data-dataset="1" data-business-function-chart="true"
+                       data-assessment-id="{{ assessment.id }}">
+            {% endfor %}
+
+            {% for securityPractice, answerValues in securityPracticeScore %}
+                <input type="hidden" id="{{ securityPractice }}" value="{{ answerValues }}" data-dataset="1" data-security-practice-chart="true"
+                       data-assessment-id="{{ assessment.id }}">
+            {% endfor %}
+
+            {# Dataset 2 #}
+            {% for businessFunction, answerValues in businessFunctionScore %}
+                <input type="hidden" id="{{ businessFunction }}" value="{{ answerValues }}" data-dataset="2" data-business-function-chart="true"
+                       data-assessment-id="{{ assessment.id }}">
+            {% endfor %}
+
+            {% for securityPractice, answerValues in securityPracticeScore %}
+                <input type="hidden" id="{{ securityPractice }}" value="{{ answerValues }}" data-dataset="2" data-security-practice-chart="true"
+                       data-assessment-id="{{ assessment.id }}">
+            {% endfor %}
+
+            <canvas id="bar-bf" class="chart-bar-bf chartjs-render-monitor" data-assessment-id="{{ assessment.id }}" data-compact-view="true"></canvas>
+
+            <canvas id="bar-sp" class="chart-bar-sp chartjs-render-monitor mt-negative-3" data-assessment-id="{{ assessment.id }}" data-compact-view="true"></canvas>
+        {% endif %}
+    {% else %}
+        <canvas id="bar-bf" class="chart-bar-bf chartjs-render-monitor mt-5" data-assessment-id="0"></canvas>
+        <input type="hidden" id="businessFunctionName" value="" data-business-function-chart="true" data-assessment-id="0" data-dataset="1">
+
+        <canvas id="bar-sp" class="chart-bar-sp chartjs-render-monitor" data-assessment-id="0"></canvas>
+        <input type="hidden" id="practiceName" value="" data-security-practice-chart="true" data-assessment-id="0" data-dataset="1">
+
+
+        {% for businessFunction in businessFunctions %}
+            <input type="hidden" id="{{ businessFunction.id }}" class="businessFunction" value="{{ businessFunction.name }}">
+        {% endfor %}
+
+        {% set metamodel = businessFunction is defined ? businessFunction.metamodel : constant('App\\Utils\\Constants::SAMM_ID') %}
+
+        {% for securityPractice in securityPractices %}
+            <input type="hidden" id="{{ securityPractice.id }}" class="securityPractice" value="{{ securityPractice.name }}">
+        {% endfor %}
+    {% endif %}
+</div>
+<input id="max-score" value="{{ metamodel.maxScore ?? ""}}" hidden disabled/>

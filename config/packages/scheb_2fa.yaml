@@ -1,0 +1,22 @@
+# See the configuration reference at https://symfony.com/bundles/SchebTwoFactorBundle/6.x/configuration.html
+scheb_two_factor :
+  # Trusted device feature
+  trusted_device :
+    enabled : true                 # If the trusted device feature should be enabled
+    cookie_secure : true           # Set the 'Secure' (HTTPS Only) flag on the trusted device cookie
+
+  # Backup codes feature
+  backup_codes :
+    enabled : true                 # If the backup code feature should be enabled
+
+  google :
+    enabled : true
+    server_name : 'Codific SAMMYv2 OSS'             # Server name used in QR code
+    issuer : SAMMY                  # Issuer name used in QR code
+    leeway : 29                       # Acceptable time drift in seconds
+    digits : 6                      # Number of digits in authentication code
+    window : 4                      # How many codes before/after the current one would be accepted as valid
+
+  security_tokens :
+    - Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken
+    - Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken

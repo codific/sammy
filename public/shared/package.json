@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0",
+  "author": "Codific <info@codific.com>",
+  "license": "MIT",
+  "dependencies": {
+    "mark.js": "^8.11.1"
+  }
+}
+
+

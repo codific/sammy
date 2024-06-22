@@ -1,0 +1,31 @@
+{% set evaluation ={
+    'icon': 'fa fa-list-ol',
+    'path': 'app_evaluation_overview',
+    'title': 'application.streams.tabs.evaluation'|trans({}, 'application'),
+    'isDone': false,
+    'stage': assessmentStream.lastEvaluationStage,
+    'assignment': null
+} %}
+
+<div class="row">
+    <div class="pl-4 pr-4 row">
+        <div id="smartwizard" class="forms-wizard-alt">
+            <ul class="forms-wizard">
+                <li id="evaluation-tab" class="active">
+                    <a href="{{ path(evaluation['path'], {'id': stream.id}) }}" class="nav-link">
+                        <div>
+                            <em>1</em>
+                            <span><i class="{{ evaluation['icon'] }}"></i> {{ evaluation['title'] }}</span>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+            <hr class="mb-0">
+            <div class="form-wizard-content">
+                <div id="step-1" class="tab-pane step-content">
+                    {% include 'application/model/tabs/_evaluation_tab.html.twig' with partialParams %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

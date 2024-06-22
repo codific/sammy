@@ -1,0 +1,32 @@
+<div class="modal fade" id="addProjectModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    {{ 'application.project.add_title'|trans({},'application') }}
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {{ form_start(addProjectForm, {'action': url('app_project_add')}) }}
+                {{ form_row(addProjectForm.metamodel) }}
+                {{ form_row(addProjectForm.name) }}
+                {{ form_row(addProjectForm.validationThreshold) }}
+                {{ form_row(addProjectForm.description) }}
+                <div class="form-group row">
+                    {{ form_label(addProjectForm.groups) }}
+                    <div class="col-sm-9 mt-1">
+                        <input type="checkbox" id="all-project-groups" class="checkbox-all">
+                        <label class="form-check-label" for="all-project-groups">{{ button_label|default('application.general.select_all'|trans({},'application')) }}</label>
+                        <hr class="mt-1 mb-2">
+                        {{ form_widget(addProjectForm.groups) }}
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-sm"><i class="far fa-save"></i>&nbsp; {{ button_label|default('application.project.add_btn'|trans({},'application')) }}</button>
+                {{ form_end(addProjectForm) }}
+            </div>
+        </div>
+    </div>
+</div>

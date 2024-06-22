@@ -1,0 +1,25 @@
+{% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+    <div>
+        <div class="mt-3 align-content-center mb-5">
+            <a href="#" class="btn btn-sm btn-danger btn-block btn-clear-answers" data-toggle="modal" data-target="#clear-assessment-modal">
+                <i class="fa fa-trash"></i>
+                <span class="button-responsive-text">
+                    {{ 'application.general.clear_assessment_button'|trans({}, 'application') }}
+                </span>
+            </a>
+        </div>
+    </div>
+{% else %}
+    <div class="mt-3">
+        <form id="exportForm" action="{{ path("app_reporting_export_samm") }}" method="POST">
+            <input type="hidden" name="answers">
+            <input type="hidden" name="token" value="{{ csrf_token('export_answers_auth') }}">
+            <button type="submit" class="btn btn-light export-answers toolbox-export btn-block">
+                <i class="fas fa-download"> </i>
+                <span class="button-responsive-text">
+                    {{ "application.general.toolbox_export"|trans({}, 'application') }}
+                </span>
+            </button>
+        </form>
+    </div>
+{% endif %}

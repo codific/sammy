@@ -1,0 +1,36 @@
+{#
+//#BlockStart number=139 id=_18_3_40d01a2_1459232054623_922903_4976_#_0
+//The whole add file is protected and can be modified manually. If you wish to regenerate it simply delete it and it will be generated again.
+#}
+{# form \Symfony\Component\Form\Form #}
+{# project \App\Entity\Project #}
+{% extends 'application/base.html.twig' %}
+  
+{% block title %}{{ 'application.project.add_title'|trans({},'application')}}{% endblock %}
+  
+{% block body %}
+    <a href="{{ path('app_project_index', queryParams) }}" class="btn btn-labeled btn-default">
+        <span class="btn-label"><i class="far fa-chevron-left"></i></span>&nbsp; {{ 'application.project.back_to_list'|trans({},'application')}}
+    </a>
+    <br><br>
+    <div class="panel">
+        <div class="panel-hdr">
+            <h2>{{ 'application.project.add_title'|trans({},'application')}}</h2>
+            <div class="panel-toolbar">
+                <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+            </div>
+        </div>
+        <div class="panel-container show">
+            <div class="panel-content">
+                {{ form_start(addForm) }}
+                {{ form_widget(addForm) }}
+                <button class="btn btn-primary btn-sm"><i class="far fa-save"></i>&nbsp; {{ button_label|default('application.project.save_button'|trans) }}</button>
+                {{ form_end(addForm) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+  
+{#
+//#BlockEnd number=139
+#} 

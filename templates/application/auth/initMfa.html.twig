@@ -1,0 +1,28 @@
+{% extends 'application/base.html.twig' %}
+
+{% block title %}{{ 'application.general.mfa_title'|trans({}, 'application') }}{% endblock %}
+  
+{% block body %}
+    <div class="row mt-5">
+        <div class="offset-sm-4 col-md-5">
+            <div class="card">
+                <div class="card-header header-elements-inline">
+                    <h4><i class="icon-qrcode"></i> {{ 'application.general.mfa_title'|trans({}, 'application') }}</h4>
+                </div>
+                <div class="card-body">
+                    {{ 'application.general.mfa_text'|trans({"qr_code_data_uri": qr_code_data_uri(qrcode), "auth_mfa_secret": app.session.get('_auth.mfa.secret')}, 'application')|raw }}
+                    <form action='{{ path('app_auth_mfa_verify') }}' method="POST" class="form-inline">
+                        <div class="input-group col-md-12">
+                            <input type="tel" pattern="[0-9 ]*" id="totpPin" name="pin" dir="ltr" autocomplete="off"
+                                   placeholder="{{ 'application.general.mfa_code_placeholder'|trans({}, 'application') }}" autofocus class="form-control">
+                            <button type="submit" class="btn btn-primary btn-default">
+                                {{ button_label|default('application.general.save_button'|trans({}, 'application')) }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+  

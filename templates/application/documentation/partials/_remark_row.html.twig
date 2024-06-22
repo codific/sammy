@@ -1,0 +1,97 @@
+{# RemarkType_Validated \App\Enum\Custom\RemarkType #}
+{% set RemarkType_Validated = constant('App\\Enum\\Custom\\RemarkType::VALIDATION') %}
+<input id="remark-type-validation" type="hidden" value="{{ RemarkType_Validated.label }}">
+
+{# remark \App\ViewStructures\Remark\RemarkObject #}
+<tr class="remark-row"
+    data-remark-defined="true"
+    data-remark-type="{{ remark is defined ? remark.type.label : '' }}"
+    data-remark-id="{{ remark is defined ? remark.id : '' }}">
+    <td>
+        {% if remark is defined %}
+            {{ (remark.user is entityExists(true)) ? remark.user.longName : '' }} <br>
+            {{ remark.date|dateTimeToUserSettings("H:i") }}
+        {% else %}
+            <br>
+        {% endif %}
+    </td>
+    {% if assessmentStream.stream.practice.businessFunction.metamodel.id == constant('App\\Utils\\Constants::SAMM_ID') %}
+        <td>
+            {% if remark is defined %}
+                {% set remarkElementClasses = "remark-level" %}
+                {% if remark.type == constant('App\\Enum\\Custom\\RemarkType::DOCUMENTATION') and remarkLevels[remark.id] is defined %}
+                    {% set sortedMaturityLevelRemarks = remarkLevels[remark.id]|sort((level1, level2) => level1 <=> level2) %}
+                    {% for level in sortedMaturityLevelRemarks %}
+                        <span class="badge rounded-pill bg-primary text-white remark-level" data-level-value="{{ level }}">L{{ level }}</span>
+                    {% endfor %}
+                {% endif %}
+            {% endif %}
+        </td>
+    {% endif %}
+    <td>
+        {% if remark is defined %}
+
+            <span class="remark-text">
+                {{ remark.text }}
+{#            {{ generateTooltipPreviewForLinks(#}
+{#                remark.text|default("")|sanitize_html("liberal_sanitizer")#}
+{#            ) }}#}
+        </span>
+            {% if remark.type == constant('App\\Enum\\Custom\\RemarkType::VALIDATION') %}
+                <small class="text-muted">
+                    ({{ "application.assessment.validation_remark_documentation"|trans({}, 'application')|lower }})
+                </small>
+            {% elseif remark.type == constant('App\\Enum\\Custom\\RemarkType::IMPROVEMENT') %}
+                <small class="text-muted">
+                    ({{ "application.assessment.improvement_remark_documentation"|trans({}, 'application')|lower }})
+                </small>
+            {% endif %}
+        {% else %}
+            <span class="remark-text"></span>
+        {% endif %}
+    </td>
+    <td class="text-right">
+        {% if remark is defined %}
+            {% if remark.type == constant('App\\Enum\\Custom\\RemarkType::DOCUMENTATION') and remark.assessmentStatus != constant('App\\Enum\\AssessmentStatus::ARCHIVED') and (remark.user.id == app.user.id) %}
+                <span>
+                        <button class="btn btn-sm btn-primary py-0 px-1 text-white btn-edit-remark" data-toggle="tooltip"
+                                title="{{ 'application.assessment.remark_edit_tooltip'|trans({},'application') }}"><i class="fas fa-pen"></i>
+                        </button>
+                    </span>
+                <span class="mr-2" data-toggle="modal" data-target="{{ "#delete-" ~ remark.type.label ~ "-" ~ remark.id }}">
+                        <button class="btn btn-sm btn-danger py-0 px-1 text-white" data-toggle="tooltip" title="{{ 'application.assessment.remark_delete_tooltip'|trans({},'application') }}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </span>
+                <div class="modal fade remark-delete-modal"
+                     id="{{ "delete-"~ remark.type.label ~ "-" ~ remark.id }}"
+                     data-remark-defined="true"
+                     tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title remark-delete-modal-title">
+                                    {{ 'application.assessment.remark_delete_text'|trans({}, "application") }}
+                                </h4>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-default" data-dismiss="modal"><i class="far fa-times"></i>&nbsp; {{ 'application.general.cancel'|trans({},'application') }}</button>
+                                {% set deleteUrl = "" %}
+                                {% if remark.type == constant('App\\Enum\\Custom\\RemarkType::DOCUMENTATION') %}
+                                    {% set deleteUrl = path("app_validation_delete_remark", {'id': remark.id}) %}
+                                {% endif %}
+                                <button class="btn btn-danger delete-remark"
+                                        data-remark-id="{{ remark.id }}"
+                                        data-remark-type="{{ remark.type.label }}"
+                                        data-url="{{ deleteUrl }}">
+                                    <i class="fas fa-trash"></i>
+                                    &nbsp; {{ 'application.assessment.remark_delete_button'|trans({},'application') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    </td>
+</tr>

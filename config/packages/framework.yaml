@@ -1,0 +1,28 @@
+# see https://symfony.com/doc/current/reference/configuration/framework.html
+framework:
+  secret: '%env(APP_SECRET)%'
+  #csrf_protection: true
+  #    http_method_override: true
+
+  # the IP address (or range) of your proxy
+  trusted_proxies : '127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16'
+  # trust *all* "X-Forwarded-*" headers
+  trusted_headers : [ 'x-forwarded-for', 'x-forwarded-host', 'x-forwarded-proto', 'x-forwarded-port' ]
+
+  # Enables session support. Note that the session will ONLY be started if you read or write from it.
+  # Remove or comment this section to explicitly disable session support.
+  session:
+    handler_id: Symfony\Component\HttpFoundation\Session\Storage\Handler\RedisSessionHandler
+    cookie_secure: auto
+    cookie_samesite: lax
+    storage_factory_id: session.storage.factory.native
+    cookie_lifetime : 86400 # how long cookie is valid 1d
+    gc_maxlifetime : 10800 # how long session is valid 3h (this automatically refresh on each user activity)
+
+  #esi: true
+  #fragments: true
+  php_errors:
+    log: true
+
+  validation: { enabled: true }
+

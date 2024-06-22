@@ -1,0 +1,80 @@
+template:
+  notification:
+    name: Notification mail template
+    type: 0
+    subject: You have received a notification on SAMMY
+    message: |
+      Dear [name],<br/><br/>
+      You have received new notifications on SAMMY. Please login to SAMMY to view them. Here is a brief list of them:<br/>
+          [notifications]<br/><br/>
+      The SAMMY team!
+
+  administrator_password_reset:
+    name: Administrator password reset
+    type: 1
+    subject: Your SAMMY login credentials
+    message: |
+      Dear [name],<br />
+      <br />
+      Here is a one-time link to create or update your login credentials on the SAMMY platform. Click on the link or copy/paste it in your browser window.<br />
+      <br />
+      [link]<br />
+      Please note that the link is valid until [linkValidity].
+      <br /><br/>
+      The SAMMY team!
+
+  user_password_reset:
+    name: User password reset
+    type: 2
+    subject: Your SAMMY login credentials
+    message: |
+      Dear [name],<br />
+      <br />
+      Here is a one-time link to create or update your login credentials on the SAMMY platform. Click on the link or copy/paste it in your browser window.<br />
+      <br />
+      [link]<br />
+      Please note that the link is valid until [linkValidity].
+      <br /><br/>
+      The SAMMY team!
+
+  user_welcome:
+    name: User welcome mail
+    type: 3
+    subject: Welcome to SAMMY
+    message: |
+      Dear [name],<br />
+      <br />
+      Thank you for registering for SAMMY. Here is your one-time link to finalize your registration and select a password of your choosing. Click on the link or copy/paste it in your browser window.<br />
+      <br />
+      [link]<br />
+      Please note that the link is valid until [linkValidity].
+      <br /><br/>
+      The SAMMY team!
+
+  changed_password:
+    name: Changed password
+    type: 4
+    subject: Your SAMMY login credentials have been changed
+    message: |
+      Dear [name],<br />
+      <br />
+      Your password has been changed.<br />
+      <br />
+      If you did not make this change please contact us immediately.
+      <br /><br/>
+      The SAMMY team!
+
+  user_welcome_sso:
+    name: User welcome mail
+    type: 50
+    subject: Welcome to SAMMY
+    message: |
+      Dear [name],<br />
+      <br />
+      Thank you for your registration for the SAMMY tool. You can now start adding your team in the tool and create your first SAMM assessment.
+      <br />
+      We are NOT looking to leverage, analyze or sell your data for any devious nor commercial purposes even in an anonymized form. Your data is secure with us. We do offer on-prem and dedicated deployments of the tool. Please contact our team should you wish to consider that option.
+      <br />
+      We welcome your suggestions and feedback.
+      <br /><br/>
+      The SAMMY team!

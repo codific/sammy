@@ -1,0 +1,40 @@
+<div class="modal fade" id="editUserRolesModal-{{ user.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    {{ 'application.user.manage_roles_title'|trans({},'application')}}
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {{ 'application.user.manage_roles_description'|trans({},'application')}}
+                <form class="mt-3" method="post" action="{{ path("app_user_editrole", {id: user.id}) }}">
+                    <fieldset class="form-group">
+                        <div class="row">
+                            <legend class="col-sm-2 col-form-label">{{ 'application.user.roles'|trans}}</legend>
+                            <div class="col-sm-10">
+                                <div>
+                                    {% for role in user.getAllAssignableRoles() %}
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" id="mt-{{ user.id }}-{{ role|replace({"ROLE_": ""}) }}" name="userRoles[]" class="custom-control-input"
+                                                   value="{{ role }}" {{ role in user.roles ? 'checked' : '' }}>
+                                            <label class="custom-control-label" for="mt-{{ user.id }}-{{ role|replace({"ROLE_": ""}) }}">
+                                                {{ "application.user.non_admin_role_enum"|trans({"value": role}) }}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <input type="hidden" name="_token" value="{{ csrfToken }}">
+                    <button class="btn btn-primary btn-sm"><i class="far fa-save"></i>&nbsp; {{ ('application.general.save_button')|trans({},'application')}}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

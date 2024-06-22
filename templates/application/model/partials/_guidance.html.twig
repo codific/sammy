@@ -1,0 +1,24 @@
+{% set guidanceTypeLowerCase = guidanceType | lower %}
+{% if guidance[guidanceType] is defined and guidance[guidanceType] | length > 0 %}
+    <h6><b>{{ "application.assessment.#{guidanceTypeLowerCase}_guidance"|trans({}, 'application') }}</b></h6>
+    <p><i>{{ "application.assessment.#{guidanceTypeLowerCase}_guidance_tooltip"|trans({}, 'application') }}</i></p>
+    {% for guidanceElement in guidance[guidanceType] %}
+        {% if activity.getPracticeLevel.getMaturityLevel.getLevel in guidanceElement['levels'] %}
+            <p>
+                {% if guidanceElement['url'] != '' %}
+                    <a href="{{ guidanceElement['url'] }}" target="_blank">
+                        {{ guidanceElement['name'] }}
+                    </a>
+                {% else %}
+                    <b> {{ guidanceElement['name'] }} </b>
+                {% endif %}
+                <br>
+                <br>
+                {{ guidanceElement['rationale'] | nl2br }}
+                <br>
+                <br>
+                {{ guidanceElement['content'] | nl2br }}
+            </p>
+        {% endif %}
+    {% endfor %}
+{% endif %}

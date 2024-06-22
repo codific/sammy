@@ -1,0 +1,24 @@
+{% set submenuClasses = '' %}
+{% set title = '' %}
+{% set additionalElement = '' %}
+{% if status == constant('App\\Enum\\AssessmentStatus::IN_EVALUATION') %}
+    {% set submenuClasses = 'fas fa-list-ol' %}
+    {% set title = 'in evaluation' %}
+{% elseif status == constant('App\\Enum\\AssessmentStatus::IN_VALIDATION') %}
+    {% set submenuClasses = 'fas fa-certificate' %}
+    {% set title = 'waiting for validation' %}
+{% elseif status == constant('App\\Enum\\AssessmentStatus::VALIDATED') %}
+    {% set submenuClasses = 'fas fa-check' %}
+    {% set title = 'validated' %}
+{% elseif status == constant('App\\Enum\\AssessmentStatus::IN_IMPROVEMENT') %}
+    {% set submenuClasses = 'fas fa-arrow-alt-circle-up' %}
+    {% set title = 'in improvement' %}
+{% elseif status == constant('App\\Enum\\AssessmentStatus::COMPLETE') %}
+    {% set submenuClasses = 'far fa-dot-circle' %}
+    {% set title = 'completed' %}
+
+{% endif %}
+<span class="assessment-stream-status">
+    <i title="{{ title }}" data-toggle="tooltip" data-trigger="hover" class="{{ submenuClasses }} {{ streamCompleted ? "practice-icon-complete" : "practice-icon-incomplete" }}"></i>
+    {{ additionalElement|striptags('<i>')|raw }}
+</span>

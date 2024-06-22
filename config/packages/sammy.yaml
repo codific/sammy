@@ -1,0 +1,21 @@
+parameters :
+  sammy :
+    single.instance : 0
+    license.name : Codific SAMMYv2 OSS
+    login :
+      register : 1
+      internal : 1
+
+    raw.answers.export : 1
+
+    reports :
+      maturity_details : 0
+      improvement_details : 1
+
+    captcha.enabled : 1
+
+    # Defines the list environments for which the 2FA is auto-populated
+  totp_no_mfa_environments :
+    - dev
+    - test
+    - panther

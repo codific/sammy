@@ -1,0 +1,26 @@
+{% set activeProject = app.session.get(constant("App\\Service\\ProjectService::CURRENT_PROJECT_SESSION_KEY")) %}
+{% set isActiveProjectSet = activeProject is not null %}
+
+{% if projects|length > 0 %}
+    <a data-toggle="dropdown" class="d-flex nav-custom-menu-item" style="place-items: center; cursor: pointer;" aria-expanded="false">
+        <i class="nav-link-icon fa fa-briefcase nav-custom-icon">&nbsp;</i>
+        <span class="text-truncate nav-custom-text">
+            {% if isActiveProjectSet %}
+                {{ activeProject.name }}
+            {% endif %}
+        </span>
+        <i class="fa fa-angle-down ml-2 nav-custom-icon"></i>
+    </a>
+    <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu-rounded rm-pointers dropdown-menu overflow-auto" style="max-height: 55vh">
+        {% for project in projects %}
+            <form method="POST" action="{{ path("app_switch_project", {"id": project.id}) }}" class="change-project-r">
+                <input type="hidden" name="token" value="{{ csrf_token('switch_project') }}">
+                <button type="submit"
+                        class="dropdown-item {{ isActiveProjectSet and activeProject.id == project.id ? "dropdown-item-active" : "" }} mb-1"
+                        data-url="">
+                    {{ project.name }}
+                </button>
+            </form>
+        {% endfor %}
+    </div>
+{% endif %}

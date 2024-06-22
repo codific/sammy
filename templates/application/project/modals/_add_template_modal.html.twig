@@ -1,0 +1,22 @@
+<div class="modal fade" id="addProjectModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    {{ 'application.template_project.add_title'|trans({},'application') }}
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {{ form_start(addTemplateForm, {'action': url('app_project_add_template')}) }}
+                {{ form_row(addTemplateForm.metamodel) }}
+                {{ form_row(addTemplateForm.name) }}
+                {{ form_row(addTemplateForm.description) }}
+                <button class="btn btn-primary btn-sm"><i class="far fa-save"></i>&nbsp; {{ button_label|default('application.project.add_btn'|trans({},'application')) }}</button>
+                {{ form_end(addTemplateForm) }}
+            </div>
+        </div>
+    </div>
+</div>

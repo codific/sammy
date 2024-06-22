@@ -1,0 +1,129 @@
+{% use "bootstrap_4_horizontal_layout.html.twig" %}
+
+{% block form_label_class -%}
+    col-sm-3
+{%- endblock form_label_class %}
+
+{% block form_group_class -%}
+    col-sm-9
+{%- endblock form_group_class %}
+
+{% block date_widget -%}
+    {%- if widget != 'single_text' and not valid -%}
+        {% set attr = attr|merge({class: (attr.class|default('') ~ ' form-control is-invalid')|trim}) -%}
+        {% set valid = true %}
+    {%- endif -%}
+    <div class="input-group">
+        {{- parent() -}}
+    </div>
+{%- endblock date_widget %}
+
+{% block datetime_widget -%}
+    {%- if widget != 'single_text' and not valid -%}
+        {% set attr = attr|merge({class: (attr.class|default('') ~ ' form-control is-invalid')|trim}) -%}
+        {% set valid = true %}
+    {%- endif -%}
+    <div class="input-group">
+        {{- parent() -}}
+        <div class="input-group-append">
+        <span class="input-group-text fs-xl">
+            <i class="fal fa-calendar-week"></i>
+        </span>
+        </div>
+    </div>
+{%- endblock datetime_widget %}
+
+{% block form_label -%}
+    {% if label is empty -%}
+        {%- if label_format is not empty -%}
+            {% set label = label_format|replace({
+                '%name%': name,
+                '%id%': id,
+            }) %}
+        {%- else -%}
+            {% set label = name|humanize %}
+        {%- endif -%}
+    {%- endif -%}
+
+    {%- if translation_domain is same as(false) -%}
+        {%- if label_html is same as(false) -%}
+            {%- if required -%}
+                {% set label = label ~ ' *' %}
+            {%- endif -%}
+        {%- else -%}
+            {%- if required -%}
+                {% set label = label|raw ~ ' *' %}
+            {%- endif -%}
+        {%- endif -%}
+    {%- else -%}
+        {%- if label_html is same as(false) -%}
+            {%- if required -%}
+                {% set label = label|trans(label_translation_parameters, translation_domain) ~ ' *' %}
+            {%- endif -%}
+        {%- else -%}
+            {%- if required -%}
+                {% set label = label|trans(label_translation_parameters, translation_domain)|raw ~ ' *' %}
+            {%- endif -%}
+        {%- endif -%}
+    {%- endif -%}
+    {{- parent() -}}
+{%- endblock form_label %}
+
+{% block file_widget -%}
+    {{- parent() -}}
+    {% if image_url is defined and image_url is not null %}
+        <div class="mt-1">
+            <img src="{{ image_url }}" alt="{{ image_name }}" class="preview"/>
+        </div>
+    {% endif %}
+    {% if file_url is defined and file_url is not null %}
+        <div class="mt-1">
+            <a href="{{ file_url }}" target="blank">{{ file_name }}</a>
+        </div>
+    {% endif %}
+{%- endblock %}
+
+{%- block choice_widget_options -%}
+    {% for group_label, choice in options %}
+        {%- if choice is iterable -%}
+            <optgroup
+                    label="{{ choice_translation_domain is same as(false) ? group_label : group_label|trans({}, choice_translation_domain) }}">
+                {% set options = choice %}
+                {{- block('choice_widget_options') -}}
+            </optgroup>
+        {%- else -%}
+            <option value="{{ choice.value }}"
+                    {% if choice.attr %}{% with { attr: choice.attr } %}{{ block('attributes') }}{% endwith %}{% endif %}
+                    {% if not render_preferred_choices|default(false) and choice is selectedchoice(value) %} selected="selected"{% endif %}>
+                {% if enum_translation is defined and enum_translation is not null %}
+                    {{ choice_translation_domain is same as(false) ? enum_translation|trans({ 'value': choice.value }) : enum_translation|trans({ 'value': choice.value }, choice_translation_domain) }}
+                {% else %}
+                    {{ choice_translation_domain is same as(false) ? choice.label : choice.label|trans({}, choice_translation_domain) }}
+                {% endif %}
+            </option>
+        {%- endif -%}
+    {% endfor %}
+{%- endblock choice_widget_options -%}
+
+{%- block choice_widget_collapsed -%}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' form-control')|trim}) -%}
+    {%- if required and placeholder is none and not placeholder_in_choices and not multiple and (attr.size is not defined or attr.size <= 1) -%}
+        {% set required = false %}
+    {%- endif -%}
+    <select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
+        {%- if placeholder is not none -%}
+            <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ placeholder != '' ? (translation_domain is same as(false) ? placeholder : placeholder|trans(placeholder_translation_parameters, translation_domain)) }}</option>
+        {%- endif -%}
+        {%- if preferred_choices|length > 0 -%}
+            {% set options = preferred_choices %}
+            {% set render_preferred_choices = true %}
+            {{- block('choice_widget_options') -}}
+            {%- if choices|length > 0 and separator is not none -%}
+                <option disabled="disabled">{{ separator }}</option>
+            {%- endif -%}
+        {%- endif -%}
+        {%- set options = choices -%}
+        {%- set render_preferred_choices = false -%}
+        {{- block('choice_widget_options') -}}
+    </select>
+{%- endblock choice_widget_collapsed -%}

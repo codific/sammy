@@ -1,0 +1,113 @@
+{% block page %}
+    {% include 'application/documentation/partials/_documentation_container.html.twig' %}
+
+    <div class="card-body">
+        {% if not readOnly %}
+            <div class="changes-saved text-right">
+                <i class="fa fa-check"></i> {{ 'application.assessment.changes_saved'|trans({}, 'application') }}
+            </div>
+            <div id="formParent">
+                {{ form_start(validationForm, { 'action': path('app_validation_validate', {'id': assessmentStream.id}), 'attr': {'class': (showAssignmentPopup) ? 'button-js-submit-popup-form' : '', 'data-autosave-url' : path('app_validation_autosave', {'id': assessmentStream.id})  } }) }}
+                <div class="row ml-1 mb-1">
+                    {{ 'application.assessment.validation_remarks'|trans({}, 'application') }}:
+                </div>
+                {{ form_widget(validationForm.remarks) }}
+                <br>
+                <div class="d-flex flex-row justify-content-between">
+                    {{ form_widget(validationForm[constant("App\\Enum\\ValidationStatus::REJECTED").label]) }}
+                    {{ form_widget(validationForm[constant("App\\Form\\Application\\ValidationType::SAVE_BUTTON")]) }}
+                    {{ form_widget(validationForm[constant("App\\Enum\\ValidationStatus::ACCEPTED").label]) }}
+                </div>
+                {{ form_end(validationForm) }}
+            </div>
+            {% include 'application/model/modals/_popup_assignment_modal.html.twig' %}
+
+
+        {% else %}
+            {% if showRestrictedNote %}
+                {% include 'application/model/tabs/_restricted_note.html.twig' %}
+            {% elseif assessmentStream.validatedBy is entityExists(true) or assessmentStream.validatedBy is null %}
+                {% if assessmentStream.getLastValidationStage.status == constant('App\\Enum\\ValidationStatus::AUTO_ACCEPTED') %}
+                    <div class="text-center">
+                        {{ 'application.stream.validation_skipped_threshold'|trans({'threshold': assessmentStream.assessment.project.validationThreshold ?? 0}, 'application') |sanitize_html("liberal_sanitizer") }}
+                    </div>
+                    <br>
+                {% endif %}
+                <div class="row mb-3">
+                    <label class="form-label offset-sm-2 col-sm-2 col-form-label">
+                        {{ 'application.stream.validated_by'|trans({}, 'application') }}:
+                    </label>
+                    <div class="col-sm-4 form-control">
+                        {% if assessmentStream.getLastValidationStage.status == constant('App\\Enum\\ValidationStatus::AUTO_ACCEPTED') %}
+                            {{ 'application.stream.auto'|trans({}, 'application') }}
+                        {% else %}
+                            {{ assessmentStream.validatedBy.longName }}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="form-label offset-sm-2 col-sm-2 col-form-label">
+                        {{ 'application.stream.validated_at'|trans({}, 'application') }}:
+                    </label>
+                    <div class="col-sm-4 form-control">
+                        {{ assessmentStream.validatedAt |datePrettyPrint }}
+                    </div>
+                </div>
+                <div class="row mb-3 validation-remarks-row {{ assessmentStream.getLastValidationStage.comment == null ? "d-none" : "" }}">
+                    <label class="form-label offset-sm-2 col-sm-2 col-form-label">
+                        {{ 'application.assessment.validation_remarks'|trans({}, 'application') }}:
+                    </label>
+                    <div class="col-sm-6 pt-2">
+                        <span id="validation-remarks-value">
+                            {{ assessmentStream.getLastValidationStage.comment|default("")|sanitize_html("liberal_sanitizer") }}
+                        </span>
+                    </div>
+                </div>
+
+                {% if canEditValidation %}
+                    {{ form_start(editValidationForm, { 'action': path('app_validation_edit_validation', {'id': assessmentStream.id}), 'attr': {'class': 'ajax-form edit-validation-form ajax-form-no-reload d-none'} }) }}
+                    <div class="row ml-1 mb-1">
+                        {{ 'application.assessment.validation_remarks'|trans({}, 'application') }}:
+                    </div>
+                    {{ form_widget(editValidationForm.remarks) }}
+                    <div class="text-right w-100 mt-2">
+                        {{ form_widget(editValidationForm.submit) }}
+                    </div>
+                    {{ form_end(editValidationForm) }}
+                    <div class="d-flex justify-content-center">
+                        <div class="validation-buttons-container">
+                            {% if assessmentStream.getLastImprovementStage is defined and
+                                app.user == assessmentStream.getSubmittedBy and
+                                assessmentStream.getStatus == constant('App\\Enum\\AssessmentStatus::VALIDATED') and
+                                assessmentStream.getLastValidationStage.getStatus == constant('App\\Enum\\ValidationStatus::ACCEPTED') and
+                                assessmentStream.getCurrentStage is instanceof('Improvement') and
+                                assessmentStreamDesiredAnswers|length == 0 and
+                                assessmentStream.getCurrentStage.getPlan|length == 0 and
+                                assessmentStream.getLastImprovementStage.createdAt >= date('-24 hours')
+                            %}
+                                <form action="{{ path('app_validation_undo_validation', {'assessmentStream': assessmentStream}) }}" method="post"
+                                      class="float-left retract-validation-form ml-1 mr-2">
+                                    <button class="retract-validation btn btn-sm btn-danger prevent-double-click" data-toggle="tooltip" data-trigger="hover" title="{{ 'application.stream.retract_validation_hover'|trans({}, 'application') }}">
+                                        <i class="fa fa-times"></i> {{ 'application.stream.retract_validation'|trans({}, 'application') }}
+                                    </button>
+                                </form>
+                            {% endif %}
+                            <span class="text-center w-100">
+                                <button class="btn btn-sm btn-primary btn-edit-validation"
+                                        data-hide-text="{{ "application.assessment.validation_edit_close"|trans }}"
+                                        data-show-text="{{ "application.assessment.validation_edit"|trans }}">
+                                    {{ "application.assessment.validation_edit"|trans }}
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    </div>
+
+{% endblock %}
+{% block scripts %}
+    <script type="application/javascript" src="{{ asset('front/dependency/jquery/dist/jquery.min.js') }}"></script>
+    <script type="application/javascript" src="{{ asset('front/js/assessment.fill.validation.codific.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,657 @@
+application :
+  index :
+    streams_without_answer : Evaluation track
+    name : Name
+    business_function : Business function
+    practice : Security practice
+    priority : Priority
+    high : High
+    medium : Medium
+    low : Low
+    priority_thresholds : "Weight: {weight} <br> High: &gt;= {high} <br/> Medium: [ {medium} - {high} ) <br> Low: &lt; {medium}"
+    priority_tooltip : "Priority is a function of weight. <br> High: &gt;= {high}, Medium: [ {medium} - {high} ), Low: &lt; {medium} <br> Weight is calculated as follows: <br>(MaximumScore - CurrentScore) * (ImprovementScore/3), 
+    <br>where ImprovementScore is the number of stars you select for each stream."
+    actions : Actions
+    preview : Details
+    view_all : View all
+    hide : Hide
+    question : Question
+    answer_text : Answer
+    stream_name : Stream
+    non_verified_streams : Validation track
+    in_or_for_improvement_streams : Improvement track
+    status : Status
+    assigned_to : "Assigned to"
+    score : "Score"
+    unvalidated_score_tooltip : "This score is not validated yet"
+    submitted_by : "Evaluated by"
+    validated_by : "Validated by"
+    in_improvement : In improvement
+    for_improvement : Validated
+    assignments : All streams
+    assignments_my_assignments : My assignments only
+    assignments_tooltip : "ON - Shows all the streams <br>OFF - Shows your assignments only"
+    first_date_modal : Current date
+    second_date_modal : Previous phase date
+    stream : Stream
+    completed_streams : Completed
+    completed_by : Completed by
+    back_phase_tooltip : Go to the previous phase date
+    next_phase_tooltip : Go to the next phase date
+    no_current_project : You have no scopes. Please create a scope from Scopes->Create a new scope or contact your manager.
+    stream_weight : Priority
+    stream_weight_description : "Priority is a function of weight. <br> High: >= Max possible weight / 2, 
+    <br> Medium: >= Max possible weight / 4, 
+    <br> Low >= 0  
+    <br>
+     Weight is calculated as follows: <br> ((1 + (TargetPostureScore - CurrentScore))^2) - 1
+    <br> If CurrentScore > TargetPostureScore weight is 0.00
+    <br> negative values are rounded to 0.00. "
+    stream_weight_none : None
+    stream_weight_low : Low
+    stream_weight_medium : Medium
+    stream_weight_high : High
+    stream_weight_hover : "Weight is {weight}<br>Posture score is {postureScore}<br>Your score is {currentScore}<br>Delta is {delta}"
+    phase1_tooltip : Phase 1
+    phase1_text : P1
+
+  reporting :
+    no_current_project : You have no selected scope. Either select/create one or contact your manager.
+    full_screen : Full screen
+    download : Download
+    export_answers_power_bi : Export all answers in Power BI format
+    export_answers_power_bi_button : Export all answers
+    historic_change_per_function : Historic growth
+    bar_per_function : Scores per business function
+    bar_per_practice : Scores per practice
+    target_posture_coverage : Percentage to target
+    target_posture_coverage_info : This value represents your gap to the target score. The exact value is calculated as the relative gap to the target posture for questions for which the scope does not meet the target posture requirements.
+    spider_per_function : Scores per business function
+    spider_per_prctice : Scores per practice
+    projected : Show improvement targets
+    power_bi_export : Power BI export
+    assessment_report : Assessment Report
+    please_enter_the : Please enter the
+    started_pdf_generation : Your report is being generated, please wait..
+    report_pdf_success : Successfully generated the report
+    report_pdf_error : Failed generating a report
+    assessment_pdf_export : Generate Assessment report
+    unvalidated_score_toggle : Unvalidated score
+    unvalidated_score : Overall Unvalidated score
+    validated_score : Overall Validated Score
+    next_phase_score : Projected Overall Score For Next Phase
+    verified_score : Latest Externally Verified Score
+    target_score : Target Score
+
+  general :
+    no_date : Not set
+    metadata : Metadata
+    id : ID
+    created_at : Created at
+    updated_at : Last update
+    changelog_title : SAMMY Changelog
+    changelog_view_tooltip : Click to view the update history
+    old_password : Old password
+    change_password_digit_message : Your password must contain at least one digit
+    change_password_lower_case_message : Your password must contain at least one lowercase letter
+    change_password_upper_case_message : Your password must contain at least one uppercase letter
+    breached_password : Your password has been in a data leak. Please change it.
+    confirm_password : Confirm password
+    new_password : New password
+    email_mismatch : The email fields must match.
+    login : Login
+    login_title : Welcome to SAMMY
+    login_credentials : Please enter your login credentials
+    login_invalid_credentials : Your login credentials could not be validated
+    forgot_password : I forgot my password
+    signin_with_gitlab : Sign in with your GitLab account
+    signin_with_github : Sign in with your GitHub account
+    signin_with_google : Sign in with your Google account
+    signin_with_microsoft : Sign in with your Microsoft account
+    cancel : Cancel
+    mfa_enter_authenticator_code : Please enter the 6 digits of the code displayed on your Authenticator app.
+    mfa_code_placeholder : 6-digit code
+    my_profile : My profile
+    my_profile_title : My profile
+    save_button : Save
+    test_button : Test integration
+    new : New
+    sso_user_not_found : You don't have access to SAMMY. Please ask your teammates to add you in the SAMMY tool.
+    sso_title : Password setup
+    sso_password_strength : The chosen password does not meet the minimum requirements. Your password must be at least 12 characters long with 1 uppercase letter, 1 lowercase letter and 1 number.
+    password_requirements : Please select a password. Your password must be at least 12 characters long with at least 1 number, 1 uppercase letter and 1 lowercase letter.
+    password : Password
+    reset_password : Reset password
+    repeat_password : Repeat password
+    my_mfa : My MFA setup
+    projects : Scope
+    assessments : Assessments
+    phases : Phases
+    users : Users
+    close : Close
+    import : Import
+    profile_save_success : Your profile was saved successfully
+    stop_imitation : Stop imitation
+    team : Team
+    delete_button : Delete
+    delete_organization_button : Delete Organization
+    done : Done
+    mfa_reset_device_tooltip : Reset device
+    mfa_reset_device_button : Reset
+    mfa_reset_device : Reset device
+    mfa_reset_device_title : Are you sure you want to reset the MFA code
+    mfa_auth_code : Authentication Code
+    mfa_backup_codes_title : Backup codes
+    mfa_backup_codes_text : |
+      Store these backup codes somewhere safe - print them, write them down, or save a screenshot.
+      If you ever lose access to your device, you can use these codes to verify your identity. Each code can only be used once.
+    mfa_choose_provider : Switch authentication method
+    mfa_code_invalid : The verification code is not valid.
+    mfa_invalid_code : Your code is invalid!
+    mfa_missing_code : Missing code!
+    mfa_success : You have successfully setup your Multi-Factor Authentication (MFA)
+    mfa_title : 2-step verification
+    mfa_text : |
+      <ul>
+          <li>
+              Use your phone's camera to scan this barcode.
+              <div>
+                  <img src="{qr_code_data_uri}" alt='multi-factory authentication'/>
+             </div>
+          </li>
+      </ul>
+      If you have problems with a barcode scanner enter this code manually in your Authenticator: <br/><b>{auth_mfa_secret}</b>
+      <div>Once you have scanned the barcode, enter the 6-digit verification code generated by the Authenticator app.</div>
+    mfa_trusted : I'm on a trusted computer
+    accept : Accept
+    decline : Decline
+    toa_title : SAMMY terms of use
+    toa_text : <div class="text-center toa-container"><iframe src="https://docs.google.com/document/d/e/2PACX-1vRf8fr1MnPgoI1D29JUSz2aJbL6_i6gi1hdNkQ0Gw4xjRB3UOKGxZAR6rZm8wXLrtNNu07d0OAeDoXH/pub?embedded=true" class="col-sm-12 h-100"></iframe></div>
+    change_password_title : Change password
+    sso_invalid_link : Your link is incorrect or it has expired. You can request a new password reset from this page.
+    sso_expired_hash : Your password reset link has expired. You can request a new password reset link on this page.
+    reset_password_help : We will send you the instructions via email
+    reset_password_button : Reset password
+    reset_password_success : If your username / email was correct, we have sent you a new login link via email.
+    password_change_success : Password changed successfully
+    register : Register
+    register_button : Submit your registration
+    register_title : Register for SAMMY
+    register_text : "Please fill in your data and you will receive an automated password setup link.<br/><br/>
+    <i>Your is stored in the Netherlands and it will be only used by Codific BV to measure SAMMY adoption and decide whether or not to proceed with the development.<br/> 
+    For the full terms of conditions please have look at this document: <a target='_blank' href='https://docs.google.com/document/d/1vMgAUvgF6wUUCdq1D9BB_DOg4pWqkfMYLq5kNTsH8rA'>Terms of agreement</a>
+    </i>"
+    register_success : Your account has been created. We have sent you the instructions per mail on how to finalize setting up your account.
+    register_select_dropdown_placeholder : 'Please pick one'
+    organization_info_title : My organization information
+    organization_info_text : Almost ready, please fill the required fields. We need this information to know more about the typical userbase for SAMMY.
+    organization_info_success : Thanks for updating your organization information.
+    organization_delete_success : You have successfully deleted your organization
+    organization_delete_error : There was a problem with deleting your organization
+    menu :
+      dashboard : Dashboard
+      projects : Scopes
+      templates : Target postures
+      assessment : Assessment
+      target_posture : Target Posture
+      manual : User manual
+      groups : Teams
+      users : Users
+      reporting : Reporting
+    welcome_title : Welcome to SAMMY
+    back_to_home : Back to the homepage
+    contact_success : Message has been sent successfully.
+    contact_failed : There was an error sending the message. Please try again later.
+    contact_title : Contact
+    contact_subject : Subject
+    contact_message : Message
+    send : Send
+    contact : Contact
+    toolbox_export : Export answers in SAMM toolbox format
+    clear_assessment_button : Clear assessment answers
+    clear_assessment_text : Are you sure that you want to clear all your answers so far and start again?
+    meta_description : SAMMY is a free OWASP SAMM tool that allows you to systematically assess, measure, manage and improve your security posture. SAMMY is an OWASP SAMM calculator that supports all OWASP SAMM Business functions and security practices.
+    no_new_notifications : No new notifications
+    help : Help
+    heading_modified_warning : Heading «{headingName}» for routes {routeNames} has been modified and is no longer applicable
+    preview : Preview
+    search : Search
+    login_with_sso : Sign in
+    login_with_sso_tooltip : Sign in with your {company} account
+    select_all : Select All
+    error_save_checkbox : 'There was an error saving your checkbox answers'
+
+    pagination :
+      first : First
+      last : Last
+      next : Next
+      previous : Previous
+      text : Showing {current} of {total} pages
+
+  oauth :
+    invalid_state : Invalid state
+
+  group :
+    add_title_tooltip : Create a new team
+    add_title_button : Create a new team
+    add_title : Create a new team
+    full_team : View all users
+    team : Manage team users
+    name : Team name
+    delete_button : Delete this team
+    delete_text : Are you sure you would like to delete the {group} team?
+    save_button : Save this team
+    save_success : Team was successfully created
+    delete_success : Team {group} was successfully deleted
+    parent : Parent group
+    project_edit_success : Scopes have been saved successfully
+    projects : Scopes
+    manage_projects_title : Scopes this team can access
+    manage_projects_button : Manage scopes for this team
+    manage_projects_description : Select the scopes this team will have access to
+    delete_disabled : Teams with users cannot be deleted
+    total_groups : Total number of teams
+    search_by_placeholder : Search by Team name
+    show_all : Show All
+    overview_title_button : Overview
+    no_parent : No parent
+  user :
+    self : This is you
+    self_text : This is your own profile. Please note that any modifications to your own profile will trigger a logout.
+    external : This user logs in via an external system.
+    last_login : Last login
+    list_title : List of all users across all teams
+    all_users : All users
+    username : Your email
+    password : Your password
+    microsoft_display_name : Display name
+    import_users_from_gitlab_button : Import
+    import_users_from_gitlab_tooltip : Import users from GitLab
+    import_users_from_gitlab : Import from GitLab
+    import_users_from_gitlab_modal_title : Import users from GitLab
+    import_users_from_gitlab_modal_text : Imported users will not get any notifications. After a successful import the user when logging in via Gitlab will be assigned to the same organization.
+    fetching_gitlab_users_failed : Fetching GitLab users failed
+    import_users_from_microsoft_modal_title : Import users from Microsoft
+    import_users_from_microsoft_modal_text : Imported users will not get any notifications. After a successful import the user when logging in via Microsoft will be assigned to the same organization.
+    import_users_from_microsoft_tooltip : Import users from Microsoft
+    expired_token : Your GitLab token has expired. Please, log out and log back in to refresh it
+    invalid_user_id : User ID contains invalid symbols
+    no_users_selected : No users selected
+    number_of_gitlab_users_imported : "GitLab users imported: {total}. Note that by default the imported users are not assigned to any scope."
+    gitlab_user_import_failed : "Importing GitLab users failed"
+    gitlab_username : Username
+    group_label : Team
+    id : ID
+    name : Name
+    surname : Surname
+    email : Email
+    confirm_email : Confirm Email
+    role : Roles
+    role_descriptions : |
+      <b>EVALUATOR</b> - can fill out an assessment, <br>
+      <b>VALIDATOR</b> - can validate an assessment, <br>
+      <b>IMPROVER</b> - is in charge of creating improvement plans, <br>
+      <b>MANAGER</b> - the highest user role that can manage everything, <br>
+      <b>EXTERNAL ASSESSOR</b> - can create assessments and validations. The scores validated by the external assessor will get a mark. <br>
+    readonly_user : Readonly user
+    save_button : Save
+    add_title : Create a new user
+    add_title_text : Upon creation the user will immediately get an invitation email from SAMMY platform that will contain his/her authentication information
+    add_title_tooltip : Create a new user
+    add_title_button : Create a new user
+    save_success : «{user}» was saved successfully. We have sent an invitation mail to this user.
+    delete_button : Delete this user
+    delete_text : Are you sure you would like to delete «{user}»?
+    delete_success : «{user}» was deleted successfully
+    delete_error : Something went wrong. We could not delete this user.
+    roles_modify_success : Roles were modified successfully
+    roles : Roles
+    non_admin_role_enum : >-
+      {value, select,
+        ROLE_USER {User}
+        ROLE_IMPROVER {Improver}
+        ROLE_VALIDATOR {Validator}
+        ROLE_MANAGER {Manager}
+        ROLE_EVALUATOR {Evaluator}
+        ROLE_AUDITOR {External assessor}
+        other {Not specified}
+      }
+    organization_role : Role in company
+    organization_role_enum : >-
+      {value, selectordinal,
+        =0 {Please pick one}
+        =1 {Academic staff}
+        =2 {Analyst}
+        =3 {Architect}
+        =4 {C level}
+        =5 {Compliance}
+        =6 {Consultant}
+        =7 {Developer}
+        =8 {Product owner}
+        =9 {Project manager}
+        =10 {Qa staff}
+        =11 {Research staff}
+        =12 {Sys admin}
+        =13 {Team lead}
+        =50 {Other}
+        other {Not specified}
+      }
+    industry : Industry
+    industry_enum : >-
+      {value, selectordinal,
+        =0 {Please pick one}
+        =1 {Consulting}
+        =2 {Education}
+        =3 {Financial}
+        =4 {Government}
+        =5 {Healthcare}
+        =6 {IT Services}
+        =7 {IT Product Vendor}
+        =8 {Research}
+        =50 {Other}
+        other {Not specified}
+      }
+    size : Size
+    size_enum : >-
+      {value, selectordinal,
+        =0 {Please pick one}
+        =1 {Small}
+        =2 {Medium}
+        =3 {Large}
+        =50 {Not applicable}
+        other {Not specified}
+      }
+    organization_domain : Organization domain
+    organization_role_error : There was an error with setting your organization role
+    edit_roles : Edit roles
+    details_button : View and modify user information
+    details_title : User details for {user}
+    manage_roles_title : Change roles
+    manage_roles_description : Select the wanted roles and click the save button
+    projects : Scopes
+    group : Team
+    groups : Teams
+    edit_group : Change team
+    edit_projects : Edit scope
+    manage_projects_title : Assigned scope
+    manage_projects_description : Assign scope to this user. Note that the user role is global and cannot be defined per scope.
+    project_edit_success : Scopes have been saved successfully
+    user_edit_success : User has been saved successfully
+    assignments : "Assignments"
+    active_assignments : "Open assignments"
+    bad_groups : Bad groups supplied
+    date_format : Date format
+    time_zone : Time zone
+    date_format_not_selected : Not selected
+    time_zone_not_selected : Not selected
+    import_title : Import new users
+    import_title_text : Upon creation each user will immediately get an invitation email to SAMMY that will contain his login data.
+    import_button : Import
+    import_bad_mime_type : Bad file
+    import_file_too_large : File is too large
+    download_import_template : Download template
+    import_zero_sheets : No sheets provided
+    import_success : Total of «{users}» users were imported
+    import_wrong_roles : Wrong roles
+    import_users_button : Import users from excel
+    import_users_part_of_group : Imported users will be part of «{group}» group
+    import_users_no_group : Imported users will have no group
+    required_property : Property is required
+    import_too_many_cols : Too many columns provided
+    export_users_button : Export users to excel
+    export_error : Something went wrong during export
+    total_users : Total number of users
+    search_by_placeholder : Search by Name
+    roles_change_warning : 'Please note that if you change your roles you will have to reauthenticate'
+
+  session :
+    modal_title : Your session has expired
+    modal_description : For security considerations your session on SAMMY has expired. You need to login again.
+    modal_button_extend : Extend session
+    modal_button_login : Go to login
+
+  streams :
+    tabs :
+      evaluation : Evaluation
+      documentation : Documentation
+      documentation_and_timeline : Documentation and timeline
+      reference_documentation : Reference documentation
+      show_in_new_window : Open in a new window
+      show_hide : Show/Hide
+      show_inline : Show inline
+      validation : Validation
+      improvement : Improvement
+      progress : Progress
+      timeline : Timeline
+      completed : Completed
+      audit : External assessment
+
+  assessment :
+    demo : You are filling out an anonymous SAMM assessment. Sign in to get access to the full-fledged version of SAMMY.
+    start : Switch to this scope
+    start_stream : Start
+    title : Assessment
+    next : Next
+    back : Back
+    overview : Scores overview
+    project : Scope
+    activities : Activities
+    objective : Objective
+    stats : Stats
+    description : Description
+    begin : Begin Assessment
+    evidence : Evidence and documentation
+    assessment_complete : Assessment Complete
+    submit_stream_success : Stream has been submitted successfully
+    submit_evidence_success : Documentation has been uploaded successfully
+    target_date : Target date
+    start_improve_stream_success : Stream improvement submitted successfully
+    finish_improve_stream_success : Stream improvement finished successfully
+    cancel_improve_stream_success : Stream improvement has been cancelled
+    improvement_target_date : Target date for improvement
+    improvement_plan : Improvement Phase 1 plan
+    improvement_owner : Assigned to
+    validation_remarks : Validation remarks
+    audit_remarks : Observations / recommendations
+    start_improvement_button : Finalize Improvement Phase 1
+    cancel_improvement_button : Delete Improvement Phase 1
+    save_improvement_button : Save Improvement Phase 1
+    save_improvement_button_tooltip : You can save the answers and the plan that you have written so far. Note that they will be visible to other improvers.
+    save_improvement_plan_success : Improvement Phase 1 plan and answers were saved successfully
+    will_improve_button : Start Improvement Phase 1
+    user_improving_stream : User improving the stream
+    star_rating_question : How important is it to grow in this security practice
+    submit_rating_success : Rating was submitted successfully
+    awaiting_improvement : To improve
+    improvement_in_progress : In progress
+    audit_stream_error : An error occurred with the audit submit process
+    validate_stream_error : An error occurred with the validation process
+    validate_stream_accepted : Stream validation was accepted
+    validate_stream_rejected : Stream validation was rejected
+    validate_stream_auto_accepted : Stream validation was auto-accepted
+    validate_stream_retracted : Stream submission was retracted
+    star_rating_enum : >-
+      {value, selectordinal,
+        =1 {Unimportant}
+        =2 {Somewhat unimportant}
+        =3 {Average}
+        =4 {Important}
+        =5 {Very important}
+        other {Not specified}
+      }
+    upload_file : Upload a document
+    submit_attachment_success : Document has been uploaded successfully
+    start_stream_validation : Validate this stream
+    file_too_large : Document is too large. Maximum allowed size is 2MB.
+    bad_mime_type : Please upload a valid file
+    remark_delete_button : Delete
+    delete_remark_success : Remark has been deleted successfully.
+    missing_file : Missing file.
+    remark_delete_tooltip : Delete
+    remark_edit_tooltip : Edit
+    documentation : Documentation
+    reference : Reference documentation
+    bad_attachment_values : Please fill out all required fields
+    file : File
+    action : Action
+    improvement_bad_data : Improvement plan is incomplete. Please fill out all required fields before submitting the plan.
+    stage_type : Type
+    stage_status : Status
+    meta_description : Use the SAMMY tool to create an assessment of your organization's security maturity based on OWASP SAMM model. This is a free lightweight version of the assessment tool that allows you to export in OWASP SAMM Toolbox.
+    reactivate_stream : Move stream back to improvement
+    reactivate_improve_stream_success : Stream was successfully reactivated
+    finish_improvement : Finish Improvement
+    archive_stream : Archive this stream and restart evaluation
+    complete_stream : Complete this stream without improvements
+    complete_stream_info : Mark the stream as complete as there is no need to improve (at the moment).
+    add_text : Write a comment
+    remark_uploaded_at : Uploaded at
+    remarks : Remarks
+    remark_text : Text
+    remark_delete_text : Are you sure you would like to delete this remark?
+    remark_submitted_by : Submitted by
+    remark_maturity_levels : Maturity levels
+    remark_submitted_at : Submitted at
+    phase1_scores : Improvement Phase 1 scores
+    phase1_info : <i>Your existing validated answers are marked in blue. Please select your desired answer for each question.</i>
+    scope_change : "Scope was changed to {scope}"
+    improved_score : "Score after implementing the improvement: "
+    previous_answer : Previously selected answer
+    desired_answer : Improvement Phase 1
+    improvement_phase_1 : Improvement Phase 1
+    improvement_phase_1_with_date : Improvement Phase 1 for {date}
+    unvalidated_score : "Unvalidated score: "
+    allowed_mime_types_and_file_size : "Allowed file types: {fileExtensions}. <br> Maximum allowed file size: {fileSize} MB"
+    improvement_edit : Edit improvement
+    improvement_edit_close : Close improvement edit
+    validation_edit : Edit remarks
+    validation_edit_close : Cancel edit
+    edit_validation_success : Remarks have been updated
+    no_preview : 'Preview is not available for this file type'
+    maturity_level_remark : Maturity level
+    validation_remark_documentation : Validation remark
+    improvement_remark_documentation : Improvement plan
+    remarks_timeline : Remarks
+    assignment_popup_warning_title : You are about to override an assignment
+    assignment_popup_warning : This stage is not assigned to you. If you continue the assigned user will receive a notification, their assignment will be deleted, and you will be assigned to this stage.
+    reference_guidance_tooltip : This guidance is based on the Target Posture for this project, defined by your organization.
+    no_guidance : Guidance is not available for this activity.
+    save_validation_remark_tooltip : You can save the remark that you have written so far. Note that it will be visible to other validators.
+    save_validation_remark_success : Remark was saved successfully
+    template_answer : Target answer
+    template_remark_modal_title : Reference remarks
+    changes_saved : Remarks saved
+    could_not_download_remark : File could not be downloaded
+    current_answer : Current answer
+    externally_verified_answer : Last externally verified answer, on {date}
+
+  template_project :
+    add_title : Add a new target posture
+    add_title_button : Create a new target posture
+    add_btn : Add
+    projects : Scopes
+    templates : Target postures
+    links : Assign target postures
+    warning_badge : "You are in target posture management mode."
+    streams : Stream target postures
+
+  project :
+    add_title : Add a new scope
+    add_btn : Add
+    add_title_button : Create a new scope
+    add_title_tooltip : Add a new scope
+    add_user_text : Add user to scope
+    add_user_tooltip : Add user to scope
+    delete_tooltip : Delete this scope
+    migrate_tooltip : Migrate this project to SAMM 2.1
+    delete_text : Are you sure you would like to delete scope «{project}»?
+    delete_button : Delete
+    delete_success : Scope «{project}» was deleted successfully
+    restore_button : Restore
+    restore_title : Are you sure that you want to unarchive this scope?
+    unarchive : Unarchive this scope
+    assessments : Assessments
+    phases : Phases
+    name : Name
+    description : Description
+    teams : Teams
+    clear : Clear
+    save_button : Save
+    users_selected : users selected
+    save_success : «{project}» was saved successfully.
+    restore_success : «{project}» was successfully restored.
+    manage_users_title : Teams with access to this scope
+    manage_users_description : Add / remove teams from this scope.
+    team_edit_success : Teams have been saved successfully
+    unvalidated_score : Overall Unvalidated Score
+    score : Overall Validated Score
+    validation_threshold : Validation Threshold
+    validation_threshold_tooltip : Using a non-zero threshold you can trigger an automatic evaluation validation. This is handy for low scores (e.g., 0.5) where the benefits of a formal validation are less evident.
+    template_tooltip : You can create target postures and assign them to scopes. A target posture defines the baseline scores for each SAMM activity without specifying the "when".
+    ajaxError : Unauthorized field edit
+    templates : Manage scope target postures
+    manage_template_button : Target postures
+    manage_template_title : List of all target postures
+    template : Target posture
+    metamodel : Base model
+    import_zero_sheets : No sheets provided
+    samm_version_undetected : SAMM version could not be found
+    question_not_found : Question could not be found in the toolbox
+    answer_not_found : Answer could not be found in our database
+    import_toolbox_tooltip : Import from SAMM toolbox
+    import_toolbox_title : Create scope from SAMM toolbox
+    import_toolbox_submit : Import
+    import_toolbox_placeholder : Select SAMM (1.5 or 2.0) toolbox .xlsx file
+    import_toolbox_type_error : Wrong file type attached
+    import_toolbox_autovalidate : Auto validate all streams
+    import_toolbox_project_name_15 : Import from toolbox 1.5 version
+    import_toolbox_project_name_20 : Import from toolbox 2.0 version
+    search_by_name : Search by Name
+    switch_success : Successfully switched to {projectName}
+
+  stream :
+    submit : Finalize evaluation and submit for validation
+    retract-submission : Retract stream submission
+    restricted_view : Restricted View - You do not have the appropriate role to work on this stream
+    validation_skipped_zero : All three questions were answered with a "No", so the validation step was skipped.
+    validation_skipped_threshold : "The validation step was skipped, because the score does not exceed the validation threshold ({threshold}<sup>*</sup>) for this scope. <br> * You can change this value in the \"Manage scopes\" menu"
+    evidence_empty : No documentation was uploaded for this stream.
+    assigned_to : "Assigned to: {user}"
+    submitted_by : "Evaluated by: {name} {surname}"
+    validated_by : "Validated by"
+    validated_at : Validation date
+    improvement_by : "Improvement started by: {name} {surname}"
+    date : "Date : "
+    mode : "State: {mode}"
+    score : "{score}"
+    score_tooltip : SAMM score for this stream. Note that score is updated only upon validation.
+    auto : Automatic Validation
+    retract_error : Stream state has changed and it can no longer be retracted
+    improve_incorrect_stream_error : Stream state has changed and the plan can't be saved
+    retract_validation : Retract validation
+    retract_validation_hover : Retracts to validation stage
+
+  timeline :
+    assigned_to : "Assigned to"
+    submitted_by : "Evaluated by"
+    validated_by : "Validated by"
+    rejected_by : "Rejected by"
+    retracted_by : "Retracted by"
+    auto_validated : "Auto validated"
+    improved_by : "Improved by"
+    restarted_by : "Restarted by"
+    completed : "Completed"
+
+  nav :
+    todos : 'You have {number} active assignments for this scope'
+
+  stage :
+    evaluation : 'evaluation'
+    validation : 'validation'
+    improvement : 'improvement'
+
+  actions :
+    submitted_by : "Evaluated by: {name}"
+    validated_by : "Validated by {name}"
+    improved_by : "Improved by {name}"
+    auto_validated : "Auto validated"

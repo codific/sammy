@@ -1,0 +1,208 @@
+<?php
+
+/**
+ * This is automatically generated file using the Codific Prototizer
+ * PHP version 8
+ * @category PHP
+ * @author   CODIFIC <info@codific.com>
+ * @see     http://codific.com
+ */
+
+declare(strict_types=1);
+
+namespace App\Entity;
+
+use App\Entity\Abstraction\AbstractEntity;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
+use Symfony\Component\Serializer\Annotation\Ignore;
+
+
+
+// #BlockStart number=194 id=_19_0_3_40d01a2_1637590051717_771589_5093_#_0
+
+// #BlockEnd number=194
+
+
+#[ORM\Table(name: "`system_config`")]
+#[ORM\Entity(repositoryClass: "App\Repository\SystemConfigRepository")]
+#[ORM\HasLifecycleCallbacks]
+class SystemConfig extends AbstractEntity
+// #BlockStart number=123123 id=_19_0_3_40d01a2_1637590051717_771589_5093_#_1
+    // additional implements go here
+// #BlockEnd number=123123
+{
+
+    #[ORM\Column(name: "`key`", type: Types::STRING, nullable: true)]
+    protected ?string $key = "";
+
+    #[ORM\Column(name: "`value`", type: Types::STRING, nullable: true)]
+    protected ?string $value = "";
+
+    #[ORM\Column(name: "`description`", type: Types::TEXT, nullable: true)]
+    protected ?string $description = "";
+
+
+
+    public function __construct()
+    {
+    }
+
+    public function setKey(?string $key): self
+    {
+        $this->key = $key;
+
+        return $this;
+    }
+
+    public function getKey(): ?string
+    {
+        return $this->key;
+    }
+
+    public function setValue(?string $value): self
+    {
+        $this->value = $value;
+
+        return $this;
+    }
+
+    public function getValue(): ?string
+    {
+        return $this->value;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+
+    /**
+     * This method is a copy constructor that will return a copy object (except for the id field)
+     * Note that this method will not save the object
+     */
+    #[Ignore]
+    public function getCopy(?SystemConfig $clone = null): SystemConfig
+    {
+        if ($clone === null) {
+            $clone = new SystemConfig();
+        }
+        $clone->setKey($this->key);
+        $clone->setValue($this->value);
+        $clone->setDescription($this->description);
+// #BlockStart number=195 id=_19_0_3_40d01a2_1637590051717_771589_5093_#_2
+
+// #BlockEnd number=195
+
+        return $clone;
+    }
+
+    /**
+     * Private to string method auto generated based on the UML properties
+     * This is the new way of doing things.
+     */
+    public function toString(): string
+    {
+        return "{$this->key}";
+    }
+
+    /**
+     * https://symfony.com/doc/current/validation.html
+     * we use php version for validation!!!
+     */
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    {
+        $metadata->addPropertyConstraint('key', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('value', new Assert\NotBlank());
+
+// #BlockStart number=196 id=_19_0_3_40d01a2_1637590051717_771589_5093_#_3
+//        to remove constraint use following code
+//        unset($metadata->properties['PROPERTY']);
+//        unset($metadata->members['PROPERTY']);
+// #BlockEnd number=196
+    }
+
+    #[Ignore]
+    public function getGeneratedFilterFields(): array
+    {
+        return [
+            "_system_config.id",
+            "_system_config.key",
+            "_system_config.value",
+            "_system_config.description",
+        ];
+    }
+
+    #[Ignore]
+    public function getUploadFields(): array
+    {
+        return [
+
+        ];
+    }
+    
+    #[Ignore]
+    public function getModifiableFields(): array
+    {
+        return [
+            "key",
+            "value",
+            "description",
+        ];
+    }
+
+    #[Ignore]
+    public function getReadOnlyFields(): array
+    {
+        return [
+        ];
+    }
+
+    #[Ignore]
+    public function getParentClasses(): array
+    {
+        return [
+
+        ];
+    }
+
+    #[Ignore]
+    public static array $manyToManyProperties = [
+    ];
+
+
+    #[Ignore]
+    public static array $childProperties = [
+    ];
+
+// #BlockStart number=197 id=_19_0_3_40d01a2_1637590051717_771589_5093_#_4
+
+    /**
+     * The toString method based on the private __toString autogenerated method
+     * If necessary override.
+     */
+    public function __toString(): string
+    {
+        return $this->toString();
+    }
+
+// #BlockEnd number=197
+
+}

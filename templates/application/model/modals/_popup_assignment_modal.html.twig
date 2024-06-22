@@ -1,0 +1,24 @@
+<div id="popupModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">
+                    {{ 'application.assessment.assignment_popup_warning_title'|trans({}, 'application') }}
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {{ 'application.assessment.assignment_popup_warning'|trans({}, 'application') }}
+                <br>
+                <br>
+
+                <div class="d-flex justify-content-center">
+                    <button id="hiddenAcceptBtn" type="button" class="btn btn-success center" data-dismiss="modal" data-accept=0 data-target="">OK</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

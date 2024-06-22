@@ -1,0 +1,49 @@
+<div class="">
+    <div class="ml-3">
+        <div class="vertical-time-icons vertical-timeline vertical-timeline--animate vertical-timeline--one-column padding-match-arrow">
+            <div class="vertical-timeline-item vertical-timeline-element">
+                <div>
+                    <span class="vertical-timeline-element-icon bounce-in">
+                        <div class="text-center">
+                            <i class="fa fa-arrow-up fa-2x arrow-up-color-gray"></i>
+                        </div>
+                    </span>
+                    <h6>&nbsp;</h6>
+                </div>
+            </div>
+            {# event \App\ViewStructures\Timeline\TimelineEvent #}
+            {% for event in timelineEvents %}
+
+                {% if event.newline == true %}
+                    <hr>
+                {% endif %}
+
+                <div class="vertical-timeline-item vertical-timeline-element">
+                    <div>
+                        <span class="vertical-timeline-element-icon bounce-in">
+                            <div class="timeline-icon border-primary">
+                                <i class="fa {{ event.eventIcon.icon}} {{ event.eventIcon.color }}"></i>
+                            </div>
+                        </span>
+                        <div class="vertical-timeline-element-content bounce-in">
+                            <p>
+                                {% if event.completedAt is not null %}
+                                    {{ 'application.timeline.assigned_to' |trans({}, 'application') }}
+                                    : {{ (event.assignee is not null and event.assignee is entityExists) ? event.assignee.name ~' '~ event.assignee.surname : 'N/A' }}
+                                    <br>
+                                    {{ ('application.timeline.'~event.action) |trans({}, 'application') }}
+                                    : {{ (event.user is not null and event.user is entityExists) ?  event.user.name ~' '~ event.user.surname : 'N/A' }} @
+                                    <b class="">{{ event.completedAt|dateTimeToUserSettings("H:i", constant('App\\Utils\\DateTimeUtil::PREPEND_SCHEMA_TIME_THEN_DATE')) }}</b>
+                                {% else %}
+                                    {{ ('application.timeline.'~event.action) |trans({}, 'application') }}
+                                    <br>
+                                    <br>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>

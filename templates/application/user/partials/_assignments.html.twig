@@ -1,0 +1,30 @@
+<h4>{{ 'application.user.active_assignments'|trans({}, 'application') }}</h4>
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th class="w-37">{{ 'application.index.practice'|trans({}, 'application') }}</th>
+        <th class="text-center">{{ 'application.assessment.stage_type'|trans({}, 'application') }}</th>
+        <th class="text-center">{{ 'application.assessment.target_date'|trans({}, 'application') }}</th>
+        <th class="text-center">{{ 'application.assessment.project'|trans({}, 'application') }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {# stage \App\Entity\Stage #}
+    {% for assignment in userAssignments %}
+        {% set stage = assignment.stage %}
+        <tr>
+            <td>
+                <i class='fa {{ stage.assessmentStream.stream.getPractice.getBusinessFunction.icon }}'></i>
+                {{ stage.assessmentStream.stream.getPractice.getName }}
+                <i class="fa fa-angle-right"></i>
+                {{ stage.assessmentStream.stream.getName }}
+            </td>
+            <td class="text-center">{{ stage.entityName|upper }}</td>
+            <td class="text-center">{{ stage.targetDate ? stage.targetDate|date("d-M-Y") : "" }}</td>
+            <td class="text-center">
+                {{ stage.assessmentStream.assessment.project.name }}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

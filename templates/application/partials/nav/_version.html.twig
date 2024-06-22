@@ -1,0 +1,37 @@
+<div class="ml-5">
+    <span data-toggle="tooltip" title="{{ 'application.general.changelog_view_tooltip'|trans({}, 'application') }}">
+        <a data-toggle="modal" data-target="#changelog_modal" class="text-secondary">
+            <i class="fa fa-code"></i>
+            <span class="footer-responsive-label">
+                SAMMY
+            </span>
+            v{{ version }}
+        </a>
+    </span>
+</div>
+<!-- Version Modal -->
+<div class="modal fade" id="changelog_modal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true" data-auto-show="{{ popup ? 'true' : 'false' }}">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    {{ 'application.general.changelog_title'|trans({}, 'application') }}
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="fa fa-times"></i></span>
+                </button>
+            </div>
+            <div class="modal-body changelog-body">
+                <div class="scroll-area-lg">
+                    {{ changes | markdown_to_html }}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" data-version="{{ version }}">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Version Modal -->

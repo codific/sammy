@@ -1,0 +1,32 @@
+{% set csrfToken = app.user ? csrf_token(app.user.id) : '' %}
+<div class="table-paginator-container">
+    <table class="groups-table mb-0 table table-hover">
+        <thead>
+        <tr>
+            <th class="w-20">{{ 'application.group.name'|trans({}, 'application') }}</th>
+            <th class="text-center">{{ 'application.group.projects'|trans({}, 'application') }}</th>
+            <th class="text-center">Parent</th>
+            <th class="w-20">
+                <div class="pull-right text-white">
+                    {% if is_granted("ROLE_MANAGER") %}
+                        <span id="addGroup" data-toggle="modal" data-target="#addGroupModal">
+                            <a class="btn btn-success" data-toggle="tooltip" data-trigger="hover" title="{{ 'application.group.add_title_button'|trans({},'application') }}">
+                                <i class="fas fa-plus"></i> <i class="fas fa-users"></i>
+                            </a>
+                        </span>
+                    {% endif %}
+                    <a href="{{ path('app_user_index') }}" class="btn btn-primary" data-toggle="tooltip" data-trigger="hover"
+                       title="{{ 'application.group.full_team'|trans({},'application') }}">
+                        <i class="fa fa-user"></i>
+                    </a>
+                </div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% include 'application/group/partials/_group_row_wrapper.html.twig' with {groups: groups.results, padding: 0} %}
+        </tbody>
+    </table>
+    {% import "application/_pagination.html.twig" as pagination %}
+    {{ pagination.paginate('app_group_index', groups, queryParams) }}
+</div>

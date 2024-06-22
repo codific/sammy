@@ -1,0 +1,54 @@
+{% block page %}
+    {% set csrfToken = app.user ? csrf_token(app.user.id) : '' %}
+
+    <div class="card-body">
+        <div class="remarks-wrapper">
+            <div class="scroll-area-xs">
+                <div class="mt-2">
+                    <table class="table table-hover table-striped table-sm">
+                        <thead>
+                        <tr>
+                            <th class="w-15">{{ "application.assessment.remark_submitted_by"|trans({},'application') }}</th>
+                            {% if assessmentStream.stream.practice.businessFunction.metamodel.id == constant('App\\Utils\\Constants::SAMM_ID') %}
+                                <th class="w-10">{{ "application.assessment.remark_maturity_levels"|trans({},'application') }}</th>
+                            {% endif %}
+                            <th class="w-50">{{ "application.assessment.remarks"|trans({},'application') }}</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody class="remarks-table-body">
+                        {% for remark in remarks %}
+                            {% include 'application/documentation/partials/_remark_row.html.twig' %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <br>
+
+        {% if is_granted("ROLE_EVALUATOR") or is_granted("ROLE_VALIDATOR") or is_granted("ROLE_IMPROVER") or is_granted("ROLE_MANAGER") %}
+            {{ form_start(documentationForm, { 'action': path('app_documentation_save_documentation', {'id': assessmentStream.id}), 'attr': {'class' : 'ajax-documentation-form', 'id': 'form-' ~ assessmentStream.id} }) }}
+            {% if assessmentStream.stream.practice.businessFunction.metamodel.id == constant('App\\Utils\\Constants::SAMM_ID') %}
+                <div class="mt-2 d-flex flex-row">
+                    <label class="required">{{ "application.assessment.maturity_level_remark"|trans({}, 'application') }}</label>
+                    <div class="ml-3">
+                        {{ form_widget(documentationForm.maturityLevel) }}
+                    </div>
+                </div>
+            {% endif %}
+            <div id="add-evidence-text">
+                {{ form_widget(documentationForm.text) }}
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary mt-3">{{ 'application.general.save_button'|trans({},'application') }}</button>
+                {{ form_end(documentationForm) }}
+            </div>
+
+        {% else %}
+            <div class="text-center badge-warning rounded">
+                {{ "application.stream.restricted_view"|trans({},'application') }}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

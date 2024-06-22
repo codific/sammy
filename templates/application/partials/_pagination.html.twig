@@ -1,0 +1,90 @@
+{% macro paginate(paginationPath, paginator, queryParams) %}
+    {% apply spaceless %}
+        {% set nearbyPagesLimit = 4 %}
+        {% set extremePagesLimit = 6 %}
+        {% set showAlwaysFirstAndLast = true %}
+        <div class="card-footer bg-white d-flex justify-content-between align-items-center">
+            <div class="text-muted">{{ 'application.general.pagination.text'|trans({"current": paginator.currentPage, "total": paginator.lastPage},'application') }}</div>
+            <ul class="pagination pagination-flat pagination-sm justify-content-around mt-2 mt-sm-0">
+                {% if paginator.currentPage > 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ path(paginationPath, queryParams|merge({page: 1})) }}">{{ 'application.general.pagination.first'|trans({},'application') }}</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="{{ path(paginationPath, queryParams|merge({page: paginator.previousPage})) }}">{{ 'application.general.pagination.previous'|trans({},'application') }}</a>
+                    </li>
+
+                    {% for i in range(1, extremePagesLimit) %}
+                        {% if ( i < paginator.currentPage - nearbyPagesLimit ) %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ path(paginationPath, queryParams|merge({page: i})) }}">{{ i }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if extremePagesLimit + 1 < paginator.currentPage - nearbyPagesLimit %}
+                        <span class="page-link bg-transparent">...</span>
+                    {% endif %}
+
+                    {% for i in range(paginator.currentPage - nearbyPagesLimit, paginator.previousPage) %}
+                        {% if ( i > 0 ) %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ path(paginationPath, queryParams|merge({page: i})) }}">{{ i }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                {% elseif showAlwaysFirstAndLast %}
+                    <li class="page-item disabled">
+                        <a class="page-link disabled">{{ 'application.general.pagination.first'|trans({},'application') }}</a>
+                    </li>
+                    <li class="page-item disabled">
+                        <a class="page-link disabled">{{ 'application.general.pagination.previous'|trans({},'application') }}</a>
+                    </li>
+                {% endif %}
+
+                <li class="page-item active">
+                    <a class="page-link" href="{{ path(paginationPath, queryParams|merge({ page: paginator.currentPage })) }}">{{ paginator.currentPage }}</a>
+                </li>
+
+                {% if paginator.currentPage < paginator.lastPage %}
+                    {% for i in range(paginator.nextPage, paginator.currentPage + nearbyPagesLimit) %}
+                        {% if ( i <= paginator.lastPage ) %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ path(paginationPath, queryParams|merge({page: i})) }}">{{ i }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if  (paginator.lastPage - extremePagesLimit) > (paginator.currentPage + nearbyPagesLimit) %}
+                        <span class="page-link bg-transparent">...</span>
+                    {% endif %}
+
+                    {% for i in range(paginator.lastPage - extremePagesLimit+1, paginator.lastPage) %}
+                        {% if ( i > paginator.currentPage + nearbyPagesLimit ) %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ path(paginationPath, queryParams|merge({page: i})) }}">{{ i }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="{{ path(paginationPath, queryParams|merge({page: paginator.nextPage})) }}">{{ 'application.general.pagination.next'|trans({},'application') }}</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="{{ path(paginationPath, queryParams|merge({page: paginator.lastPage})) }}">{{ 'application.general.pagination.last'|trans({},'application') }}</a>
+                    </li>
+                {% elseif showAlwaysFirstAndLast %}
+                    <li class="page-item disabled">
+                        <a class="page-link disabled">{{ 'application.general.pagination.next'|trans({},'application') }}</a>
+                    </li>
+                    <li class="page-item disabled">
+                        <a class="page-link disabled">{{ 'application.general.pagination.last'|trans({},'application') }}</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    {% endapply %}
+{% endmacro %}

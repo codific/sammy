@@ -1,0 +1,10 @@
+{% extends 'application/base.html.twig' %}
+
+{% block container %}
+    {% include 'application/documentation/partials/_documentation_container.html.twig' with {modalIsShownInNewWindow: true} %}
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script type="application/javascript" src="{{ asset('front/js/assessment.fill.codific.js?v=1.6') }}"></script>
+{% endblock %}

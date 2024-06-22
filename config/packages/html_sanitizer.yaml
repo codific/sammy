@@ -1,0 +1,45 @@
+framework :
+  html_sanitizer :
+    sanitizers :
+      strict_sanitizer :
+
+      liberal_sanitizer :
+        allow_relative_links : true
+        allow_relative_medias : true
+        allow_elements :
+          br : [ ]
+          h1 : [ ]
+          h2 : [ ]
+          h3 : [ ]
+          h4 : [ ]
+          img : [ "src", "alt", "height", "width", "id", "class", "name", "style" ]
+          a : [ "href", "title", "rel", "target", "id", "class", "name" ]
+          div : [ "id", "class", "style", "name" ]
+          u : [ "id", "class", "name" ]
+          em : [ "id", "class", "name" ]
+          ul : [ "id", "class", "name" ]
+          ol : [ "id", "class", "name" ]
+          li : [ "id", "class", "name" ]
+          strong : [ "id", "class", "name" ]
+          span : [ "id", "style", "class", "name" ]
+          p : [ "id", "style", "class", "name" ]
+          b : [ "id", "class", "name" ]
+          i : [ "id", "class", "name" ]
+          hr : [ "id", "class", "name" ]
+          sup : [ "id", "class", "name" ]
+          sub : [ "id", "class", "name" ]
+          video : [ "id", "class", "name", "controls", "width", "height", "src", "poster" ]
+          audio : [ "id", "class", "name", "controls", "width", "height", "src", "poster" ]
+          source : [ "id", "class", "name", "src", "type" ]
+          table : [ "id", "class", "name", "align", "cellspacing", "cellpadding", "style", "border", "summary" ]
+          thead : [ "id", "class", "name", "style" ]
+          tbody : [ "id", "class", "name", "style" ]
+          th : [ "id", "class", "name", "scope", "style" ]
+          tr : [ "id", "class", "name", "style" ]
+          td : [ "id", "class", "name", "style" ]
+          caption : [ "id", "class", "name" ]
+      knowledge_base_sanitizer :
+        allow_safe_elements : true
+        force_https_urls : true
+        allowed_link_schemes : [ 'https', 'http' ]
+

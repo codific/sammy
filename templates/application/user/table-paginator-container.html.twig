@@ -1,0 +1,34 @@
+{% set csrfToken = app.user ? csrf_token(app.user.id) : '' %}
+<div class="table-paginator-container">
+    <table class="users-table mb-0 table table-hover">
+        <thead>
+        <tr>
+            <th class="w-20" id="column-name-label">{{ 'application.user.name'|trans({}, 'application') }}</th>
+            <th class="w-20">{{ 'application.user.email'|trans({}, 'application') }}</th>
+            <th class="w-10 text-center">{{ 'application.user.active_assignments'|trans({}, 'application') }}</th>
+            <th class="w-20 text-center">{{ 'application.user.role'|trans({}, 'application') }}
+                <i class="fa fa-question-circle" data-toggle="tooltip" data-html="true" title="{{ 'application.user.role_descriptions'|trans({}, 'application') }}"></i>
+            </th>
+            <th class="w-10 text-center">
+                    <span id="addUser" data-toggle="modal" data-target="#addUserModal">
+                        <a class="btn btn-success" data-toggle="tooltip" data-trigger="hover" title="{{ 'application.user.add_title_button'|trans({},'application') }}">
+                            <i class="fas fa-plus"></i> <i class="fas fa-user"></i>
+                        </a>
+                    </span>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users.results %}
+            {% include 'application/user/partials/_user_row.html.twig' with {userAssignments: allUserAssignments[user.id] ?? {}} %}
+        {% endfor %}
+        </tbody>
+    </table>
+    {% import "application/_pagination.html.twig" as pagination %}
+    {{ pagination.paginate('app_user_index', users, queryParams) }}
+</div>
+{% for user in users.results %}
+    {% include 'application/user/modals/_user_details_modal.html.twig' with { userAssignments: allUserAssignments[user.id] ?? {} } %}
+{% endfor %}
+<script type="application/javascript" src="{{ asset('front/dependency/jquery/dist/jquery.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('front/js/app.codific.js?v=1.1') }}"></script>

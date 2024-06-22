@@ -1,0 +1,9 @@
+{% extends 'error_base.html.twig' %}
+
+{% block body %}
+    <div class="text-center mb-3 mt-5">
+        <h1>Error</h1>
+        <h5>You encountered an error! This problem has been reported to our team who should provide a fix in the next 24 hours. Contact our team if necessary.</h5>
+        <a href="{{ path('app_index') }}">return to the homepage</a>
+    </div>
+{% endblock %}

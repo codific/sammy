@@ -1,0 +1,55 @@
+{% extends 'application/base_login.html.twig' %}
+
+{% block title %}{{ 'application.general.login_title'|trans({}, 'application') }}{% endblock %}
+
+{% block body %}
+    <!-- Login form -->
+    <div class="d-flex align-items-center justify-content-center h-100">
+        <div class="col-lg-8 col-xl-4">
+            <div class="card mb-0">
+                <div class="card-body">
+
+                    <div class="text-center mb-3">
+                        <div class="logo-src mr-1">
+                            <img alt="logo" class="logo" src="{{ asset("front/images/logo.png") }}" width="200">
+                        </div>
+                        <i class="icon-reading icon-2x text-slate-300 border-slate-300 border-3 rounded-round p-3 mb-3 mt-1"></i>
+                        <h5 class="mb-0 login-title">{{ 'application.general.login_title'|trans({}, 'application') }}</h5>
+                        {% if getConfig('login.internal', false) or vpnLogin %}
+                            <span class="d-block text-muted">{{ 'application.general.login_credentials'|trans({}, 'application')|nl2br }}</span>
+                        {% endif %}
+                    </div>
+
+                    {{ form_start(form, {'attr':{'class': 'login-form'}}) }}
+                    {% if error %}
+                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                    {% endif %}
+
+                    <div class="col-md-12">
+                        <div class="position-relative form-group">
+                            {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'application.user.email'|trans({}, 'application')}}) }}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="position-relative form-group">
+                            {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': 'application.user.password'|trans({}, 'application')}}) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <i class="fa fa-sign-in-alt"></i> {{ 'application.general.login'|trans({}, 'application') }}
+                        </button>
+                        {% if getConfig('login.internal', false) %}
+                            <div class="text-right">
+                                <a href="{{ path('app_login_reset_password_request') }}"> &raquo; {{ 'application.general.forgot_password'|trans({}, 'application') }}</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                    {{ form_end(form) }}
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

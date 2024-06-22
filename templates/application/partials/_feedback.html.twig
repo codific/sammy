@@ -1,0 +1,20 @@
+<div class="modal fade" id="feedback_modal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true" data-auto-show="{{ popup ? 'true' : 'false' }}">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                {{ "application.feedback.feedback_text"|trans({},'application')}}
+            </div>
+            {{ form_start(form, {"action": path("app_dashboard_feedback")}) }}
+            <div class="modal-body">
+                {{ form_widget(form) }}
+            </div>
+            <div class="modal-footer">
+                <button id="feedback-later" type="button" class="btn btn-secondary">
+                    {{ "application.feedback.later_button"|trans({},'application')}}
+                </button>
+                <button id="feedback-submit" class="btn btn-primary"><i class="far fa-save"></i>&nbsp; {{ button_label|default('application.feedback.save_button'|trans) }}</button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,193 @@
+<div class="main-card mb-3 card w-100">
+    <div class="card-header">
+        <div class="col-sm-9 card-header-title font-size-lg font-weight-normal">
+            {{ tableHeaderLabel }}
+            <div class="ml-2 badge badge-pill badge-info">{{ streamRows|length }}</div>
+        </div>
+    </div>
+    {% if streamRows | length > 0 %}
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="mb-0 table table-borderless table-hover">
+                    <thead>
+                    <tr>
+                        <th class="w-25">{{ "application.index.stream"|trans({}, 'application') }}</th>
+                        {% for index, col in cols %}
+                            {% if index == 0 %}
+                                <th class="text-center" data-toggle="tooltip" data-placement="right" data-html="true" title="{{ "application.index.stream_weight_description"|trans|raw }}">
+                                    {{ col }}
+                                    <i class="fa fa-question-circle"></i>
+                                </th>
+                            {% else %}
+                                <th class="text-center"> {{ col }} </th>
+                            {% endif %}
+                        {% endfor %}
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for index, streamRow in streamRows %}
+
+                        {% set streamIsValidated = streamRow.getStatus == constant("App\\Enum\\AssessmentStatus::VALIDATED") %}
+                        {% set streamIsInImprovement = streamRow.getStatus == constant("App\\Enum\\AssessmentStatus::IN_IMPROVEMENT") %}
+
+                        <tr {{ loop.index0 > hiddenRowMinIndex ? "hidden" : "" }}
+                                data-assessment-id="{{ assessmentId }}"
+                                data-row-index="{{ loop.index0 }}"
+                                data-table="{{ tableName }}"
+                                data-hidden-row-min-index="{{ hiddenRowMinIndex }}">
+                            <td>
+                                <a data-placement="right" data-toggle="tooltip"
+                                   title="{{ streamRow.getStream.getPractice.getBusinessFunction.name }} > {{ streamRow.getStream.getPractice.name }}">
+                                    <i class='fa {{ streamRow.getStream.getPractice.getBusinessFunction.icon }}'></i>
+                                </a>
+                                {{ streamRow.getStream.getName }}
+                                <a data-placement="right" data-toggle="tooltip" title="{{ streamRow.getStream.getDescription }}">
+                                    <i class="fa fa-question-circle"></i>
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                {% set weight = streamWeights[streamRow.getStream().getId()]["streamWeight"] %}
+                                {% set targetPostureScore = streamWeights[streamRow.getStream().getId()]["targetPostureScore"] %}
+                                {% set currentScore = streamWeights[streamRow.getStream().getId()]["currentScore"] %}
+                                {% set maxWeight = streamWeights[streamRow.getStream().getId()]["maxStreamWeight"] %}
+                                {% set delta = streamWeights[streamRow.getStream().getId()]["delta"] %}
+                                {% set weightClasses = "badge-success" %}
+                                {% set weightText = "application.index.stream_weight_none" %}
+                                {% if weight >= maxWeight / 2 %}
+                                    {% set weightClasses = "badge-danger" %}
+                                    {% set weightText = "application.index.stream_weight_high" %}
+                                {% elseif weight >= maxWeight / 4 %}
+                                    {% set weightClasses = "badge-warning" %}
+                                    {% set weightText = "application.index.stream_weight_medium" %}
+                                {% elseif weight > 0 %}
+                                    {% set weightClasses = "badge-info" %}
+                                    {% set weightText = "application.index.stream_weight_low" %}
+                                {% endif %}
+                                <div class="badge badge-pill z-index-1001 {{ weightClasses }}"
+                                     data-placement="right"
+                                     data-toggle="tooltip"
+                                     data-html="true"
+                                     title="<div class='text-left'>{{ "application.index.stream_weight_hover"|trans({
+                                         postureScore: targetPostureScore,
+                                         currentScore: currentScore,
+                                         delta: delta|number_format(2),
+                                         weight: weight|number_format(0)
+                                     }) }}</div>">
+                                    <a>
+                                        {{ weightText|trans }}
+                                    </a>
+                                </div>
+                            </td>
+
+                            {% if streamRow.getStatus.value >= constant("App\\Enum\\AssessmentStatus::IN_VALIDATION").value %}
+                                <td class="text-center">
+                                    {% if streamRow.getStatus.value >= constant("App\\Enum\\AssessmentStatus::VALIDATED").value and streamRow.getValidatedBy is entityExists(true) %}
+                                        {{ streamRow.getValidatedBy.longName }}
+                                    {% elseif streamRow.getStatus == constant("App\\Enum\\AssessmentStatus::IN_VALIDATION") and streamRow.getSubmittedBy is entityExists(true) %}
+                                        {{ streamRow.getSubmittedBy.longName }}
+                                    {% endif %}
+                                </td>
+                            {% endif %}
+
+
+                            {% if streamIsValidated or streamIsInImprovement %}
+                                <td class="text-center">
+                                    {% if streamIsValidated %}
+                                        <div class="badge badge-pill badge-info"> {{ "application.index.for_improvement"|trans({},'application') }} </div>
+                                        {% if phase1Stages[streamRow.getCurrentStage().getId()] is defined %}
+                                            <div class="badge badge-success badge-pill p-1" data-toggle="tooltip" data-title="{{ "application.index.phase1_tooltip"|trans({},'application') }}">
+                                                {{ "application.index.phase1_text"|trans({},'application') }}
+                                            </div>
+                                        {% endif %}
+                                    {% else %}
+                                        <div class="badge badge-pill badge-success"> {{ "application.index.in_improvement"|trans({},'application') }} </div>
+                                    {% endif %}
+                                </td>
+                            {% endif %}
+
+                            <td class="text-center">
+                                <span class="text-success font-weight-bold">{{ streamWeights[streamRow.getStream().getId()]["currentScore"]|formatScore }}</span>
+                                {% if not unvalidatedToggleIsActive %}
+                                    {% if streamRow.getStatus == constant("App\\Enum\\AssessmentStatus::IN_VALIDATION") or streamRow.getStatus == constant("App\\Enum\\AssessmentStatus::IN_EVALUATION") %}
+                                        / <span class="text-danger font-weight-bold">{{ streamRow.unvalidatedScore|formatScore }}</span>
+                                        <i class="fa fa-info-circle" data-placement="right" data-toggle="tooltip" data-trigger="hover"
+                                           title="{{ "application.index.unvalidated_score_tooltip"|trans({},'application') }}"></i>
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                            {% if streamRow.getStatus != constant("App\\Enum\\AssessmentStatus::COMPLETE") %}
+                                <td class="text-center">
+                                    {% set assignment = null %}
+                                    {% if assignments[streamRow.id] is defined %}
+                                        {% set assignment = assignments[streamRow.id] %}
+                                    {% endif %}
+                                    {% if is_granted('ROLE_MANAGER') or (assignment is null) %}
+                                        <a href="javascript:void(0);" style="width: 100%" class="editable2 editable-click editableShort" id="assignedTo"
+                                           data-type="select2"
+                                           data-value="{{ assignment != null ? assignment.user.id : 0 }}"
+                                           data-pk="{{ streamRow.id }}"
+                                           data-source="{{ path('app_stage_ajaxindexForAssignment', {'project': currentProject.id, 'assessmentStream' : streamRow }) }}"
+                                           data-url='{{ path('app_stage_ajaxSetAssignedTo', {'assessmentStream': streamRow.id }) }}'>
+                                            {% if assignment != null and assignments[streamRow.id].user is entityExists(true) %}
+                                                <p class="mt-1 mb-1">
+                                                    {{ assignment.user.longName }}
+                                                </p>
+                                            {% endif %}
+                                        </a>
+                                    {% else %}
+                                        {% if assignment != null and assignments[streamRow.id].user is entityExists(true) %}
+                                            <p class="">
+                                                {{ assignment.user.longName }}
+                                            </p>
+                                        {% endif %}
+                                    {% endif %}
+                                </td>
+                            {% endif %}
+                            <td class="text-right w-6">
+                                <div role="group" class="btn-group-sm btn-group">
+                                    {% set path = "app_improvement_overview" %}
+                                    {% if track is not null %}
+                                        {% set path = "app_"~track~"_overview" %}
+                                    {% endif %}
+                                    <a class="btn-shadow btn btn-primary ml-1"
+                                       href="{{ path(path, {"id": streamRow.getStream.id}) }}">
+                                        {{ "application.index.preview"|trans({}, 'application') }}
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% if streamRows|length > hiddenRowMinIndex + 1 %}
+            <div class="d-block p-4 text-center card-footer">
+                <button class="btn-pill btn-shadow btn-wide fsize-1 btn btn-dark btn-lg button-view-all"
+                        data-table="{{ tableName }}"
+                        data-assessment-id="{{ assessmentId }}"
+                        data-rows-hidden="true">
+                    <span class="mr-2 opacity-7">
+                        {% set viewAllIcon = "fa-arrow-circle-down" %}
+                        {% set hideIcon = "fa-arrow-alt-circle-up" %}
+                        <i class="fa {{ viewAllIcon }} button-view-all-icon"
+                           data-table="{{ tableName }}"
+                           data-assessment-id="{{ assessmentId }}"
+                           data-show-icon="{{ viewAllIcon }}"
+                           data-hide-icon="{{ hideIcon }}"
+                        ></i>
+                    </span>
+                    {% set dataShowText = "application.index.view_all"|trans({},'application') %}
+                    <span class="mr-1 button-view-all-text"
+                          data-table="{{ tableName }}"
+                          data-hide-text="{{ "application.index.hide"|trans({},'application') }}"
+                          data-show-text="{{ dataShowText }}"
+                          data-assessment-id="{{ assessmentId }}">
+                        {{ dataShowText }}
+                    </span>
+                </button>
+            </div>
+        {% endif %}
+    {% endif %}
+</div>

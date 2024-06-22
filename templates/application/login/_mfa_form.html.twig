@@ -1,0 +1,59 @@
+{% extends 'application/base_login.html.twig' %}
+
+{% block javascripts %}
+    {{- parent() -}}
+    <script type="application/javascript">
+        let csrfToken = "{{ app.user ? csrf_token(app.user.id)|e('js') : '' }}";
+    </script>
+{% endblock %}
+
+
+{% block body %}
+    <div class="d-flex align-items-center justify-content-center h-100">
+            <form action="{{ checkPathUrl ? checkPathUrl: path(checkPathRoute) }}" method="post" class="login-form">
+            <div class="card mb-0">
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <i class="icon-user-lock icon-2x text-slate-300 border-slate-300 border-3 rounded-round p-3 mb-3 mt-1"></i>
+                        <h5 class="mb-0">{{ app.user.name~" "~app.user.surname }}</h5>
+                        <span class="d-block text-muted">
+                            {{ 'application.general.mfa_enter_authenticator_code'|trans({}, 'application') }}
+                        </span>
+                    </div>
+                    {# Authentication errors #}
+                    {% if authenticationError %}
+                        <p class="alert alert-danger">
+                            {{ ('application.general.mfa_' ~ authenticationError)|trans(authenticationErrorData, 'application') }}
+                        </p>
+                    {% endif %}
+                    <input type="hidden" name="{{ csrfParameterName }}" value="{{ csrf_token(csrfTokenId) }}">
+                    <div class="form-group form-group-feedback form-group-feedback-left">
+                        <input
+                                id="_auth_code"
+                                type="text"
+                                class="form-control"
+                                name="{{ authCodeParameterName }}"
+                                value="{{ getTotpCode() }}"
+                                autocomplete="one-time-code"
+                                placeholder="{{ 'application.general.mfa_code_placeholder'|trans({}, 'application') }}"
+                                required
+                                autofocus
+                        />
+                        <div class="form-control-feedback">
+                            <i class="icon-user-lock text-muted"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block">
+                            {{ 'application.general.login'|trans({}, 'application') }}<i class="icon-arrow-right14 position-right"></i>
+                        </button>
+                        <a href="{{ logoutPath }}" class="btn btn-danger btn-block">
+                            {{ 'application.general.cancel'|trans({}, 'application') }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

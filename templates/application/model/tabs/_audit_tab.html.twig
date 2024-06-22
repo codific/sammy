@@ -1,0 +1,162 @@
+{% if showValidation %}
+    {% include 'application/model/tabs/_evaluation_tab.html.twig' with evaluationParams %}
+    {% include 'application/model/tabs/_validation_tab.html.twig' with validationParams %}
+{% else %}
+    {% block page %}
+        {% set disabled = (readOnly) ? "disabled='disabled'" : '' %}
+        <div class="card-body pl-2 pr-2">
+            {% if showRestrictedNote %}
+                {% include 'application/model/tabs/_restricted_note.html.twig' %}
+            {% endif %}
+            {% set templateName = assessmentStream.assessment.project.templateProject ? assessmentStream.assessment.project.templateProject.name : null %}
+            {# question \App\Entity\Question #}
+            {% for question in questions %}
+                {% set answers = question.getAnswers() %}
+                <div class="d-flex" data-question="{{ question.id }}">
+                    {% set required = 'required' %}
+                    {% set questionLoopIndex = loop.index %}
+                    <div class="row w-100" data-stream-id="{{ assessmentStream.stream.id }}" data-maturity-level="{{ questionLoopIndex }}">
+                        {% if not loop.first %}
+                            <div class="col-sm-12">
+                                <hr class="ml-2 mb-0 mt-0"/>
+                            </div>
+                        {% endif %}
+
+                        <div class="col-sm-8">
+                            <div class="row">
+                                <div class="col-sm-12 card-header">
+                            <span id="activity" class="mr-2" data-toggle="modal" data-target="#activityModal{{ question.activity.id }}">
+                                <a href="#" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="{{ question.activity.shortDescription }}">
+                                    <i class="fa fa-question-circle"></i>
+                                </a>
+                            </span>
+                                    {% if question.activity.practiceLevel != null %}
+                                        L{{ question.activity.practiceLevel.maturityLevel.level }}:
+                                    {% endif %}
+                                    {{ question.text }}
+                                </div>
+                                <div class="col-sm-12 mt-2 ml-3" id="qualityCriteria{{ question.id }}">
+                                    {% set qualities = question.quality|split("\n") %}
+                                    {% if question.quality == "" %}
+                                        {% set qualities = [] %}
+                                    {% endif %}
+                                    <ul class="qualities-checkboxes-list" style="{{ assessmentStream.assessment.project.template ? '' : 'list-style: none;' }}">
+                                        {% set checkboxIndex = 0 %}
+                                        {% for quality  in qualities %}
+                                            <li class="quality-{{ question.id }} ml-3">
+                                                {% set checkboxAttributes =
+                                                    savedAnswers[question.id] is defined and
+                                                    savedAnswers[question.id]|first.answer.value is defined and
+                                                    savedAnswers[question.id]|first.answer.value <= 0 ?
+                                                    "enabled" : "disabled" %}
+                                                {% if savedAnswers is defined and
+                                                    savedAnswers[question.id] is defined and
+                                                    savedAnswers[question.id]|first.criteria['checkbox_'~checkboxIndex] is defined %}
+                                                    {% set checkboxAttributes =
+                                                        savedAnswers[question.id]|first.criteria['checkbox_'~checkboxIndex] == "true" ?
+                                                        checkboxAttributes ~ " checked" : checkboxAttributes %}
+                                                {% endif %}
+                                                <label class="label-checkbox">
+                                                    {% if not assessmentStream.assessment.project.template %}
+                                                        <div class="col-2 ml-n4">
+                                                            <input type="checkbox"
+                                                                   class='checkbox-choice-{{ question.id }}'
+                                                                   id="checkbox-{{ checkboxIndex }}"
+                                                                   data-question="{{ question.id }}"
+                                                                   data-url="{{ path('app_evaluation_save_checkbox_choice', {'id': assessmentStream.id}) }}"
+                                                                    {{ checkboxAttributes }}
+                                                                    {{ disabled }}>
+                                                        </div>
+                                                    {% endif %}
+                                                    <div class="col-12 pr-5">
+                                                        {{ quality }}
+                                                    </div>
+                                                </label>
+                                            </li>
+                                            {% set checkboxIndex = checkboxIndex + 1 %}
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="align-content-end col-sm-4 mt-3 mb-1">
+                            <div class="row">
+                                <div id="question-{{ question.id }}" data-question="{{ question.id }}" data-required="{{ required }}"
+                                     class="col-lg-11 col-md-11 col-sm-11 d-flex flex-column multiple-choice {{ required }} text-right">
+                                    {# answer \App\Entity\Answer #}
+                                    {% for index, answer in answers %}
+                                        {%- set active = 'btn-light' -%}
+                                        {% set chosen = '' %}
+                                        {% if savedAnswers is defined and savedAnswers[question.id] is defined and savedAnswers[question.id][answer.id] is defined %}
+                                            {% set active = 'btn-primary text-white' %}
+                                            {% set chosen = 'current-chosen' %}
+                                        {% endif %}
+                                        <button class="d-block mx-1 btn-hover-shine btn multiple-choice event-target {{ active }} {{ required }} {{ chosen }} mt-1 text-left "
+                                                {{ disabled }}
+                                                id="answer-{{ answer.id }}"
+                                                data-answer="{{ answer.id }}"
+                                                data-question="{{ question.id }}"
+                                                data-answer-value="{{ answer.value }}"
+                                                data-stream-id="{{ assessmentStream.stream.id }}"
+                                                data-maturity-level="{{ questionLoopIndex }}"
+                                                data-url="{{ path('app_evaluation_save_choice', {'id': assessmentStream.id}) }}"
+                                                aria-selected="false">
+                                            <div class="button-text-content d-flex flex-wrap align-items-center justify-content-between">
+                                                {{ answer.text }}
+                                                <div class="badges-block d-flex flex-wrap justify-content-end ml-auto mt-2">
+                                                    {% if templateAnswers is defined and templateAnswers[question.id][answer.id] is defined %}
+                                                        {% include 'application/model/partials/_target_posture_reference.html.twig'
+                                                            with {'remarks': templateRemarks, 'level': question.activity.practiceLevel.maturityLevel.level ?? 1, 'activity': question.activity, 'templateName': templateName} %}
+                                                    {% endif %}
+                                                    {% if oldAnswers is defined and oldAnswers['desired'][question.id] is defined and oldAnswers['desired'][question.id][answer.id] is defined %}
+                                                        <span class="badge badge-pill badge-success pull-right z-index-1001" data-toggle="tooltip" data-trigger="hover"
+                                                              title="{{ 'application.assessment.desired_answer'|trans({}, 'application') }}">
+                                                        <i class="fas fa-arrow-alt-circle-up"></i>
+                                                    </span>
+                                                    {% endif %}
+                                                    {% if oldAnswers is defined and oldAnswers['old'][question.id] is defined and oldAnswers['old'][question.id][answer.id] is defined %}
+                                                        <span class="badge badge-pill badge-primary pull-right z-index-1001" data-toggle="tooltip" data-trigger="hover"
+                                                              title="{{ 'application.assessment.previous_answer'|trans({}, 'application') }}">
+                                                        <i class="fas fa-history"></i>
+                                                    </span>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </button>
+                                    {% endfor %}
+                                </div>
+                                <div class="col-lg-1 col-md-1 col-sm-1 pl-0 pr-0 mt-6 text-center">
+                                <span id="score-{{ question.id }}"
+                                      class="scoreSpan text-primary mt-3"
+                                      data-maturity-level="{{ question.activity.practiceLevel is not null ? question.activity.practiceLevel.maturityLevel.level }}">
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% include 'application/model/modals/_activity.html.twig' with {'activity': question.activity, 'remarks': templateRemarks, 'level': question.activity.practiceLevel.maturityLevel.level ?? 1, 'templateName': templateName} %}
+                </div>
+            {% endfor %}
+            {% include 'application/documentation/partials/_documentation_container.html.twig' %}
+
+            <div id="formParent">
+                {% set disabledSubmit = (not fullyAnswered) %}
+                {{ form_start(auditForm, { 'action': path('app_audit_submit', {'id': assessmentStream.id}), 'attr': {'data-autosave-url' : path('app_audit_autosave', {'id': assessmentStream.id})  } }) }}
+                <div class="row ml-1 mb-1">
+                    {{ 'application.assessment.audit_remarks'|trans({}, 'application') }}:
+                </div>
+                {{ form_widget(auditForm.remarks) }}
+                <br>
+                <div class="d-flex flex-row justify-content-between">
+                    {{ form_widget(auditForm[constant("App\\Form\\Application\\AuditType::SAVE_BUTTON")]) }}
+                    {{ form_widget(auditForm[constant("App\\Form\\Application\\AuditType::SUBMIT_BUTTON")], {'attr': {'disabled': disabledSubmit}}) }}
+                </div>
+                {{ form_end(auditForm) }}
+            </div>
+        </div>
+    {% endblock %}
+{% endif %}
+{% block scripts %}
+    <script type="application/javascript" src="{{ asset('front/dependency/jquery/dist/jquery.min.js') }}"></script>
+    <script type="application/javascript" src="{{ asset('front/js/assessment.fill.audit.codific.js') }}"></script>
+{% endblock %}

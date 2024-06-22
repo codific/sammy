@@ -1,0 +1,15 @@
+/var/
+/vendor/
+/private/
+/tests/
+/.idea/
+/.git/
+/.editorconfig
+/.env.*
+/.gitignore
+/.php-cs-fixer.cache
+/.php-cs-fixer.dist.php
+/compose.yaml
+/phpstan.neon
+/phpunit.xml.dist
+/README.md

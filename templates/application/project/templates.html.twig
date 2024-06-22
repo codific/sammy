@@ -1,0 +1,143 @@
+{% extends 'application/base.html.twig' %}
+
+{% block body %}
+    <div class="row mt-5">
+        <div class="col-xl-12">
+            <div class="main-card card">
+                <div class="card-body">
+                    <table class="mb-0 table table-hover">
+                        <thead>
+                        <tr>
+                            <th class="w-15">{{ 'application.project.metamodel'|trans({}, 'application') }}</th>
+                            <th class="w-15">{{ 'application.project.name'|trans({}, 'application') }}</th>
+                            <th class="w-20">{{ 'application.project.description'|trans({}, 'application') }}</th>
+                            <th class="w-15 text-center">{{ 'application.project.score'|trans({}, 'application') }}</th>
+                            <th class="w-15">
+                                {% if is_granted("ROLE_MANAGER") %}
+                                    <div class="pull-right text-white">
+                                <span id="addProject" data-toggle="modal" data-target="#addProjectModal">
+                                    <a class="btn btn-success" data-toggle="tooltip" data-trigger="hover" title="{{ 'application.template_project.add_title_button'|trans({},'application') }}">
+                                        <i class="fas fa-plus"></i> <i class="fas fa-bullseye"></i>
+                                    </a>
+                                </span>
+                                    </div>
+                                {% endif %}
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% set activeProject = app.session.get(constant("App\\Service\\ProjectService::CURRENT_PROJECT_SESSION_KEY")) %}
+                        {# project \App\Entity\Project #}
+                        {% for project in templateProjects.results %}
+                            <tr>
+                                <td>{{ project.metamodel }}</td>
+                                <td>
+                                    {% set projectName = project.name %}
+                                    {% if is_granted("ROLE_MANAGER") %}
+                                        <a href="#" class="editable" id="name" data-type="text" data-pk="{{ project.id }}"
+                                           data-url="{{ path('app_project_ajaxmodify', {'id': project.id}) }}">
+                                            {{ projectName }}
+                                        </a>
+                                    {% else %}
+                                        <span>
+                                    {{ projectName }}
+                                </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% set projectDescription = project.description %}
+                                    {% if is_granted("ROLE_MANAGER") %}
+                                        <a href="#" class="editable" id="description" data-type="textarea" data-pk="{{ project.id }}"
+                                           data-url="{{ path('app_project_ajaxmodify', {'id': project.id}) }}">
+                                            {{ (projectDescription is empty) ? "..." : projectDescription | nl2br }}
+                                        </a>
+                                    {% else %}
+                                        <span>
+                                    {{ projectDescription | nl2br }}
+                                </span>
+                                    {% endif %}
+                                </td>
+
+                                <td class="text-center">
+                            <span class="text-success">
+                                {{ (projectScore[project.id] is defined) ? projectScore[project.id].arithmeticMean|number_format(2) : "0.00" }}</span>
+                                    &nbsp;
+                                    <span data-toggle="modal" data-target="#overviewModal">
+                                        <a id="overview-project-{{ project.id }}"
+                                           data-project="{{ project.id }}"
+                                           data-url="{{ path('app_reporting_overviewPartial',{'id':project.id} ) }}"
+                                           class="btn btn-light btn-primary btn-overview-project" data-toggle='tooltip' data-html="true"
+                                           title="{{ 'application.assessment.overview'|trans({},'application') }}">
+                                            <i class="fas fa-chart-line"></i>
+                                        </a>
+                                    </span>
+                                </td>
+                                <td class="text-right">
+                                    {% if activeProject is not null and project.id != activeProject.id %}
+                                        <form method="POST" action="{{ path("app_switch_project", {id: project.id}) }}" class="d-inline-block">
+                                            <button type="submit" class="btn btn-primary"
+                                                    data-toggle="tooltip"
+                                                    data-placement="top"
+                                                    title="{{ 'application.assessment.start'|trans({},'application') }}"
+                                                    data-original-title="{{ 'application.assessment.start'|trans({},'application') }} ">
+                                                <i class="fas fa-play"></i>
+                                            </button>
+                                            <input type="hidden" name="token" value="{{ csrf_token('switch_project') }}">
+                                        </form>
+                                    {% endif %}
+                                    {% if is_granted("ROLE_MANAGER") %}
+                                        <span data-toggle="modal" data-target="#delete-{{ project.id }}">
+                                            <button class="btn btn-danger text-white" data-toggle="tooltip" title="{{ 'application.project.delete_tooltip'|trans({},'application') }}">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </span>
+                                        <div class="modal fade" id="delete-{{ project.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">
+                                                            {{ 'application.project.delete_text'|trans({"project": project.name|trim}, 'application') }}
+                                                        </h4>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <form method="post" action="{{ path("app_project_delete", app.request.query.all|merge({'id': project.id})) }}">
+                                                            <input type="hidden" name="_method" value="DELETE">
+                                                            <input type="hidden" name="_token" value="{{ csrfToken }}">
+                                                            <button class="btn btn-default" data-dismiss="modal">
+                                                                <i class="far fa-times"></i>&nbsp; {{ 'application.general.cancel'|trans({},'application') }}
+                                                            </button>
+                                                            <button class="btn btn-danger" type="submit">
+                                                                <i class="fas fa-trash"></i>&nbsp; {{ 'application.project.delete_button'|trans({},'application') }}
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% import "application/_pagination.html.twig" as pagination %}
+                {{ pagination.paginate('app_project_templates', templateProjects, queryParams) }}
+            </div>
+        </div>
+    </div>
+
+    {% include 'application/project/modals/_add_template_modal.html.twig' %}
+    {% if templateProjects.results | length > 0 %}
+        {{ render(controller('App\\Controller\\Application\\ReportingController::overview', {project: templateProjects.results|first})) }}
+    {% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script type="application/javascript" src="{{ asset('front/js/projectOverview.js?v=1.0') }}"></script>
+    <script type="application/javascript" src="{{ asset('front/js/assessment.charts.js') }}"></script>
+{% endblock %}
+
+

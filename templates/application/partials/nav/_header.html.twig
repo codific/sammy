@@ -1,0 +1,40 @@
+{% set highlightedMenu = '' %}
+{% if app.session.get('highlightedMenu') %}
+    {% set highlightedMenu = app.session.get('highlightedMenu') %}
+{% endif %}
+{% set isAssessmentMenuActive = path('app_model_showPractice') == highlightedMenu %}
+<div class="app-header header-shadow header-text-light {{ getThemeStyleForMetamodel() }}">
+    <div class="app-header__logo">
+        <div class="logo-src mr-1 pt-1 pb-1">
+            <img alt="logo" class="logo" src="{{ asset("front/images/logo.png") }}">
+        </div>
+    </div>
+    <div class="app-header__menu w-100">
+        <span class="d-inline-block w-100">
+            {% if isAssessmentMenuActive %}
+                <button type="button" class="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-sidebar">
+                    <span class="btn-icon-wrapper">
+                        <i class="fas fa-bars"></i>
+                    </span>
+                </button>
+            {% endif %}
+            <button type="button" class="{{ isAssessmentMenuActive ? "ml-3" : "" }} float-right btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav">
+                <span class="btn-icon-wrapper">
+                    <i class="dots-button fa fa-ellipsis-v fa-w-6"></i>
+                </span>
+            </button>
+        </span>
+    </div>
+    <div class="app-header__content pl-2 pr-3">
+        <div class="app-header-left pl-1 col-9">
+            {% block navbar %}
+                {% include 'application/partials/nav/_header_navbar_left.html.twig' %}
+            {% endblock %}
+        </div>
+        <div class="app-header-right pr-0 col-3 justify-content-end">
+            {% block user_section %}
+                {% include 'application/partials/nav/_header_navbar_right.html.twig' %}
+            {% endblock %}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,87 @@
+{% extends 'application/base.html.twig' %}
+{% set fixedSidebar = 'fixed-sidebar' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('front/css/custom-smartwizard.css') }}">
+{% endblock %}
+
+{% block sidebar %}
+    {% include 'application/model/partials/_sidebar.html.twig' %}
+{% endblock %}
+
+{% block body %}
+    {% set stream = assessmentStream.stream %}
+    {% set currentPractice = stream.practice %}
+    <div class="mt-2 assessment-body-wrapper">
+        {% include 'application/shared/_assessment_progress_bar.html.twig' %}
+        <div class="card">
+            <div class="card">
+                <div class="card-header tabs-lg-alternate">
+                    <ul class="nav nav-justified">
+                        {% for currentStream in streams %}
+                            <li class="nav-item">
+                                {% set streamLetter = (currentStream.stream.order == 2 ? "B" : "A") %}
+                                <a href="{{ path('app_model_showStream', { 'id' : currentStream.stream.id}) }}"
+                                   class="{{ stream.name == currentStream.stream.name ? "active" : "" }} streamHeader nav-link w-100">
+                                    <h4 class="{{ stream.name == currentStream.stream.name ? 'd-inline-block' : '' }}">
+                                        {% include 'application/model/partials/_stream_icons.html.twig' with {status: currentStream.status, streamCompleted: currentStream.completed } %}
+                                        {{ currentStream.stream.nameKey }}: {{ currentStream.stream.trimmedName }}
+                                        {% if stream.name == currentStream.stream.name and assessmentStream.score is defined %}
+                                            {% if assessmentStream.assessment.project.isTemplate == false %}
+                                                <span id="validatedScore">{{ assessmentStream.score|number_format(2) }}</span>
+                                                <span id="unvalidatedScoreWrapper" class="{{ assessmentStream.score < assessmentStream.unvalidatedScore ? "" : "d-none" }}">
+                                                    / <span id="unvalidatedScore" class="text-danger font-weight-bold">{{ assessmentStream.unvalidatedScore|number_format(2) }}</span>
+                                                    <i class="fa fa-info-circle" data-toggle="tooltip" data-trigger="hover"
+                                                       title="{{ "application.index.unvalidated_score_tooltip"|trans({},'application') }}"></i>
+                                                </span>
+                                            {% else %}
+                                                <span id="unvalidatedScore">{{ assessmentStream.score|number_format(2) }}</span>
+                                            {% endif %}
+                                        {% endif %}
+                                    </h4>
+                                </a>
+                                {% if stream.name != currentStream.stream.name %}
+                                    <div class="{{ streamLetter == "A" ? 'inset-shadow-bottom-right' : 'inset-shadow-bottom-left' }}"></div>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab-eg9-{{ stream.name == streams.0.stream.name ? 0 : 1 }}" role="tabpanel">
+                        <div class="card-body">
+                            <div>
+                                {% if assessmentStream.assessment.project.isTemplate == false %}
+                                    {% if auditView ?? false == false %}
+                                        {% include 'application/model/partials/_stage_tabs_wizard.html.twig' with partialParams %}
+                                    {% else %}
+                                        {% include 'application/model/partials/_audit_tabs_wizard.html.twig' with partialParams %}
+                                    {% endif %}
+                                {% else %}
+                                    {% include 'application/model/partials/_target_posture_wizard.html.twig' with partialParams %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% include 'application/model/modals/_chart.html.twig' %}
+        </div>
+    </div>
+    <input id="max-maturity-levels" value="{{ getMaxMaturityLevels(currentPractice.businessFunction.metamodel.id) }}" hidden/>
+{% endblock %}
+
+
+{% block scripts %}
+    {{ parent() }}
+    <script type="application/javascript" src="{{ asset('front/js/custom_datepicker.js') }}"></script>
+    <script type="application/javascript" src="{{ asset('front/js/assessment.fill.codific.js?v=1.7') }}"></script>
+    <script type="application/javascript" src="{{ asset('front/js/assessment.charts.js?v=1.5') }}"></script>
+    <script type="application/javascript" src="{{ asset('front/js/improvementScore.js?v=1.1') }}"></script>
+    <script type="application/javascript" src="{{ asset('front/js/improvement.codific.js?v=1.0') }}"></script>
+    <script type="application/javascript" src="{{ asset('front/js/unvalidatedScore.js?v=1.1') }}"></script>
+    <script type="application/javascript" src="{{ asset('front/js/assignments.js?v=1.0') }}"></script>
+    <script type="application/javascript" src="{{ asset('front/js/guidanceModal.js') }}"></script>
+{% endblock %}

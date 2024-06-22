@@ -1,0 +1,9 @@
+services:
+  App\Repository\AssessmentAnswerRepository :
+    public : true
+    autowire : true
+    autoconfigure : true
+  App\Repository\FeedbackRepository :
+    public : true
+    autowire : true
+    autoconfigure : true

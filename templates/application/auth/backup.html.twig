@@ -1,0 +1,52 @@
+{% extends 'application/base.html.twig' %}
+
+{% block title %}{{ 'application.general.mfa_backup_codes_title'|trans({}, 'application') }}{% endblock %}
+  
+{% block body %}
+    <div class="row mt-5">
+        <div class="card col-md-8 offset-md-2">
+            <div class="card-header header-elements-inline">
+                <h4><i class="fa fa-life-ring"></i> {{ 'application.general.mfa_backup_codes_title'|trans({}, 'application') }}</h4>
+            </div>
+            <div class="card-body">
+                <p>{{ 'application.general.mfa_backup_codes_text'|trans({}, 'application') | raw }}</p>
+                <div class="text-center">
+                    {% for index, code in app.user.backupCodes() %}
+                        <h5 class="d-inline-block">
+                            <span class="badge border border-secondary text-secondary">{{ index + 1 }}: {{ code }}</span>
+                        </h5>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="float-right">
+                    <a class="btn btn-success" href="/"><i class="fa fa-check"></i> {{ 'application.general.done'|trans({}, 'application') }}</a>
+                </div>
+                <span class="float-left mx-1" data-toggle="modal" data-target="#resetDevice">
+                    <button title="{{ 'application.general.mfa_reset_device_tooltip'|trans ({}, "application") }}" data-toggle="tooltip" data-placement="left" type="button" class="btn btn-danger">
+                        <i class="fas fa-retweet"></i> {{ 'application.general.mfa_reset_device'|trans({}, 'application') }}
+                    </button>
+                </span>
+                <div class="modal fade text-left" id="resetDevice" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">
+                                    {{ 'application.general.mfa_reset_device_title'|trans({}, 'application') }}
+                                </h4>
+                            </div>
+                            <div class="modal-footer">
+                                <form method="post" class="delete-multimedia-form" action="{{ path('app_auth_mfa_reset') }}">
+                                    <input type="hidden" name="_token" value="{{ csrf_token(app.user.id) }}">
+                                    <button class="btn btn-default close-btn" data-dismiss="modal"><i class="fa fa-times"></i>&nbsp; {{ 'application.general.cancel'|trans ({}, 'application') }}</button>
+                                    <button class="btn btn-danger submit-btn" type="submit"><i class="fas fa-retweet"></i>&nbsp; {{ 'application.general.mfa_reset_device_button'|trans ({}, 'application') }}</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+  

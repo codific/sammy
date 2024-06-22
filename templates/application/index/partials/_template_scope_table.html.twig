@@ -1,0 +1,60 @@
+<div class="main-card mb-3 card w-100">
+    <div class="card-header">
+        <div class="col-sm-9 card-header-title font-size-lg font-weight-normal">
+            {{ "application.template_project.streams"|trans({},'application') }}
+            <div class="ml-2 badge badge-pill badge-info">{{ streamRows|length }}</div>
+        </div>
+    </div>
+    {% if streamRows | length > 0 %}
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="mb-0 table table-borderless table-hover">
+                    <thead>
+                    <tr>
+                        <th class="w-37">{{ "application.index.stream"|trans({}, 'application') }}</th>
+                        <th class="text-center">{{ "application.index.score"|trans({},'application') }}</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for index, assessmentStream in streamRows %}
+
+                        {% set streamIsValidated = assessmentStream.getStatus == constant("App\\Enum\\AssessmentStatus::VALIDATED") %}
+                        {% set streamIsInImprovement = assessmentStream.getStatus == constant("App\\Enum\\AssessmentStatus::IN_IMPROVEMENT") %}
+
+                        <tr {{ loop.index0 }}
+                                data-assessment-id="{{ assessmentId }}"
+                                data-row-index="{{ loop.index0 }}">
+
+                            <td>
+                                <a data-placement="right" data-toggle="tooltip"
+                                   title="{{ assessmentStream.getStream.getPractice.getBusinessFunction.name }} > {{ assessmentStream.getStream.getPractice.name }}">
+                                    <i class='fa {{ assessmentStream.getStream.getPractice.getBusinessFunction.icon }}'></i>
+                                </a>
+                                {{ assessmentStream.getStream.getName }}
+                                <a data-placement="right" data-toggle="tooltip" title="{{ assessmentStream.getStream.getDescription }}">
+                                    <i class="fa fa-question-circle"></i>
+                                </a>
+                            </td>
+
+                            <td class="text-center">
+                                <span class="text-success font-weight-bold">{{ assessmentStream.score|number_format(2) }}</span>
+                            </td>
+
+                            <td class="text-right w-6">
+                                <div role="group" class="btn-group-sm btn-group">
+                                    <a class="btn-shadow btn btn-primary ml-1"
+                                       href="{{ path("app_evaluation_overview", {"id": assessmentStream.getStream.id}) }}">
+                                        {{ "application.index.preview"|trans({}, 'application') }}
+                                    </a>
+                                </div>
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+</div>

@@ -1,0 +1,13 @@
+{% set progress = progress is defined ? progress : 0 %}
+
+<div class="progress mb-1 progress-custom-style">
+    <div class="progress-bar bg-success" role="progressbar"
+         aria-valuenow="{{ progress }}"
+         aria-valuemin="0"
+         aria-valuemax="100"
+         style="width: {{ progress }}%">
+        <div class="pl-4 pr-4 text-dark">
+            Assessment completion: <span id='progressPct'>{{ progress|round }}</span>%
+        </div>
+    </div>
+</div>

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Language" content="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    {% block seoMetaTags %}
+        <meta name="description" content="{{ "application.general.meta_description"|trans({},'application')}}">
+    {% endblock %}
+    <title>{% block title %}SAMMY - the OWASP SAMM tool{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no">
+    <!-- Disable tap highlight on IE -->
+    <meta name="msapplication-tap-highlight" content="no">
+    <link rel="stylesheet" href="{{ asset('front/dependency/@fortawesome/fontawesome-free/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('front/dependency/ionicons-npm/css/ionicons.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('front/dependency/pe7-icon/dist/dist/pe-icon-7-stroke.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('front/css/theme/base.css') }}">
+    <link href="{{ asset('front/css/codific.css') }}" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<div class="app-container app-theme-white body-tabs-shadow">
+    <div class="app-container">
+        {% block flashes %}
+            {% include 'application/partials/nav/_flashes.html.twig' %}
+        {% endblock %}
+
+        {% block body %}{% endblock %}
+    </div>
+    <script type="application/javascript" src="{{ asset('front/dependency/jquery/dist/jquery.min.js') }}"></script>
+    <script type="application/javascript" src="{{ asset('front/dependency/toastr/build/toastr.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('front/js/notifications.codific.js') }}"></script>
+</div>
+</body>
+</html>

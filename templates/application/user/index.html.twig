@@ -1,0 +1,52 @@
+{% extends 'application/base.html.twig' %}
+
+{% block body %}
+    <div class="row mt-5">
+        <div class="col-xl-12">
+            <div class="main-card card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            {{ form_start(groupFilterForm, {'attr':{'class': 'groupFilterForm'}}) }}
+                            {{ form_widget(groupFilterForm) }}
+                            {{ form_end(groupFilterForm) }}
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-2">
+                            <div class="search-users-container input-group">
+                                <input type="search"
+                                       id="search-users-input"
+                                       class="form-control w-75 mr-1"
+                                       data-url="{{ path("app_user_filter", {'group': group != null ? group.id : null}) }}"
+                                       placeholder="{{ 'application.user.search_by_placeholder'|trans({},'application') }}"
+                                       value="{{ app.request.query.get('searchTerm') }}"
+                                       autofocus="autofocus"
+                                />
+                                {#  button is only for aesthetics  #}
+                                <button type="button" class="search-users-button btn btn-primary">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {{ include('application/user/table-paginator-container.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% for user in users.results %}
+        {% include 'application/user/modals/_user_details_modal.html.twig' with {userAssignments: allUserAssignments[user.id] ?? {}} %}
+    {% endfor %}
+    {{ include('application/user/modals/_add_user_modal.html.twig') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('front/js/import.users.js?v=1.1') }}"></script>
+    <script src="{{ asset('shared/js/user.roles.js') }}"></script>
+    <script src="{{ asset('front/js/users.index.form.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('front/js/selectAll.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('front/js/users.js') }}"></script>
+{% endblock %}

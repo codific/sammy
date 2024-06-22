@@ -1,0 +1,40 @@
+{% extends 'application/base.html.twig' %}
+
+{% block body %}
+    <div class="row mt-5">
+        <div class="col-lg-12">
+            <div class="main-card card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6 mb-2">
+                            <div class="search-groups-container input-group">
+                                <input type="search"
+                                       id="search-groups-input"
+                                       class="form-control w-75 mr-1"
+                                       data-url="{{ path("app_group_filter") }}"
+                                       placeholder={{ 'application.group.search_by_placeholder'|trans({}, 'application') }}
+                                       value="{{ app.request.query.get('searchTerm') }}"
+                                       autofocus="autofocus"
+                                />
+                                {#  button is only for aesthetics  #}
+                                <button type="button" class="search-groups-button btn btn-primary">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        {{ include('application/group/table-paginator-container.html.twig') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ include('application/group/modals/_add_group_modal.html.twig') }}
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('front/js/selectAll.js?v=1.0') }}"></script>
+    <script type="text/javascript" src="{{ asset('front/js/groups.js?v=1.4') }}"></script>
+{% endblock %}

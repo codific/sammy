@@ -1,0 +1,69 @@
+{% set assignment = partialParams['assignment'] is defined ? partialParams['assignment'] : null %}
+{% set tabs =
+    { 'audit': {
+        'icon': 'fa fa-eye',
+        'path': 'app_audit_overview',
+        'title': 'application.streams.tabs.audit'|trans({}, 'application'),
+        'isDone': assessmentStream.status == constant('App\\Enum\\AssessmentStatus::VALIDATED') or
+        assessmentStream.status == constant('App\\Enum\\AssessmentStatus::IN_IMPROVEMENT') or
+        assessmentStream.status == constant('App\\Enum\\AssessmentStatus::COMPLETE'),
+        'stage': assessmentStream.lastValidationStage,
+        'assignment': assignment
+    }, 'improvement': {
+        'icon': 'fas fa-arrow-alt-circle-up',
+        'path': 'app_improvement_overview',
+        'title': 'application.streams.tabs.improvement'|trans({}, 'application'),
+        'isDone': assessmentStream.status == constant('App\\Enum\\AssessmentStatus::IN_IMPROVEMENT') or
+        assessmentStream.status == constant('App\\Enum\\AssessmentStatus::COMPLETE'),
+        'stage': assessmentStream.lastImprovementStage,
+        'assignment': assignment
+    }} %}
+
+<div class="row">
+    <div class="pl-4 pr-4 row">
+        <div id="smartwizard" class="forms-wizard-alt">
+            <ul class="forms-wizard">
+                {% set counter = 0 %}
+                {% for tabName, tab in tabs %}
+                    {% set tabClass = (tabName == activeTab ? ' active ' : tab['isDone'] ? ' done ' : '') ~ (tabName == currentTab ? ' current ' : '') %}
+                    <li id="{{ tabName }}-tab" class="{{  tabClass is empty ? 'inactiveLink' : tabClass }}">
+                        <a href="{{ path(tab['path'], {'id': stream.id}) }}" class="nav-link {{ tabClass is empty ? 'inactiveLink' : '' }}">
+                            <div>
+                                <em>{{ loop.index }}</em>
+                                <span>
+                                    <i class="{{ tab['icon'] }}"></i> {{ (tabName == 'improvement' and assessmentStream.status == constant('App\\Enum\\AssessmentStatus::COMPLETE')) ?  'application.streams.tabs.completed'|trans({}, 'application') : tab['title']}}
+                                    {% if tab['isDone'] == false and (tabName == activeTab or (tabName == 'improvement' and activeTab == "progress"))
+                                        and ( assessmentStream.getLastValidationStage is null or assessmentStream.getLastValidationStage.status != constant('App\\Enum\\ValidationStatus::AUTO_ACCEPTED') ) %}
+                                        (Assigned to:
+                                        <span href="javascript:void(0);" class="editable2 editable-click editableShort clickable text-primary" id="assignedTo"
+                                              data-type="select2"
+                                              data-value="{{ (tab['assignment']) ? (tab['assignment'].user) ? tab['assignment'].user.id : 0 : 0 }}"
+                                              data-pk="{{ assessmentStream.id }}"
+                                              data-source="{{ path('app_stage_ajaxindexForAssignment', {'project': assessmentStream.assessment.project.id, 'assessmentStream' : assessmentStream, 'short': true }) }}"
+                                              data-url='{{ path('app_stage_ajaxSetAssignedTo', {'assessmentStream': assessmentStream.id }) }}'>
+                                            {% if tab['assignment'] is not null and tab['assignment'].user is entityExists(true) and tabName == activeTab %}
+                                                {{ tab['assignment'].user.shortName }}
+                                            {% else %}
+                                                ____
+                                            {% endif %}
+                                        </span>
+                                        )
+                                    {% elseif tab['stage'] is not null and tab['stage'].submittedBy is entityExists(true) and (tabName == activeTab or tab['isDone']) %}
+                                        ({{ tab['stage'].getSubmittedByActionTranslationKey|trans({'name':tab['stage'].submittedBy.shortName},'application') }})
+                                    {% endif %}
+                                    </span>
+                            </div>
+                        </a>
+                    </li>
+                    {% set counter = counter + 1 %}
+                {% endfor %}
+            </ul>
+            <hr class="mb-0">
+            <div class="form-wizard-content">
+                <div id="step-1" class="tab-pane step-content">
+                    {% include 'application/model/tabs/_' ~ activeTab ~ '_tab.html.twig' with partialParams %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- https://phpunit.readthedocs.io/en/latest/configuration.html -->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         backupGlobals="false"
+         colors="true"
+         bootstrap="tests/bootstrap.php"
+         testdox="true"
+    convertDeprecationsToExceptions="false">
+    <php>
+        <ini name="display_errors" value="1" />
+        <ini name="memory_limit" value="-1" />
+        <ini name="error_reporting" value="-1" />
+        <server name="APP_ENV" value="test" force="true" />
+        <server name="SHELL_VERBOSITY" value="-1" />
+        <server name="SYMFONY_PHPUNIT_REMOVE" value="" />
+        <server name="SYMFONY_PHPUNIT_VERSION" value="9.5" />
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak"/>
+    </php>
+
+    <testsuites>
+        <testsuite name="Project Test Suite">
+            <directory>tests</directory>
+        </testsuite>
+        <testsuite name="entity">
+            <directory>tests/Entity</directory>
+        </testsuite>
+        <testsuite name="repository">
+            <directory>tests/Repository</directory>
+        </testsuite>
+        <testsuite name="service">
+            <directory>tests/Service</directory>
+        </testsuite>
+<!--        NOT WORKING YET-->
+        <testsuite name="misc">
+            <directory>tests/misc</directory>
+        </testsuite>
+        <testsuite name="functional">
+            <directory>tests/functional</directory>
+        </testsuite>
+        <testsuite name="trait">
+            <directory>tests/trait</directory>
+        </testsuite>
+    </testsuites>
+
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+        <exclude>
+            <directory suffix=".php">src/Migrations</directory>
+            <directory suffix=".php">src/Form</directory>
+            <directory suffix=".php">src/Entity</directory>
+            <directory suffix=".php">src/DataFixtures</directory>
+        </exclude>
+    </coverage>
+
+    <extensions>
+        <extension class="DAMA\DoctrineTestBundle\PHPUnit\PHPUnitExtension" />
+        <extension class="Symfony\Component\Panther\ServerExtension" />
+    </extensions>
+
+
+</phpunit>

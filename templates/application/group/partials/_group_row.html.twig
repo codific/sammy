@@ -1,0 +1,151 @@
+<tr data-parent-id="{{ parentId }}" data-group="{{ group.id }}">
+    <td data-group="{{ group.id }}" data-parent-id="{{ parentId }}" {{ padding > 0 ? "style=padding-left:" ~ padding ~ "px" }}>
+        {% if groupsByParent[group.id] is defined %}
+            <button type="button" class="btn btn-sm pl-0 btn-show-subgroup d-none" data-group="{{ group.id }}" data-parent-id="{{ parentId }}">
+                <i class="fa fa-solid fa-caret-right"></i>
+            </button>
+
+            <button type="button" class="btn btn-sm pl-0 btn-hide-subgroup" data-group="{{ group.id }}" data-parent-id="{{ parentId }}">
+                <i class="fa fa-solid fa-caret-down"></i>
+            </button>
+        {% endif %}
+        {% if is_granted("ROLE_MANAGER") %}
+            <a href="#" class="editable" id="name" data-type="text" data-pk="{{ group.id }}" data-url="{{ path('app_group_ajaxmodify', {'id': group.id}) }}">
+                {{ group.name }}
+            </a>
+        {% else %}
+            <span>
+                {{ group.name }}
+            </span>
+        {% endif %}
+    </td>
+    <td class="text-center">
+        {% for groupProject in group.groupProjects|slice(0,4) %}
+            <button class="btn-icon btn-icon-only btn-pill btn btn-outline-secondary">
+                <i class="fa fa-briefcase"></i> {{ groupProject.project }}
+            </button>
+        {% endfor %}
+        {% if group.groupProjects|length > 4 %}
+            <span data-toggle="modal" data-target="#add-users-{{ group.id }}">
+                            <button class="button-view-all-projects btn-icon btn-icon-only btn-pill btn btn-outline-secondary">
+                                <i class="fa fa-list"></i> {{ 'application.group.show_all'|trans({},'application') }}
+                            </button>
+                        </span>
+        {% endif %}
+    </td>
+    <td class="text-center">
+        <a href="javascript:void(0);" class="editable2 editable-click editableShort text-primary" id="parent"
+           data-type="select2"
+           data-pk="{{ group.id }}"
+           data-source="{{ path('app_group_ajaxindex', {id: group.id}) }}"
+           data-url='{{ path('app_group_ajaxmodify', {'id': group.id }) }}'>
+            {% if group.parent is not null %}
+                {{ group.parent.name }}
+            {% endif %}
+        </a>
+    </td>
+    <td class="text-right">
+                    <span data-toggle="modal" data-target="#add-users-{{ group.id }}">
+                        <button class="btn btn-primary"
+                                data-toggle="tooltip" data-placement="top"
+                                title="{{ 'application.group.manage_projects_button'|trans({},'application') }}"
+                                data-original-title="{{ 'application.group.manage_projects_button'|trans({},'application') }}">
+                        <i class="fa fa-briefcase"></i>
+                        </button>
+                    </span>
+        <div class="modal fade" id="add-users-{{ group.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            {{ 'application.group.manage_projects_title'|trans({}, 'application') }}
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {{ 'application.group.manage_projects_description'|trans({}, 'application') }}
+                        <form class="mt-3" method="POST" action="{{ path("app_group_edit_projects", {id: group.id}) }}">
+                            <fieldset class="form-project">
+                                <div class="row">
+                                    <legend class="col-sm-2 col-form-label">{{ 'application.group.projects'|trans({}, 'application') }}</legend>
+                                    <div class="col-sm-10 mt-2">
+                                        <div class="form-group">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" id="group-{{ group.id }}-all-group-projects" class="custom-control-input checkbox-all">
+                                                <label class="custom-control-label"
+                                                       for="group-{{ group.id }}-all-group-projects">{{ button_label|default('application.general.select_all'|trans({},'application')) }}</label>
+                                            </div>
+                                            <hr class="pull-left mt-1 mb-2">
+                                            <div class="row">
+                                                {% for project in allProjects %}
+                                                    {% if project.isTemplate == false %}
+                                                        <div class="custom-control custom-checkbox inline-checkbox col-6">
+                                                            <input type="checkbox" id="group-{{ group.id }}-project-{{ project.id }}" name="projectIds[]"
+                                                                   class="custom-control-input"
+                                                                   value="{{ project.id }}" {{ groupProjectData[group.id] is defined and project.id in groupProjectData[group.id] ? 'checked' : '' }}>
+                                                            <label class="custom-control-label"
+                                                                   for="group-{{ group.id }}-project-{{ project.id }}">{{ project.name }}</label>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <input type="hidden" name="_token" value="{{ csrfToken }}">
+                            <button class="btn btn-primary btn-sm"><i class="far fa-save"></i>&nbsp; {{ ('application.general.save_button')|trans({}, 'application') }}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a href="{{ path('app_user_index', {'group' : group.id}) }}" class="btn btn-primary" data-toggle="tooltip" data-trigger="hover"
+           title="{{ 'application.group.team'|trans({},'application') }}">
+            <i class="fa fa-user"></i>
+        </a>
+        {% if is_granted("ROLE_MANAGER") %}
+            {% if group.groupUsers|length == 0 %}
+                <span data-toggle="modal" data-target="#delete-{{ group.id }}">
+                                <button class="btn btn-danger text-white" data-toggle="tooltip" data-trigger="hover"
+                                        title="{{ 'application.group.delete_button'|trans({},'application') }}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </span>
+                <div class="modal fade" id="delete-{{ group.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">
+                                    {{ 'application.group.delete_text'|trans({"group": group.name|trim}, 'application') }}
+                                </h4>
+                            </div>
+                            <div class="modal-footer">
+                                <form method="post" action="{{ path("app_group_delete", app.request.query.all|merge({'id': group.id})) }}">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="{{ csrfToken }}">
+                                    <button class="btn btn-default" data-dismiss="modal"><i
+                                                class="far fa-times"></i>&nbsp; {{ 'application.general.cancel'|trans({},'application') }}</button>
+                                    <button class="btn btn-danger" type="submit">
+                                        <i class="fas fa-trash"></i>
+                                        &nbsp; {{ 'application.group.delete_button'|trans({},'application') }}</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <span>
+                                <button class="btn disabled btn-danger text-white" data-toggle="tooltip" data-trigger="hover"
+                                        title="{{ 'application.group.delete_disabled'|trans({},'application') }}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </span>
+            {% endif %}
+        {% endif %}
+    </td>
+</tr>

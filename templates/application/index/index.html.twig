@@ -1,0 +1,163 @@
+{% extends 'application/base.html.twig' %}
+
+{% block body %}
+
+    {% set streamsWithoutAnswerTableName = "streamsWithoutAnAnswer" %}
+    {% set streamsWithoutVerificationTableName = "streamsWithoutVerification" %}
+    {% set streamsInOrForImprovementTableName = "streamsInOrForImprovement" %}
+    {% set completedStreamsTableName = "completedStreams" %}
+    {% set totalTables = {
+        "streamsWithoutAnAnswer": "application.index.streams_without_answer"|trans({},'application'),
+        "streamsWithoutVerification": "application.index.non_verified_streams"|trans({},'application'),
+        "streamsInOrForImprovement": "application.index.in_or_for_improvement_streams"|trans({},'application'),
+        "completedStreams": "application.index.completed_streams"|trans({},'application'),
+    } %}
+
+    {% if assessment is not null %}
+        {% if not assessment.project.isTemplate %}
+            {% set unvalidatedToggleIsActive = app.request.cookies.get('unvalidated-score-toggle') == 'true' %}
+            <div class="row">
+                <div class="col-lg-12 col-xl-10 offset-md-0 offset-xl-1">
+                    {% for tableName, tablePrettyName in totalTables %}
+                        <div class="form-check form-check-inline hide-table-button " data-assessment-id="{{ assessment.id }}" data-table-name="{{ tableName }}">
+                            <div class="toggle btn mr-1 btn-light child-toggle stream-toggle {{ (app.request.cookies.has(tableName)) ? (app.request.cookies.get(tableName) == 'true' ? 'on' : 'off') : 'on' }} "
+                                 data-toggle="toggle" role="button">
+                                <input class="form-check-input" type="checkbox" data-toggle="toggle" data-style="mr-1" checked>
+                                <div class="toggle-group">
+                                    <label class="btn btn-primary toggle-on">On</label>
+                                    <label class="btn btn-light toggle-off">Off</label>
+                                    <span class="toggle-handle btn btn-light"></span>
+                                </div>
+                            </div>
+                            <label class="toggle-label" class="form-check-label">{{ tablePrettyName }}</label>
+                        </div>
+                    {% endfor %}
+                    {% if totalTables is not empty %}
+                        <div class="form-check form-check-inline show-assigned-button" data-toggle="tooltip" data-placement="bottom"
+                             data-original-title="{{ "application.index.assignments_tooltip"|trans({},'application') |raw }}" data-html="true">
+                            <div class="toggle btn mr-1 btn-light child-toggle stream-toggle {{ (app.request.cookies.has("assigned") and app.request.cookies.get("assigned") == "true") ? 'on' : 'off' }} "
+                                 data-toggle="toggle" role="button">
+                                <input class="form-check-input" type="checkbox" data-toggle="toggle" data-style="mr-1" checked>
+                                <div class="toggle-group">
+                                    <label class="btn btn-primary toggle-on">On</label>
+                                    <label class="btn btn-light toggle-off">Off</label>
+                                    <span class="toggle-handle btn btn-light"></span>
+                                </div>
+                            </div>
+                            <label class="toggle-label" class="form-check-label">
+                                {{ "application.index.assignments_my_assignments"|trans({},'application') }}
+                            </label>
+                        </div>
+                    {% endif %}
+
+                </div>
+            </div>
+            <div class="mt-3">
+                <div class="row" data-assessment-id="{{ assessment.id }}"
+                     data-table-name="{{ streamsWithoutAnswerTableName }}" {{ (app.request.cookies.has(streamsWithoutAnswerTableName)) ? (app.request.cookies.get(streamsWithoutAnswerTableName) == 'true' ? '' : 'hidden') : '' }}>
+                    <div class="col-lg-12 col-xl-10 offset-md-0 offset-xl-1">
+                        {% include 'application/index/partials/_streams_table.html.twig' with {
+                            cols: [
+                                "application.index.stream_weight"|trans({},'application'),
+                                "application.index.score"|trans({},'application'),
+                                "application.index.assigned_to"|trans({},'application')
+                            ],
+                            tableHeaderLabel: "application.index.streams_without_answer"|trans({},'application'),
+                            hiddenRowMinIndex: 2,
+                            streamRows: evaluationTrackStreams,
+                            assignments: assignments,
+                            tableName: streamsWithoutAnswerTableName,
+                            assessmentId: assessment.id,
+                            activeTabIndex: 1,
+                            track : 'evaluation'
+                        } %}
+                    </div>
+                </div>
+                <div class="row" data-assessment-id="{{ assessment.id }}"
+                     data-table-name="{{ streamsWithoutVerificationTableName }}" {{ (app.request.cookies.has(streamsWithoutVerificationTableName)) ? (app.request.cookies.get(streamsWithoutVerificationTableName) == 'true' ? '' : 'hidden') : '' }} >
+                    <div class="col-lg-12 col-xl-10 offset-md-0 offset-xl-1">
+                        {% include 'application/index/partials/_streams_table.html.twig' with {
+                            cols: [
+                                "application.index.stream_weight"|trans({},'application'),
+                                "application.index.submitted_by"|trans({},'application'),
+                                "application.index.score"|trans({},'application'),
+                                "application.index.assigned_to"|trans({},'application')
+                            ],
+                            tableHeaderLabel: "application.index.non_verified_streams"|trans({},'application'),
+                            hiddenRowMinIndex: 2,
+                            streamRows: validationTrackStreams,
+                            assignments: assignments,
+                            tableName: streamsWithoutVerificationTableName,
+                            assessmentId: assessment.id,
+                            activeTabIndex: 2,
+                            track : 'validation'
+                        } %}
+                    </div>
+                </div>
+                <div class="row" data-assessment-id="{{ assessment.id }}"
+                     data-table-name="{{ streamsInOrForImprovementTableName }}" {{ (app.request.cookies.has(streamsInOrForImprovementTableName)) ? (app.request.cookies.get(streamsInOrForImprovementTableName) == 'true' ? '' : 'hidden') : '' }} >
+                    <div class="col-lg-12 col-xl-10 offset-md-0 offset-xl-1">
+                        {% include 'application/index/partials/_streams_table.html.twig' with {
+                            cols: [
+                                "application.index.stream_weight"|trans({},'application'),
+                                "application.index.validated_by"|trans({},'application'),
+                                "application.index.status"|trans({},'application'),
+                                "application.index.score"|trans({},'application'),
+                                "application.index.assigned_to"|trans({},'application')
+                            ],
+                            tableHeaderLabel: "application.index.in_or_for_improvement_streams"|trans({},'application'),
+                            hiddenRowMinIndex: 2,
+                            streamRows: improvementTrackStreams,
+                            assignments: assignments,
+                            tableName: streamsInOrForImprovementTableName,
+                            assessmentId: assessment.id,
+                            activeTabIndex: 3,
+                            track : 'improvement'
+                        } %}
+                    </div>
+                </div>
+                <div class="row" data-assessment-id="{{ assessment.id }}"
+                     data-table-name="{{ completedStreamsTableName }}" {{ (app.request.cookies.has(completedStreamsTableName)) ? (app.request.cookies.get(completedStreamsTableName) == 'true' ? '' : 'hidden') : '' }} >
+                    <div class="col-sm-12 col-lg-10 offset-md-0 offset-lg-1">
+                        {% include 'application/index/partials/_streams_table.html.twig' with {
+                            cols: [
+                                "application.index.stream_weight"|trans({},'application'),
+                                "application.index.completed_by"|trans({},'application'),
+                                "application.index.score"|trans({},'application')
+                            ],
+                            tableHeaderLabel: "application.index.completed_streams"|trans({},'application') ,
+                            hiddenRowMinIndex: 2,
+                            streamRows: completedTrackStreams,
+                            assignments: assignments,
+                            tableName: completedStreamsTableName,
+                            assessmentId: assessment.id,
+                            activeTabIndex: 1,
+                            track : null
+                        } %}
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="mt-3">
+                <div class="row" data-assessment-id="{{ assessment.id }}"
+                     data-table-name="{{ streamsWithoutAnswerTableName }}" {{ (app.request.cookies.has(streamsWithoutAnswerTableName)) ? (app.request.cookies.get(streamsWithoutAnswerTableName) == 'true' ? '' : 'hidden') : '' }}>
+                    <div class="col-lg-10 col-xl-8 offset-md-0 offset-lg-1 offset-xl-2">
+                        {% include 'application/index/partials/_template_scope_table.html.twig' with {
+                            streamRows: evaluationTrackStreams,
+                            assessmentId: assessment.id,
+                        } %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% else %}
+        {{ include('application/shared/_no_current_project_message.html.twig') }}
+    {% endif %}
+
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('front/js/index.dashboard.js') }}"></script>
+{% endblock %}

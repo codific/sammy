@@ -1,0 +1,48 @@
+{% extends 'application/base_login.html.twig' %}
+
+{% block title %}{{ 'application.general.reset_password'|trans({}, 'application') }}{% endblock %}
+
+{% block body %}
+    <div class="d-flex align-items-center justify-content-center h-100">
+        {% if error %}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+        <div class="blankpage-form-field">
+            <div class="card p-4 border-top-left-radius-0 border-top-right-radius-0 password-reset-card">
+                <div class="text-center">
+                    <div class="icon-object border-slate-300 text-slate-300">
+                        <i class="icon-lock"></i>
+                    </div>
+                    <h5 class="content-group">
+                        <div>
+                            {{ 'application.general.sso_title'|trans({}, 'application') }}
+                        </div>
+                        <small class="display-block">{{ 'application.general.password_requirements'|trans({}, 'application') }}</small>
+                    </h5>
+                </div>
+                {{ form_start(form) }}
+                <div class="form-group form-group-feedback form-group-feedback-left">
+                    <div class="form-control-feedback">
+                        <i class="icon-lock2 text-muted"></i>
+                    </div>
+                    {{ form_widget(form.newPassword.first, {'attr': {'placeholder': 'application.general.password'|trans({}, 'application')}}) }}
+                    {{ form_errors(form.newPassword.first) }}
+                </div>
+                <div class="form-group form-group-feedback form-group-feedback-left">
+                    <div class="form-control-feedback">
+                        <i class="icon-lock2 text-muted"></i>
+                    </div>
+                    {{ form_widget(form.newPassword.second, {'attr': {'placeholder': 'application.general.repeat_password'|trans({}, 'application')}}) }}
+                    {{ form_errors(form.newPassword.second) }}
+                </div>
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block">
+                        {{ 'application.general.save_button'|trans({}, 'application') }}
+                    </button>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

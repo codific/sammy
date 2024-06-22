@@ -1,0 +1,28 @@
+{% extends 'application/base.html.twig' %}
+
+{% block body %}
+    <div class="offset-sm-2 col-sm-8">
+    <div class="card card-flat">
+        <div class="card-header bg-white">
+            <h6 class="card-title">
+                <i class="fa fa-handshake"></i> {{ 'application.general.toa_title'|trans({}, 'application') }}
+            </h6>
+        </div>
+        <div class="card-body">
+            {{ 'application.general.toa_text'|trans({}, 'application')|raw }}
+        </div>
+        <div class="card-footer text-center">
+            <div class="text-left w-100">
+                <a href='{{ path('app_login_logout', {'token' : csrf_token('logout')}) }}' class='btn btn-warning'><i class="fa fa-times-circle"></i> {{ 'application.general.decline'|trans({}, 'application') }}</a>
+            </div>
+            <div class="text-right w-100">
+                <form id="accept-toa" action="{{ path('app_dashboard_toa') }}" method="POST">
+                    <button type="submit" class='btn btn-success'><i class="fa fa-check-circle"></i> {{ 'application.general.accept'|trans({}, 'application') }}</button>
+                    <input type="hidden" name="term" value="accept">
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+
+{% endblock %}

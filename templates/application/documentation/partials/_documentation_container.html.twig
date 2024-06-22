@@ -1,0 +1,50 @@
+<div class="documentation-container">
+    <div class="p-2 text-center">
+        <div class="d-inline-block nav btn-group">
+            {% if not assessmentStream.assessment.project.isTemplate %}
+                <a data-toggle="tab" href="#tab-eg11-0" class="btn btn-pill btn-outline-primary documentation-tab-button"
+                   data-url="{{ path("app_documentation_documentation", {id: assessmentStream.id}) }}">
+                    <i class="fa fa-stamp mr-2"></i> {{ 'application.assessment.documentation'|trans({}, 'application') }}
+                </a>
+                <a data-toggle="tab" href="#tab-eg11-1" class="btn btn-pill btn-outline-primary timeline-tab-button"
+                   data-url="{{ path("app_documentation_documentation", {id: assessmentStream.id}) }}">
+                    <i class="fa fa-history mr-2"></i> {{ 'application.streams.tabs.timeline'|trans({}, 'application') }}
+                </a>
+            {% else %}
+                <a data-toggle="tab" href="#tab-eg11-1" class="btn btn-pill btn-outline-primary documentation-tab-button"
+                   data-url="{{ path("app_documentation_documentation", {id: assessmentStream.id}) }}">
+                    <i class="fa fa-history mr-2"></i> {{ 'application.assessment.reference'|trans({}, 'application') }}
+                </a>
+            {% endif %}
+        </div>
+        {% if not modalIsShownInNewWindow|default(false) %}
+            <div class="d-inline-block float-right">
+                {% if renderDocumentationContent|default(false) %}
+                    <button type="button" class="btn btn-outline-primary btn-sm ml-2 documentation-modal-popup"
+                            data-toggle="tooltip" data-trigger="hover" title="{{ 'application.streams.tabs.show_in_new_window'|trans({}, 'application') }}">
+                        <i class="far fa-window-restore"></i>
+                    </button>
+                    <button type="button" class="btn btn-outline-primary btn-sm ml-2 documentation-show-hide"
+                            data-toggle="tooltip" data-trigger="hover" title="{{ 'application.streams.tabs.show_hide'|trans({}, 'application') }}">
+                        <i class="fa fa-solid fa-chevron-down"></i>
+                    </button>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+    <div>
+        {% if renderDocumentationContent|default(false) %}
+            <div class="documentation-tabs tab-content">
+                <div class="tab-pane active documentation-tab" id="tab-eg11-0" role="tabpanel">
+                    {{ render(controller('App\\Controller\\Application\\DocumentationController::documentationPartial', {assessmentStream: assessmentStream})) }}
+                </div>
+                {% if not assessmentStream.assessment.project.isTemplate %}
+                    <div class="tab-pane timeline-tab {{ not modalIsShownInNewWindow|default(false) ? "timeline-tab-small-screen" }}" id="tab-eg11-1" role="tabpanel">
+                        {{ render(controller('App\\Controller\\Application\\ModelController::assessmentStreamTimeline', {assessmentStream: assessmentStream})) }}
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+    <input type="hidden" id="documentation-page-url" value="{{ path("app_documentation_documentation_page", {id: assessmentStream.id}) }}"/>
+</div>

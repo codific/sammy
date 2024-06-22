@@ -1,0 +1,9 @@
+{% extends 'error_base.html.twig' %}
+
+{% block body %}
+    <div class="text-center mb-3 mt-5">
+        <h1>Access Denied</h1>
+        <h5>The resource or page you are trying to access is forbidden.</h5>
+        <a href="{{ path('app_index') }}">return to the homepage</a>
+    </div>
+{% endblock %}

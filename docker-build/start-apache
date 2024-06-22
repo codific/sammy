@@ -1,0 +1,26 @@
+#!/bin/bash
+
+shopt -s nocasematch
+
+if [[ -z "$PUID" ]] ; then
+  MY_PUID=1000
+else
+  MY_PUID=${PUID}
+fi
+
+SYMFONY_CONSOLE=/var/www/bin/console
+if [[ -f "$SYMFONY_CONSOLE" ]]; then
+  php ${SYMFONY_CONSOLE} cache:clear
+  composer run-script --no-dev auto-scripts
+  php ${SYMFONY_CONSOLE} --no-interaction doctrine:migrations:migrate
+fi
+
+usermod -u ${MY_PUID} www-data \
+  && groupmod -g ${MY_PUID} www-data \
+  && chown -R www-data:www-data /var/www \
+  && chown -R www-data:www-data /var/log/cron
+
+shopt -u nocasematch
+
+service cron start
+apache2-foreground

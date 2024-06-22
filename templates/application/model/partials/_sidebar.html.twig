@@ -1,0 +1,67 @@
+{% set templateProject = false %}
+
+{% if assessmentStream is defined %}
+    {% set currentPractice = assessmentStream.stream.practice %}
+    {% set templateProject = assessmentStream.assessment.project.isTemplate %}
+{% endif %}
+
+<div class="app-sidebar sidebar-shadow sidebar-text-light {{ getThemeStyleForMetamodel() }}">
+    <div class="scrollbar-sidebar ps ps--active-y">
+        <div class="app-sidebar__inner">
+            <br>
+            <ul class="vertical-nav-menu metismenu">
+                {% for businessFunction in businessFunctions %}
+                    <li class="{{ currentPractice.businessFunction.id == businessFunction.id ? "mm-active" : "" }}">
+                        <a href="#" aria-expanded="true">
+                            <i class="metismenu-icon fa {{ businessFunction.icon == "" ? "fa-list-ol" : businessFunction.icon }}"> </i>
+                            {{ businessFunction.name }}
+                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                        </a>
+                        <ul class="mm-collapse {{ currentPractice.businessFunction.id == businessFunction.id ? "mm-show" : "" }}" style="">
+                            <div class="practice-scrollable-container">
+                                {% for practice in businessFunction.businessFunctionPractices %}
+                                    <li>
+                                        <a class="practice-menu {{ currentPractice.id == practice.id ? "mm-active" : "" }}"
+                                           href='{{ path("app_model_showPractice", {'id': practice.id}) }}'>
+                                            <div class='practice-name-div nav-link-text pl-3' data-boundary="window" title="{{ practice.name }}">{{ practice.name }}</div>
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </div>
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            {% set projectId = assessment.project.id ?? null %}
+            {% set dataUrlAttribute = "" %}
+            {% if projectId is not null %}
+                {% set dataUrlAttribute = path("app_reporting_overview", {id: projectId}) %}
+            {% endif %}
+            <a class="mt-5 mb-3 btn btn-light btn-primary btn-overview btn-block" data-toggle="modal" data-target="#overviewModal" {{ dataUrlAttribute }}>
+                <i class="fas fa-chart-line"></i>
+                <span class="button-responsive-text">
+                    {{ 'application.assessment.overview'|trans({}, 'application') }}
+                </span>
+            </a>
+            {% if currentPractice.businessFunction.metamodel.id == constant("App\\Utils\\Constants::SAMM_ID") and not templateProject %}
+                {% include 'application/model/partials/_sidebar.actions.html.twig' %}
+            {% endif %}
+
+            {% if is_granted('ROLE_AUDITOR') %}
+                <div class="form-check form-check-inline mt-2 audit-view-button">
+                    <label class="toggle-label text-white">External assessment</label>
+                    <div class="toggle btn ml-3 btn-light child-toggle stream-toggle {{ (app.request.cookies.has('audit-view-toggle')) ? (app.request.cookies.get('audit-view-toggle') == 'true' ? 'on' : 'off') : 'on' }} "
+                         data-toggle="toggle" role="button">
+                        <input class="form-check-input" type="checkbox" data-toggle="toggle" data-style="mr-1" checked>
+                        <div class="toggle-group">
+                            <label class="btn btn-primary toggle-on">On</label>
+                            <label class="btn btn-light toggle-off">Off</label>
+                            <span class="toggle-handle btn btn-light"></span>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

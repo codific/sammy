@@ -1,0 +1,33 @@
+{% set title = 'application.assessment.template_answer'|trans({}, 'application') ~ "<br>"%}
+{% set modalRemarks = false %}
+{% for remark in remarks %}
+    {% if remark.maturityLevelRemarks | length == 0 %}
+        {% set modalRemarks = true %}
+    {% else %}
+        {% for maturityLevelRemark in remark.maturityLevelRemarks %}
+            {% if maturityLevelRemark.maturityLevel.level == level %}
+                {% set modalRemarks = true %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endfor %}
+
+{% if modalRemarks == true %}
+    {% set title = title ~ "<br>" ~ 'Click to see remarks' %}
+{% endif %}
+
+{% if modalRemarks == true %}
+    <span class="reference-modal-pill activity-extra-info-modal-toggle" data-modal-tab="activity{{ templateName |replace({' ': '-'}) }}Guidance{{ activity.id }}" data-toggle="modal" data-target="#activityModal{{ activity.id }}">
+        <a class="badge badge-pill target-posture-answer pull-right z-index-1001"
+           data-toggle="tooltip" data-trigger="hover" data-html="true"
+           title="{{ title }}">
+            <i class="fas fa-bullseye"></i>
+        </a>
+    </span>
+{% else %}
+    <span class="badge badge-pill target-posture-answer pull-right z-index-1001"
+          data-toggle="tooltip" data-trigger="hover" data-html="true"
+          title="{{ title }}">
+        <i class="fas fa-bullseye"></i>
+    </span>
+{% endif %}

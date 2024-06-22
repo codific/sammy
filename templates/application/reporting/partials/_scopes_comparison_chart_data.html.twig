@@ -1,0 +1,6 @@
+<div id="scopes-comparison-data-container">
+    {% for projectId, projectStats in projectsPercentage1 %}
+        <input type="hidden" value="{{ projectStats['pct'] }}" data-assessment-id="{{ assessment.id }}" data-dataset="1" data-scope-id="{{ projectId }}"
+               data-current-project="{{ (projectId == assessment.project.id) }}" data-scope-compare-chart="true" data-scope-name="{{ projectStats['name'] }}">
+    {% endfor %}
+</div>

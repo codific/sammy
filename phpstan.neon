@@ -1,0 +1,42 @@
+includes:
+    - vendor/spaze/phpstan-disallowed-calls/disallowed-dangerous-calls.neon
+    - vendor/spaze/phpstan-disallowed-calls/disallowed-execution-calls.neon
+    - phar://phpstan.phar/conf/bleedingEdge.neon
+    - extra-phpstan-rules/rules.neon
+parameters:
+    level: 5
+    paths:
+        - src
+    excludePaths:
+            analyseAndScan:
+                - src/EventListener/EntityPreUpdateSubscriber.php
+                - src/Migrations/*
+                - src/Entity/User.php
+                - src/Repository/Abstraction/AbstractRepository.php
+                - src/Entity/Abstraction/AbstractEntity.php
+                - src/Interface/EntityInterface.php
+    disallowedFunctionCalls:
+            -
+                function: 'var_dump()'
+                message: 'use logger instead'
+            -
+                function: 'dd()'
+                message: 'use logger instead'
+            -
+                function: 'dump()'
+                message: 'use logger instead'
+            -
+                function: 'error_log()'
+                message: 'use the proper error logger'
+    ignoreErrors:
+            - '#Call to an undefined method Symfony\\Contracts\\Cache\\TagAwareCacheInterface::getItem#'
+            - '#Call to an undefined method Symfony\\Contracts\\Cache\\TagAwareCacheInterface::save#'
+            - "#^Property App\\\\Entity\\\\.* type mapping mismatch\\: .*.$#"
+
+
+    disallowedMethodCalls:
+            -
+                method: '*::redirect()'
+                message: 'use safeRedirect instead'
+
+    treatPhpDocTypesAsCertain: false

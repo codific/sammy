@@ -1,0 +1,52 @@
+/* This is custom file and it doesn't belong to the theme */
+
+.mobile-nav-flex {
+    display: flex;
+    flex-direction: column;
+}
+
+.app-header .app-header__content.auto-size {
+    height: auto;
+    max-width: 50%;
+    margin-left: 42vw;
+    padding-top: 2%;
+    background-color: #373738;
+}
+
+.app-header .header-mobile-open .app-header-right {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.mobile-nav-flex .user-menu-nav.user-menu-nav-mobile {
+    margin-left: 0;
+    margin-right: auto;
+    padding: 10px;
+}
+
+.app-header .header-mobile-open {
+    border-radius: 15px;
+}
+
+.mobile-nav-flex {
+    width: 100%;
+}
+
+.mobile-nav-flex li {
+    width: 100%;
+}
+
+.mobile-nav-flex .app-header-right .header-megamenu .nav-item {
+    width: 135%;
+}
+
+.mobile-nav-flex .app-header-right:nth-child(2) {
+    margin-left: auto;
+}
+
+
+@media (max-width: 991.98px) {
+    .app-main {
+        display: flex;
+    }
+}

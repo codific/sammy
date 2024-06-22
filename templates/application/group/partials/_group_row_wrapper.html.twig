@@ -1,0 +1,8 @@
+{# group \App\Entity\Group #}
+{% for group in groups %}
+    {% set parentId = group.parent is null ? "" : group.parent.id %}
+    {% include 'application/group/partials/_group_row.html.twig' %}
+
+    {% set childGroups = groupsByParent[group.id] ?? [] %}
+    {% include 'application/group/partials/_group_row_wrapper.html.twig' with {groups: childGroups, padding: padding + 40} %}
+{% endfor %}

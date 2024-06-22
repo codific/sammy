@@ -1,0 +1,281 @@
+{% set csrfToken = app.user ? csrf_token(app.user.id) : '' %}
+<div class="table-paginator-container">
+    <table class="mb-0 table table-hover projects-table">
+        <thead>
+        <tr>
+            <th>{{ 'application.project.metamodel'|trans({}, 'application') }}</th>
+            <th>{{ 'application.project.name'|trans({}, 'application') }}</th>
+            <th class="w-20">{{ 'application.project.description'|trans({}, 'application') }}</th>
+            <th class="text-center">{{ 'application.project.score'|trans({}, 'application') }}</th>
+            <th class="text-center">
+                {{ 'application.project.validation_threshold'|trans({}, 'application') }}
+                <i class="fa fa-question-circle" data-toggle="tooltip" data-trigger="hover"
+                   title="{{ 'application.project.validation_threshold_tooltip'|trans({}, 'application') }}"></i>
+            </th>
+            <th class="text-center">
+                {{ 'application.project.template'|trans({}, 'application') }}
+                <i class="fa fa-question-circle" data-toggle="tooltip" data-trigger="hover"
+                   title="{{ 'application.project.template_tooltip'|trans({}, 'application') }}"></i>
+
+            </th>
+            <th class="w-15">
+                {% if is_granted("ROLE_MANAGER") %}
+                    <div class="pull-right text-white">
+                      <span data-toggle="modal" data-target="#importToolboxModal">
+                            <a class="btn btn-info" data-toggle="tooltip" data-trigger="hover" title="{{ 'application.project.import_toolbox_tooltip'|trans({},'application') }}">
+                                <i class="fa fa-upload"></i>
+                                <i class="fas fa-file-excel"></i>
+                            </a>
+                        </span>
+                        <span id="addProject" data-toggle="modal" data-target="#addProjectModal">
+                            <a class="btn btn-success" data-toggle="tooltip" data-trigger="hover" title="{{ 'application.project.add_title_button'|trans({},'application') }}">
+                                <i class="fas fa-plus"></i> <i class="fas fa-briefcase"></i>
+                            </a>
+                        </span>
+                    </div>
+                {% endif %}
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {# project \App\Entity\Project #}
+        {% for project in projects.results %}
+            <tr>
+                <td>{{ project.metamodel }}</td>
+                <td>
+                    {% set projectName = project.name %}
+                    {% if is_granted("ROLE_MANAGER") %}
+                        {% if project.deletedAt is null %}
+                            <a href="#" class="editable" id="name" data-type="text" data-pk="{{ project.id }}" data-url="{{ path('app_project_ajaxmodify', {'id': project.id}) }}">
+                                {{ projectName }}
+                            </a>
+                        {% else %}
+                            <div class="text-danger" id="name" data-type="text" data-pk="{{ project.id }}">
+                                {{ projectName }}
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </td>
+                <td>
+                    {% set projectDescription = project.description %}
+                    {% if is_granted("ROLE_MANAGER") %}
+                        {% if project.deletedAt is null %}
+                            <a href="#" class="editable" id="description" data-type="textarea" data-pk="{{ project.id }}"
+                               data-url="{{ path('app_project_ajaxmodify', {'id': project.id}) }}">
+                                {{ (projectDescription is empty) ? "..." : projectDescription | nl2br }}
+                            </a>
+                        {% else %}
+                            <div class="text-danger" id="description" data-type="textarea" data-pk="{{ project.id }}">
+                                {{ (projectDescription is empty) ? "..." : projectDescription | nl2br }}
+                            </div>
+                        {% endif %}
+
+                    {% endif %}
+                </td>
+
+                <td class="text-center">
+                    <span class="text-success">
+                    {{ (projectScore[project.id] is defined) ? projectScore[project.id].arithmeticMean|number_format(2) : "0.00" }}</span>
+                    &nbsp;
+                    <span data-toggle="modal" data-target="#overviewModal">
+                        <a id="overview-project-{{ project.id }}"
+                           data-project="{{ project.id }}" data-url="{{ path('app_reporting_overviewPartial',{'id':project.id} ) }}"
+                           class="btn btn-light btn-primary btn-overview-project" data-toggle='tooltip' data-html="true"
+                           data-reload-score-url="{{ path("app_reporting_overviewPartial", {id: project.id}) }}"
+                           title="{{ 'application.assessment.overview'|trans({},'application') }}">
+                            <i class="fas fa-chart-line"></i>
+                        </a>
+                    </span>
+                </td>
+                
+                <td class="text-center">
+                    {% if project.deletedAt is null %}
+                        <a href="javascript:void(0);" class="editable" id="validationThreshold" data-type="number" data-step="0.01" data-pk="{{ project.id }}"
+                           data-url="{{ (project.deletedAt is null) ? path('app_project_ajaxmodify', {'id': project.id}) : "" }}">
+                            {{ project.validationThreshold }}
+                        </a>
+                    {% else %}
+                        <div class="text-danger" id="validationThreshold" data-type="number" data-step="0.01" data-pk="{{ project.id }}">
+                            {{ project.validationThreshold }}
+                        </div>
+                    {% endif %}
+                </td>
+
+                <td class="text-center">
+                    {% if project.deletedAt is null %}
+                        <a href="javascript:void(0);" style="width: 100%" class="editable2 editable-click editableShort" id="templateProject"
+                           data-type="select2"
+                           data-value="{{ project.templateProject is entityExists(true) ? project.templateProject.id : 0 }}"
+                           data-pk="{{ project.id }}"
+                           data-source="{{ path('app_project_ajaxindexTemplates', {'id' : project.id }) }}"
+                           data-url="{{ (project.deletedAt is null) ? path('app_project_ajaxmodify', {'id': project.id}) : "" }}">
+                            {% if project.templateProject is entityExists(true) %}
+                                <p class="mt-1 mb-1">
+                                    {{ project.templateProject }}
+                                </p>
+                            {% else %}
+                                <p class="mt-1 mb-1">
+                                    ___
+                                </p>
+                            {% endif %}
+                        </a>
+                    {% else %}
+                        <div style="width: 100%" class="text-danger" id="templateProject"
+                             data-type="select2"
+                             data-value="{{ project.templateProject is entityExists(true) ? project.templateProject.id : 0 }}"
+                             data-pk="{{ project.id }}"
+                             data-source="{{ path('app_project_ajaxindexTemplates', {'id' : project.id }) }}">
+                            {% if project.templateProject is entityExists(true) %}
+                                <p class="mt-1 mb-1">
+                                    {{ project.templateProject }}
+                                </p>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </td>
+
+                <td class="text-right">
+                    {% if projectsWithUserAccess[project.id] is defined and project.deletedAt is null and activeProject is defined and activeProject is not null and project.id is not same as activeProject.id %}
+                        <form method="POST" action="{{ path("app_switch_project", {id: project.id}) }}" class="d-inline-block">
+                            <button type="submit" class="btn btn-primary"
+                                    data-toggle="tooltip"
+                                    data-placement="top"
+                                    title="{{ 'application.assessment.start'|trans({},'application') }}"
+                                    data-original-title="{{ 'application.assessment.start'|trans({},'application') }} ">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <input type="hidden" name="token" value="{{ csrf_token('switch_project') }}">
+                        </form>
+                    {% endif %}
+                    {% if is_granted("ROLE_MANAGER") %}
+                        <span data-toggle="modal" data-target="#add-users-{{ project.id }}">
+                            <button class="btn btn-primary"
+                                    data-toggle="tooltip" data-placement="top"
+                                    title="{{ 'application.project.teams'|trans({},'application') }}"
+                                    data-original-title="{{ 'application.project.teams'|trans({},'application') }}">
+                            <i class="fa fa-users"></i>
+                            </button>
+                        </span>
+                        <div class="modal fade" id="add-users-{{ project.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-xl" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">
+                                            {{ 'application.project.manage_users_title'|trans({},'application') }}
+                                        </h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {{ 'application.project.manage_users_description'|trans({},'application') }}
+                                        <form class="mt-3" method="POST" action="{{ path("app_project_edit_groups", {id: project.id}) }}">
+                                            <fieldset class="form-group">
+                                                <div class="row">
+                                                    <legend class="col-sm-2 col-form-label">{{ 'application.project.teams'|trans({},'application') }}</legend>
+                                                    <div class="col-sm-10 mt-2">
+
+                                                        <div class="form-group">
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox" id="project-{{ project.id }}-all-project-groups"
+                                                                       class="custom-control-input checkbox-all" {{ (project.deletedAt is not null) ? "disabled" }}>
+                                                                <label class="custom-control-label"
+                                                                       for="project-{{ project.id }}-all-project-groups">{{ button_label|default('application.general.select_all'|trans({},'application')) }}</label>
+                                                            </div>
+                                                            <hr class="pull-left mt-1 mb-2">
+
+                                                            <div class="row">
+                                                                {% for group in allGroups %}
+                                                                    <div class="custom-control custom-checkbox inline-checkbox col-6">
+                                                                        <input type="checkbox" id="project-{{ project.id }}-group-{{ group.id }}" name="groupIds[]"
+                                                                               class="custom-control-input"
+                                                                               value="{{ group.id }}" {{ groupProjectData[project.id] is defined and group.id in groupProjectData[project.id] ? 'checked' : '' }}
+                                                                                {{ (project.deletedAt is not null) ? "disabled" }}>
+                                                                        <label class="custom-control-label" for="project-{{ project.id }}-group-{{ group.id }}">{{ group.name }}</label>
+                                                                    </div>
+                                                                {% endfor %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <input type="hidden" name="_token" value="{{ csrfToken }}">
+                                            <button class="btn btn-primary btn-sm" {{ (project.deletedAt is not null) ? "disabled" }}><i
+                                                        class="far fa-save"></i>&nbsp; {{ ('application.general.save_button')|trans }}
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% if project.deletedAt is null %}
+                            <span data-toggle="modal" data-target="#delete-{{ project.id }}">
+                                <button class="btn btn-danger text-white" data-toggle="tooltip" title="{{ 'application.project.delete_tooltip'|trans({},'application') }}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </span>
+                        {% else %}
+                            <span data-toggle="modal" data-target="#unarchive-scope-{{ project.id }}">
+                                <button class="btn btn-success"
+                                        data-toggle="tooltip" data-placement="top"
+                                        title="{{ 'application.project.unarchive'|trans({},'application') }}"
+                                        data-original-title="{{ 'application.project.unarchive'|trans({}, 'application') }}">
+                                <i class="fa fa-trash-restore"></i>
+                                </button>
+                            </span>
+                        {% endif %}
+
+                        <div class="modal fade" id="delete-{{ project.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">
+                                            {{ 'application.project.delete_text'|trans({"project": project.name|trim}, 'application') }}
+                                        </h4>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form method="post" action="{{ path("app_project_delete", app.request.query.all|merge({'id': project.id})) }}">
+                                            <input type="hidden" name="_method" value="DELETE">
+                                            <input type="hidden" name="_token" value="{{ csrfToken }}">
+                                            <button class="btn btn-default" data-dismiss="modal"><i
+                                                        class="far fa-times"></i>&nbsp; {{ 'application.general.cancel'|trans({},'application') }}</button>
+                                            <button class="btn btn-danger" type="submit">
+                                                <i class="fas fa-trash"></i>
+                                                &nbsp; {{ 'application.project.delete_button'|trans({},'application') }}</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="unarchive-scope-{{ project.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">
+                                            {{ 'application.project.restore_title'|trans({},'application') }}
+                                        </h4>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form method="post" action="{{ path("app_project_unarchive", app.request.query.all|merge({'id': project.id})) }}">
+                                            <input type="hidden" name="_method" value="POST">
+                                            <input type="hidden" name="_token" value="{{ csrfToken }}">
+                                            <button class="btn btn-default" data-dismiss="modal"><i
+                                                        class="far fa-times"></i>&nbsp; {{ 'application.general.cancel'|trans({},'application') }}</button>
+                                            <button class="btn btn-success" type="submit">
+                                                <i class="fas fa-trash-restore"></i>
+                                                &nbsp; {{ 'application.project.restore_button'|trans({},'application') }}</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% import "application/_pagination.html.twig" as pagination %}
+    {{ pagination.paginate('app_project_index', projects, queryParams) }}
+</div>

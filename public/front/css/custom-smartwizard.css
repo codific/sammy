@@ -1,0 +1,29 @@
+.forms-wizard li.current:not(li.active) em {
+    font-family: 'Linearicons-Free';
+    background: #3ac47d;
+    overflow: hidden; }
+.forms-wizard li.current:not(li.active) em::before {
+    width: 42px;
+    height: 42px;
+    font-size: 1.2rem;
+    line-height: 40px;
+    text-align: center;
+    display: block; }
+.forms-wizard li.current:not(li.active)::before {
+    background: #3ac47d; }
+
+.forms-wizard li.current:not(li.active)::after {
+    background: #dee2e6; }
+
+.inactiveLink {
+    pointer-events: none;
+    cursor: default;
+}
+
+.forms-wizard li{
+    padding: 0;
+}
+
+.forms-wizard li .nav-link{
+    padding: 1rem 0;
+}

@@ -1,0 +1,67 @@
+{% set path = app.request.get('_route') %}
+<ul class="header-megamenu nav menu">
+    <li class="nav-item {{ path starts with "app_dashboard_" ? 'active' : '' }}">
+        <a href="{{ path('app_dashboard_index') }}" class="nav-link">
+            <i class="nav-link-icon fa fa-tachometer-alt"></i>
+            <span class="{{ is_granted("ROLE_MANAGER") ? "header-responsive-navbar-label" }}">
+                {{ 'application.general.menu.dashboard'|trans({},'application') }}
+            </span>
+        </a>
+    </li>
+    <li class="nav-item {{ path starts with "app_evaluation" or path starts with "app_validation" or path starts with "app_improvement" or path starts with "app_audit"? 'active' : '' }}">
+        {% set title = 'application.general.menu.assessment'|trans({},'application') %}
+        {% if app.session.get('current.project.isTemplate') is defined and app.session.get('current.project.isTemplate') %}
+            {% set title = 'application.general.menu.target_posture'|trans({},'application') %}
+        {% endif %}
+        <a href="{{ path('app_model_showPractice') }}" class="nav-link">
+            <i class="nav-link-icon fa fa-tasks"></i>
+            <span class="{{ is_granted("ROLE_MANAGER") ? "header-responsive-navbar-label" }}">
+                {{ title }}
+            </span>
+        </a>
+    </li>
+    <li class="nav-item {{ path starts with "app_reporting_" ? 'active' : '' }}">
+        <a href="{{ path('app_reporting_index') }}" class="nav-link">
+            <i class="nav-link-icon fa fa-chart-pie"></i>
+            <span class="{{ is_granted("ROLE_MANAGER") ? "header-responsive-navbar-label" }}">
+                {{ 'application.general.menu.reporting'|trans({},'application') }}
+            </span>
+        </a>
+    </li>
+
+    {% if is_granted("ROLE_MANAGER") %}
+        <li class="nav-item {{ path starts with "app_project_" and path != "app_project_templates"  ? 'active' : '' }}">
+            <a href="{{ path('app_project_index') }}" class="nav-link">
+                <i class="nav-link-icon fa fa-briefcase"></i>
+                <span class="header-responsive-navbar-label">
+                     {{ 'application.general.menu.projects'|trans({},'application') }}
+                </span>
+            </a>
+        </li>
+        <li class="nav-item {{ path == "app_project_templates" ? 'active' : '' }}">
+            <a href="{{ path('app_project_templates') }}" class="nav-link">
+                <i class="nav-link-icon fa fa-bullseye"></i>
+                <span class="header-responsive-navbar-label">
+                     {{ 'application.general.menu.templates'|trans({},'application') }}
+                </span>
+            </a>
+        </li>
+        <li class="nav-item {{ path starts with "app_group_" ? 'active' : '' }}">
+            <a href="{{ path('app_group_index') }}" class="nav-link">
+                <i class="nav-link-icon fa fa-users"></i>
+                <span class="header-responsive-navbar-label">
+                    {{ 'application.general.menu.groups'|trans({},'application') }}
+                </span>
+            </a>
+        </li>
+
+        <li class="nav-item {{ path starts with "app_user_" ? 'active' : '' }}">
+            <a href="{{ path('app_user_index') }}" class="nav-link">
+                <i class="nav-link-icon fa fa-user"></i>
+                <span class="header-responsive-navbar-label">
+                    {{ 'application.general.menu.users'|trans({},'application') }}
+                </span>
+            </a>
+        </li>
+    {% endif %}
+</ul>

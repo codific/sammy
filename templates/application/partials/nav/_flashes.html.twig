@@ -1,0 +1,8 @@
+{# read and display all flash messages #}
+<div id="notifications-container" class="d-none">
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <input type="hidden" data-type="{{ label }}" value="{{ message }}" />
+        {% endfor %}
+    {% endfor %}
+</div>

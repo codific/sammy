@@ -1,0 +1,140 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters :
+  # symfony performance optimization for production
+  container.dumper.inline_factories : true
+  container.dumper.inline_class_loader : true
+  # /symfony performance optimization for production
+  admin_menus_file : '%kernel.project_dir%/config/admin_menus.yaml'
+  locale : 'en'
+  # This parameter defines the codes of the locales (languages) enabled in the application
+  app_locales : en
+  session.timeout : 10800 # in seconds, kill session no matter what after this amount of time (php session timeout is skipped)
+  session.extend_timeout : 1800 # in seconds, number of seconds before session expiration to show the pop-up to extend it
+  phpmailer.smtp.host : '%env(resolve:PHPMAILER_SMTP_HOST)%'
+  phpmailer.smtp.port : '%env(resolve:PHPMAILER_SMTP_PORT)%'
+  phpmailer.smtp.username : '%env(resolve:PHPMAILER_SMTP_USERNAME)%'
+  phpmailer.smtp.password : '%env(resolve:PHPMAILER_SMTP_PASSWORD)%'
+
+services :
+  # default configuration for services in *this* file
+  _defaults :
+    autowire : true      # Automatically injects dependencies in your services.
+    autoconfigure : true # Automatically registers your services as commands, event subscribers, etc.
+    bind : # defines the scalar arguments once and apply them to any service defined/created in this file
+      $locales : '%app_locales%'
+      $defaultLocale : '%locale%'
+
+  # makes classes in src/ available to be used as services
+  # this creates a service per class whose id is the fully-qualified class name
+  App\ :
+    resource : '../src/*'
+    exclude : '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+  # controllers are imported separately to make sure services can be injected
+  # as action arguments even if you don't extend any base controller class
+  App\Controller\ :
+    resource : '../src/Controller'
+    tags : [ 'controller.service_arguments' ]
+
+  Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleTotpFactory :
+    arguments : [ "%scheb_two_factor.google.server_name%","%scheb_two_factor.google.issuer%","%scheb_two_factor.google.digits%" ]
+
+  App\Processors\MainLogProcessor :
+    tags :
+      - { name : monolog.processor }
+
+  monolog.formatter.main_log_formatter :
+    class : Monolog\Formatter\LineFormatter
+    arguments :
+      - "[%%datetime%%] [%%extra.custom_log%%] %%channel%%.%%level_name%%: %%message%% %%context%% %%extra%%\n"
+
+  monolog.processor.web :
+    class : Symfony\Bridge\Monolog\Processor\WebProcessor
+    tags :
+      - { name : monolog.processor }
+
+  deleted_entity_listener :
+    class : App\Event\DeletedEntityListener
+    arguments : [ "@doctrine.orm.entity_manager" ]
+    tags :
+      - { name : kernel.event_listener, event : kernel.request, method : onKernelRequest, priority : 21 }
+
+  App\Translator\Translator :
+    decorates : translator
+
+  Symfony\Component\HttpFoundation\Session\Storage\Handler\RedisSessionHandler :
+    arguments :
+      - '@Redis'
+      - { prefix : 'session:' }
+
+  Redis :
+    class : App\Handler\Redis
+    arguments :
+      - '%env(REDIS_HOST)%'
+      - '%env(REDIS_PORT)%'
+      - null
+      - 'sammy_'
+
+  app.cache.adapter.redis :
+    parent : 'cache.adapter.redis'
+    tags :
+      - { name : 'cache.pool', namespace : 'sammy_cache' }
+
+  App\EventSubscriber\EntityPreUpdateSubscriber :
+    tags :
+      - { name : 'doctrine.event_subscriber', connection : 'default' }
+
+  App\EventSubscriber\CsrfAttributeSubscriber :
+    arguments :
+      - '@security.csrf.token_manager'
+      - '@security.token_storage'
+    tags :
+      - { name : 'kernel.event_subscriber', connection : 'default' }
+
+  App\EventListener\ChangedPasswordListener :
+    tags :
+      - { name : 'doctrine.orm.entity_listener', event : 'preUpdate', entity : 'App\Entity\User' }
+      - { name : 'doctrine.orm.entity_listener', event : 'postUpdate', entity : 'App\Entity\User' }
+
+  App\EventListener\ProjectListener :
+    arguments :
+      $projectDir : '%kernel.project_dir%'
+    tags :
+      - name : 'doctrine.event_listener'
+        event : 'postPersist'
+
+  Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactoryInterface :
+    alias : argument_metadata_factory
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+  App\Twig\Extensions :
+    arguments :
+      - '@router.default'
+    tags :
+      - { name : 'twig.extension' }
+
+
+  App\Twig\TotpCode :
+    arguments :
+      - '@security.token_storage'
+      - '@kernel'
+      - '@scheb_two_factor.security.google_totp_factory'
+      - "%totp_no_mfa_environments%"
+    tags :
+      - { name : 'twig.extension' }
+
+  App\Twig\Entity :
+    arguments :
+      - '@doctrine.orm.default_entity_manager'
+    tags :
+      - { name : 'twig.extension' }
+
+
+  Doctrine\Migrations\DependencyFactory :
+    alias : doctrine.migrations.dependency_factory

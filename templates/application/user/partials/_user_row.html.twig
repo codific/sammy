@@ -1,0 +1,77 @@
+<tr>
+    <td>
+        {% if user.id == app.user.id %}
+            <i class="fa fa-user-circle" data-toggle="tooltip" data-trigger="hover" title="{{ 'application.user.self'|trans({}, 'application') }}"></i>
+        {% endif %}
+        <span class="name-{{ user.id }}">{{ user.name }} {{ user.surname }}</span>
+    </td>
+    <td>
+        {{ user.email }}
+    </td>
+    <td class="text-center">
+        {{ userAssignments | length }}
+    </td>
+    <td class="text-center">
+        {% set emptySet = true %}
+        {% set icons = {"ROLE_MANAGER": "fa-user-tie",
+            "ROLE_EVALUATOR": "fa-list-ol",
+            "ROLE_VALIDATOR": "fa-certificate",
+            "ROLE_IMPROVER": "fa-arrow-alt-circle-up",
+            "ROLE_AUDITOR": "fa-eye" } %}
+        {% for role in user.getAllAssignableRoles() %}
+            {% if role in user.roles %}
+                <span data-toggle="modal" data-target="#userDetailsModal-{{ user.id }}">
+                    <button class="btn-icon btn-icon-only btn-pill btn btn-outline-secondary" data-toggle="tooltip" data-trigger="hover"
+                            title="{{ "application.user.non_admin_role_enum"|trans({"value": role}, 'application') }}">
+                        <i class="btn-icon-wrapper fab fas {{ icons[role] }}">
+                        </i>
+                    </button>
+                </span>
+                {% set emptySet = false %}
+            {% endif %}
+        {% endfor %}
+        {% if emptySet %}
+            <button class="btn-icon btn-icon-only btn-pill btn btn-outline-secondary" data-toggle="tooltip" data-trigger="hover"
+                    title="{{ 'application.user.readonly_user'|trans({}, 'application') }}">
+                <i class="btn-icon-wrapper fab fas fa-user-slash"></i>
+            </button>
+        {% endif %}
+    </td>
+    <td class="text-center">
+        <span id="editUserRoles" data-toggle="modal" data-target="#userDetailsModal-{{ user.id }}">
+            <button data-toggle="tooltip"
+                    title="{{ 'application.user.details_button'|trans({},'application') }}"
+                    class="btn btn-sm btn-primary btn-default">
+                <i class="fa fa-address-card"></i>
+            </button>
+        </span>
+        {% if user.id is not same as app.user.id %}
+            <span data-toggle="modal" data-target="#delete-{{ user.id }}">
+            <button class="btn btn-danger btn-sm text-white" data-toggle="tooltip" title="{{ 'application.user.delete_button'|trans }}">
+                <i class="fas fa-trash"></i>
+            </button>
+        </span>
+        {% endif %}
+        <div class="modal fade" id="delete-{{ user.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            {{ 'application.user.delete_text'|trans({"user": user|trim}) }}
+                        </h4>
+                    </div>
+                    <div class="modal-footer">
+                        <form method="post" action="{{ path("app_user_delete", app.request.query.all|merge({'id': user.id})) }}">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" value="{{ csrfToken }}">
+                            <button class="btn btn-default" data-dismiss="modal"><i class="far fa-times"></i>&nbsp; {{ 'application.general.cancel'|trans({},'application') }}</button>
+                            <button class="btn btn-danger" type="submit">
+                                <i class="fas fa-trash"></i>
+                                &nbsp; {{ 'application.general.delete_button'|trans({},'application') }}</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </td>
+</tr>

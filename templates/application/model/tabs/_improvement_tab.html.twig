@@ -1,0 +1,128 @@
+{% block page %}
+    {% include 'application/documentation/partials/_documentation_container.html.twig' %}
+    <div class="card-body">
+        <div id="improvement_view">
+            {% if showRestrictedNote and readOnly %}
+                {% include 'application/model/tabs/_restricted_note.html.twig' %}
+            {% else %}
+                {% if improvement.status == constant('App\\Enum\\ImprovementStatus::IMPROVE') and readOnly and is_granted("ROLE_IMPROVER") %}
+                    <input type="button" class="btn btn-sm btn-success btn-edit-improvement"
+                           data-hide-text="{{ "application.assessment.improvement_edit_close"|trans({}, "application") }}"
+                           data-show-text="{{ "application.assessment.improvement_edit"|trans({}, "application") }}"
+                           value="{{ "application.assessment.improvement_edit"|trans({}, "application") }}">
+                {% endif %}
+                {% if improvement.status != constant('App\\Enum\\ImprovementStatus::WONT_IMPROVE') and is_granted("ROLE_IMPROVER") %}
+                    <div class="collapse {{ improvement.status.name == "DRAFT" ? "show" : "d-none" }}" id="collapseImprovementForm">
+                        <div id="formParent">
+                            <br>
+                            {{ form_start(improvementForm, {'action': path('app_improvement_start_improve', {'id': assessmentStream.id}), 'attr': {'class': (showAssignmentPopup) ? ' button-js-submit-popup-form improvement-form' : 'improvement-form'} }) }}
+                            <div class="row ml-1 mb-1">
+                                {{ 'application.assessment.improvement_target_date'|trans({}, 'application') }}:
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-3">
+                                {{ form_widget(improvementForm.targetDate) }}
+                            </div>
+                            <div class="row ml-1 mb-1 mt-2">
+                                {{ 'application.assessment.improvement_plan'|trans({}, 'application') }}:
+                            </div>
+                            {{ form_widget(improvementForm.plan) }}
+                            <br>
+                            {% if improvement.status.name == "NEW" or improvement.status.name == "DRAFT" %} {#  or improvement.status.name == "DRAFT" #}
+                                <div class="justify-content-center d-flex">
+                                    {{ form_widget(improvementForm[constant('App\\Form\\Application\\ImprovementType::SAVE_BUTTON')]) }}
+                                </div>
+                            {% endif %}
+                            {% include 'application/model/partials/_desired_progress.html.twig' with {buttonsEnabled: true} %}
+                            <div class="justify-content-center d-flex {{ readOnly ? "d-none" : "" }}" id="cancel-submit-wrapper">
+                                <div class="cancel-improvement m-1">
+                                    {{ form_widget(improvementForm[constant('App\\Form\\Application\\ImprovementType::CANCEL_BUTTON')]) }}
+                                </div>
+                                <div class="submit-improvement m-1">
+                                    {{ form_widget(improvementForm[constant('App\\Form\\Application\\ImprovementType::SUBMIT_BUTTON')]) }}
+                                </div>
+                            </div>
+                            {{ form_end(improvementForm) }}
+                        </div>
+                        {% include 'application/model/modals/_popup_assignment_modal.html.twig' %}
+                    </div>
+                    <div class="{{ readOnly or improvement.status == constant('App\\Enum\\ImprovementStatus::IMPROVE') or improvement.status == constant('App\\Enum\\ImprovementStatus::WONT_IMPROVE') or improvement.status.name == "DRAFT" ? "d-none" : "" }}">
+                        <div class="d-flex justify-content-center">
+                            <div id="improvementDecision" class="collapse show mr-1">
+                                <form action="{{ path('app_improvement_complete_improve', {'id': assessmentStream.id}) }}" method="post"
+                                      class="float-left ajax-form {{ (showAssignmentPopup) ? 'button-js-submit-popup-form' : '' }}">
+                                    <button id="complete-stream" class="btn btn-success prevent-double-click-improvement" data-toggle="tooltip" data-trigger="hover"
+                                            title="{{ 'application.assessment.complete_stream_info'|trans({}, 'application') }}">
+                                        <i class="fa fa-bullseye"></i> {{ 'application.assessment.complete_stream'|trans({}, 'application') }}
+                                    </button>
+                                </form>
+
+                                <span data-toggle="collapse" href="#improvementDecision">
+                            <a id="improveStreamBtn" data-toggle="collapse" href="#collapseImprovementForm" class="btn btn-primary float-right ml-1 prevent-double-click-improvement">
+                                <i class="fa fa-arrow-alt-circle-up"></i> {{ 'application.assessment.will_improve_button'|trans({}, 'application') }}
+                            </a>
+                        </span>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if improvement.status == constant('App\\Enum\\ImprovementStatus::IMPROVE') and readOnly %}
+                    <div class="improvement-data">
+                        <div class="row mb-3">
+                            <label class="form-label offset-sm-2 col-sm-2 col-form-label">
+                                {{ "application.assessment.improvement_target_date"|trans({},'application') }}:
+                            </label>
+                            <div class="col-sm-4 form-control">
+                                {{ improvement.targetDate|datePrettyPrint }}
+                            </div>
+                        </div>
+                        {% if improvement.plan != null %}
+                            <div class="row mb-3">
+                                <label class="form-label offset-sm-2  col-sm-2 col-form-label">
+                                    {{ "application.assessment.improvement_plan"|trans({},'application') }}:
+                                </label>
+                                <div class="col-sm-6 pt-2">
+                                    {{ improvement.plan | sanitize_html('liberal_sanitizer') }}
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% include 'application/model/partials/_desired_progress.html.twig' with {buttonsEnabled: false} %}
+                        {% if userHasImprovementRights %}
+                            <div class="mt-2 text-center">
+                                <input id="finish-improve"
+                                       type="button"
+                                       class="btn btn-sm btn-success"
+                                       value="{{ "application.assessment.finish_improvement"|trans({},'application') }}"
+                                       data-url="{{ path("app_improvement_finish_improvement", {id: improvement.id}) }}">
+                            </div>
+                        {% endif %}
+                    </div>
+                {% elseif improvement.status == constant('App\\Enum\\ImprovementStatus::WONT_IMPROVE') %}
+                    {% if userHasImprovementRights %}
+                        <div class="d-flex justify-content-center">
+                            <a class="pull-left mr-1">
+                                <input id="archive-stream"
+                                       type="button"
+                                       class="btn btn-sm btn-success prevent-double-click font-awesome"
+                                       value="&#xf187; {{ "application.assessment.archive_stream"|trans({},'application') }}"
+                                       data-url="{{ path("app_improvement_finish_improvement", {id: improvement.id}) }}">
+                            </a>
+                            <a class="pull-right ml-1">
+                                <input id="reactivate-stream"
+                                       type="button"
+                                       class="btn btn-sm btn-primary prevent-double-click font-awesome"
+                                       value="&#xf0aa; {{ "application.assessment.reactivate_stream"|trans({},'application') }}"
+                                       data-url="{{ path("app_improvement_reactivate_improvement", {id: improvement.id}) }}">
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="application/javascript" src="{{ asset('front/dependency/jquery/dist/jquery.min.js') }}"></script>
+    <script type="application/javascript" src="{{ asset('front/js/improvement_events.js') }}"></script>
+{% endblock %}
+

@@ -1,0 +1,84 @@
+.app-sidebar__inner {
+    padding: 2px 1.5rem 1.5rem;
+}
+
+.page-sidebar {
+    height: 100%;
+}
+
+.sidebar-wrapper {
+    padding-top: 60px;
+}
+
+.app-sidebar {
+    height: 100%;
+}
+
+.closed-sidebar .app-sidebar {
+    transition: all .3s ease;
+    width: 70px;
+    min-width: 70px;
+}
+
+.closed-sidebar:not(.closed-sidebar-mobile) .app-header .app-header__logo {
+    width: 70px;
+}
+
+@media (min-width: 991.98px) {
+    .closed-sidebar .app-sidebar:hover .btn-overview .button-responsive-text {
+        display: initial;
+        padding: initial;
+    }
+
+    .closed-sidebar .app-sidebar .btn-overview {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .closed-sidebar .app-sidebar .btn-overview .button-responsive-text {
+        display: none;
+    }
+
+    .closed-sidebar .app-sidebar:hover .toolbox-export .button-responsive-text {
+        display: initial;
+        padding: initial;
+    }
+
+    .closed-sidebar .app-sidebar .toolbox-export {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .closed-sidebar .app-sidebar .toolbox-export .button-responsive-text {
+        display: none;
+    }
+
+    .closed-sidebar .app-sidebar:hover .btn-clear-answers .button-responsive-text {
+        display: initial;
+        padding: initial;
+    }
+
+    .closed-sidebar .app-sidebar .btn-clear-answers {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .closed-sidebar .app-sidebar .btn-clear-answers .button-responsive-text {
+        display: none;
+    }
+
+    .closed-sidebar .app-sidebar:hover .samm-toggle-div {
+        visibility: visible;
+    }
+
+    .closed-sidebar .app-sidebar .samm-toggle-div {
+        visibility: hidden;
+    }
+}
+
+.closed-sidebar .app-sidebar .app-sidebar__inner ul li a.practice-menu {
+    height: 0;
+}
+.closed-sidebar .app-sidebar:hover .app-sidebar__inner ul li a.practice-menu {
+    height: initial;
+}

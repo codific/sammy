@@ -1,0 +1,6 @@
+{% if app.user.isAdmin %}
+    {% include 'admin/login/_mfa_form.html.twig' %}
+{% else %}
+    {% include 'application/login/_mfa_form.html.twig' %}
+{% endif %}
+

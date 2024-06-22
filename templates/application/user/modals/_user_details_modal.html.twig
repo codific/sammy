@@ -1,0 +1,111 @@
+<div class="modal fade" id="userDetailsModal-{{ user.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    {% if user.id == app.user.id %}
+                        <i class="fa fa-user-circle" data-toggle="tooltip" data-trigger="hover" title="{{ 'application.user.self'|trans({}, 'application') }}"></i>
+                    {% endif %}
+                    {% if user.externalId != 0 %}
+                        <i class="fa fa-passport" data-toggle="tooltip" data-trigger="hover" title="{{ 'application.user.external'|trans({}, 'application') }}"></i>
+                    {% endif %}
+                    {{ 'application.user.details_title'|trans({user: user.longName}, 'application') }}
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body table-responsive" style="max-height: 75vh;">
+                <form class="mt-3" method="post" action="{{ path("app_user_edituser", {id: user.id}) }}">
+                    <table class="table table-bordered table-striped" id="user">
+                        <tbody>
+                        <tr>
+                            <td class="w-15">{{ 'application.general.metadata'|trans({}, 'application') }}</td>
+                            <td>
+                                <i class="far fa-id-badge"></i> {{ 'application.general.id'|trans({}, 'application') }}: {{ user.id }}
+                                <span class="ml-5 mr-1" data-toggle="tooltip" data-trigger="hover" title="{{ 'application.general.created_at'|trans({}, 'application') }}"><i
+                                            class="fa fa-clock"></i> {{ user.createdAt|dateTimeToUserSettings("H:i")|replace({"-": "/"}) }}</span>
+                                <span class="ml-5 mr-1" data-toggle="tooltip" data-trigger="hover" title="{{ 'application.general.updated_at'|trans({}, 'application') }}"><i
+                                            class="fa fa-history"></i> {{ user.updatedAt|dateTimeToUserSettings("H:i")|replace({"-": "/"}) }}</span>
+                                <span class="ml-5 mr-1" data-toggle="tooltip" data-trigger="hover" title="{{ 'application.user.last_login'|trans({}, 'application') }}"><i
+                                            class="fa fa-sign-in-alt"></i> {{ user.lastLogin|dateTimeToUserSettings("H:i")|replace({"-": "/"}) }}</span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class='w-15'>{{ 'application.user.groups'|trans({}, 'application') }}</td>
+                            <td>
+                                {% set userIsMemberOfGroup = [] %}
+                                {% for groupUser in user.groupUsers %}
+                                    {% set groupKey = groupUser.group.id %}
+                                    {% set userIsMemberOfGroup = userIsMemberOfGroup|merge({('id-'~groupKey): true}) %}
+                                {% endfor %}
+                                <div class="form-group mb-0">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" id="user-{{ user.id }}-all-user-groups" class="checkbox-all custom-control-input">
+                                        <label class="custom-control-label"
+                                               for="user-{{ user.id }}-all-user-groups">{{ button_label|default('application.general.select_all'|trans({},'application')) }}</label>
+                                    </div>
+                                    <hr class="mt-1 mb-2">
+                                    <div class="row p-3">
+                                        {% for groupInOrganization in allGroups %}
+                                            {% set isUserMemberOfThisGroup = userIsMemberOfGroup['id-'~groupInOrganization.id] is defined %}
+                                            <div class="custom-control custom-checkbox col-6">
+                                                <input type="checkbox" id="ug-{{ user.id }}-{{ groupInOrganization.id }}" name="userGroups[]" class="custom-control-input"
+                                                       value="{{ groupInOrganization.id }}" {{ isUserMemberOfThisGroup ? 'checked' : '' }}>
+                                                <label class="custom-control-label" for="ug-{{ user.id }}-{{ groupInOrganization.id }}">
+                                                    {{ groupInOrganization.name }}
+                                                </label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='w-15'>{{ 'application.user.email'|trans({}, 'application') }}</td>
+                            <td>
+                                <a href="#" class="editable min-width" id="email" data-type="text" data-pk="{{ user.id }}"
+                                   data-url="{{ path('app_user_ajaxmodify', {'id': user.id}) }}">{{ user.email }}</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='w-15'>{{ 'application.user.name'|trans({}, 'application') }}</td>
+                            <td>
+                                <a href="#" class="editable min-width" id="name" data-type="text" data-pk="{{ user.id }}"
+                                   data-url="{{ path('app_user_ajaxmodify', {'id': user.id}) }}">{{ user.name }}</a>
+                                <a href="#" class="editable min-width" id="surname" data-type="text" data-pk="{{ user.id }}"
+                                   data-url="{{ path('app_user_ajaxmodify', {'id': user.id}) }}">{{ user.surname }}</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                {{ 'application.user.roles'|trans }}
+                                <i class="fa fa-question-circle" data-toggle="tooltip" data-html="true" title="{{ 'application.user.role_descriptions'|trans({}, 'application') }}"></i>
+                            </td>
+                            <td>
+                                {% for role in user.getAllAssignableRoles() %}
+                                    {{ loop.first ? "" : "&emsp;" }}
+                                    <div class="custom-control custom-checkbox inline-checkbox">
+                                        <input type="checkbox" id="mt-{{ user.id }}-{{ role|replace({"ROLE_": ""}) }}" name="userRoles[]" class="custom-control-input"
+                                               value="{{ role }}" {{ role in user.roles ? 'checked' : '' }} {{ role == "ROLE_MANAGER" and user == app.user ? "disabled" : "" }}>
+                                        <label class="custom-control-label" for="mt-{{ user.id }}-{{ role|replace({"ROLE_": ""}) }}">
+                                            {{ "application.user.non_admin_role_enum"|trans({"value": role}) }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <input type="hidden" name="_token" value="{{ csrfToken }}">
+                    <div class="text-right w-100">
+                        <button class="btn btn-primary btn-sm"><i class="far fa-save"></i>&nbsp; {{ ('application.general.save_button')|trans({}, "application") }}
+                        </button>
+                    </div>
+                </form>
+                {{ include ('application/user/partials/_assignments.html.twig') }}
+            </div>
+        </div>
+    </div>
+</div>

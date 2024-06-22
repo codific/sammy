@@ -1,0 +1,7 @@
+framework:
+  cache:
+    directory: '%kernel.cache_dir%/pools'
+    pools:
+      redis.cache:
+        adapter: app.cache.adapter.redis
+        provider: Redis
