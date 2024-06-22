@@ -60,11 +60,6 @@ $(document).ready(function() {
         });
     }
 
-    $("[data-hidden-content-target]").click(function() {
-        let target = $(this).attr("data-hidden-content-target");
-        $(target).toggleClass("d-none");
-    });
-
     $(".assignments-navbar").click(function(e) {
         e.preventDefault();
         setToggleTableCookies();

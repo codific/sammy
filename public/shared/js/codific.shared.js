@@ -65,7 +65,7 @@ $(document).ready(function() {
                             let href = $targetElement.attr('href');
                             // replaces the last part of the url with the selected value
                             // e.g. domain.com/group/175 => domain.com/group/142
-                            $targetElement.attr('href', href.replace(/\/[^\/]*$/, '/' + selectedValue));
+                            $targetElement.attr('href', href.replace(/\/[^\/]*$/, '/' + parseInt(selectedValue)));
                         } else {
                             $targetElement.hide();
                         }

@@ -79,11 +79,6 @@ $(document).ready(function () {
         $this.parent().find(".table-js-search-input").val("").trigger("keyup");
     });
 
-    $(document).on("change", ".custom-file input", function (e) {
-        for (var t = [], n = 0; n < $(this)[0].files.length; n++) t.push($(this)[0].files[n].name);
-        $(this).next(".custom-file-label").html(t.join(", "))
-    });
-
     $(document).on('click', '.copy-link-button', function (e) {
         e.preventDefault();
         let $this = $(this),
@@ -205,7 +200,7 @@ $(document).ready(function () {
                         if (parseInt($this.val())) {
                             $targetElement.show();
                             let href = $targetElement.attr('href');
-                            $targetElement.attr('href', href.replace(/\/[^\/]*$/, '/' + $this.val()));
+                            $targetElement.attr('href', href.replace(/\/[^\/]*$/, '/' + parseInt($this.val())));
                         } else {
                             $targetElement.hide();
                         }

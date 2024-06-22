@@ -1,5 +1,10 @@
 $(document).ready(function() {
     $('.groupFilterForm select').change(function(){
-        window.location.href = $(this).closest("form").attr('action')+'/'+$(this).val();
+        var id = parseInt($(this).val());
+        if (isNaN(id)) {
+            window.location.href = "/user/index/";
+        } else {
+            window.location.href = "/user/index/" + id;
+        }
     });
 });
