@@ -29,12 +29,12 @@ class FileTypeExtension extends AbstractTypeExtension
         return [FileType::class];
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefined(['file_property', 'file_route']);
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $fileUrl = null;
         $fileName = '';

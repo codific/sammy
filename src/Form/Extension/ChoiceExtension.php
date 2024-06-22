@@ -18,12 +18,12 @@ class ChoiceExtension extends AbstractTypeExtension
         return [ChoiceType::class, EntityType::class];
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefined(['enum_translation', 'placeholder_translation_parameters']);
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $enumTranslation = null;
         $placeholderTranslationParameters = [];

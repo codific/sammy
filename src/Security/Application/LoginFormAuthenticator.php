@@ -96,10 +96,6 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         if (!($form->isSubmitted() && $form->isValid())) {
             throw new CustomUserMessageAuthenticationException($this->translator->trans('application.general.login_invalid_credentials', [], 'application'));
         }
-
-        /* @phpstan-ignore-next-line Will be resolved in next deprecation-rules update */
-        $request->getSession()->set(Security::LAST_USERNAME, $form->get('email')->getData());
-
         return $form;
     }
 }

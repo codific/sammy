@@ -1,3 +1,13 @@
 #controllers:
 #    resource: ../src/Controller/
 #    type: attribute
+
+application:
+  resource: ../src/Controller/Application
+  type: attribute
+  prefix: '/'
+  name_prefix: 'app_'
+
+kernel:
+  resource: ../src/Kernel.php
+  type: attribute

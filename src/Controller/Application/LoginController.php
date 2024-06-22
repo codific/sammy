@@ -28,6 +28,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @Route(name="login_")
  */
+#[Route(name: 'login_')]
 class LoginController extends AbstractController
 {
     #[Route('/login', name: 'login', methods: ['GET', 'POST'])]
@@ -56,6 +57,7 @@ class LoginController extends AbstractController
     /**
      * @Route("/logout", name="logout")
      */
+    #[Route('/logout', name: 'logout')]
     public function logout()
     {
     }
@@ -67,6 +69,7 @@ class LoginController extends AbstractController
      *
      * @throws NonUniqueResultException
      */
+    #[Route('/password-reset-hash/{hash}', name: 'password-reset-hash')]
     public function passwordResetHash(
         string $hash,
         Security $security,
@@ -106,9 +109,7 @@ class LoginController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/reset-password", name="reset_password_request")
-     */
+    #[Route('/reset-password', name: 'reset_password_request')]
     public function resetPasswordRequest(
         Request $request,
         ResetPasswordService $passwordResetService,

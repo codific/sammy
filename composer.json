@@ -21,7 +21,7 @@
     "doctrine/migrations": "3.*",
     "doctrine/orm": "2.*",
     "egulias/email-validator": "4.*",
-    "endroid/qr-code-bundle": "4.*",
+    "endroid/qr-code-bundle": "5.*",
     "google/apiclient": "2.*",
     "guzzlehttp/guzzle": "7.*",
     "league/commonmark": "^2.4",
@@ -29,14 +29,14 @@
     "phpmailer/phpmailer": "6.*",
     "phpoffice/phpspreadsheet": "1.*",
     "predis/predis": "^2.2",
-    "scheb/2fa-backup-code": "6.*",
-    "scheb/2fa-bundle": "6.*",
-    "scheb/2fa-google-authenticator": "6.*",
-    "scheb/2fa-trusted-device": "6.*",
+    "scheb/2fa-backup-code": "7.*",
+    "scheb/2fa-bundle": "7.*",
+    "scheb/2fa-google-authenticator": "7.*",
+    "scheb/2fa-trusted-device": "7.*",
     "scienta/doctrine-json-functions": "4.*",
     "symfony/apache-pack": "*",
     "symfony/asset": "*",
-    "symfony/console": "5.4.*",
+    "symfony/console": "*",
     "symfony/css-selector": "*",
     "symfony/dom-crawler": "*",
     "symfony/dotenv": "*",
@@ -63,13 +63,13 @@
     "symfony/validator": "*",
     "symfony/web-link": "*",
     "symfony/yaml": "*",
-    "twig/extra-bundle": "^3.4",
-    "twig/markdown-extra": "^3.4",
+    "twig/extra-bundle": "3.*",
+    "twig/markdown-extra": "3.*",
     "twig/string-extra": "3.*",
     "twig/twig": "3.*"
   },
   "require-dev" : {
-    "dama/doctrine-test-bundle": "^7.2",
+    "dama/doctrine-test-bundle": "*",
     "friendsofphp/php-cs-fixer": "^3.23",
     "jetbrains/phpstorm-attributes": "1.*",
     "phpstan/extension-installer": "1.*",
@@ -150,7 +150,7 @@
   "extra" : {
     "symfony" : {
       "allow-contrib" : false,
-      "require" : "6.4.*"
+      "require" : "7.1.*"
     }
   }
 }

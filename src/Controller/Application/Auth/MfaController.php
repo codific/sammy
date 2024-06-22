@@ -21,6 +21,7 @@ class MfaController extends AbstractController
     /**
      * @Route("/auth/mfa/init", name="auth_mfa_init", methods={"GET"})
      */
+    #[Route('/auth/mfa/init', name: 'auth_mfa_init', methods: ['GET'])]
     public function initMfa(GoogleAuthenticatorInterface $googleAuthenticatorService, SessionInterface $session): Response
     {
         $user = $this->getUser();
@@ -53,6 +54,7 @@ class MfaController extends AbstractController
      *
      * @throws \Exception
      */
+    #[Route('/auth/mfa/verify', name: 'auth_mfa_verify', methods: ['POST'])]
     public function verifyMfa(
         Request $request,
         GoogleAuthenticatorInterface $googleAuthenticatorService,
@@ -91,6 +93,7 @@ class MfaController extends AbstractController
     /**
      * @Route("/auth/mfa/backup", name="auth_mfa_backup_codes", methods={"GET"})
      */
+    #[Route('/auth/mfa/backup', name: 'auth_mfa_backup_codes', methods: ['GET'])]
     public function backupCodes(): Response
     {
         $response = $this->render(
@@ -104,6 +107,7 @@ class MfaController extends AbstractController
     /**
      * @Route("/auth/mfa/reset", name="auth_mfa_reset", methods={"POST"})
      */
+    #[Route('/auth/mfa/reset', name: 'auth_mfa_reset', methods: ['POST'])]
     public function resetDevice(Request $request, EntityManagerInterface $entityManager): RedirectResponse
     {
         $user = $this->getUser();

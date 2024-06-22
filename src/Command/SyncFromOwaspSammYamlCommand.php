@@ -16,12 +16,14 @@ use App\Repository\MetamodelRepository;
 use App\Service\Processing\YamlModelsToDbRecordsSyncer;
 use Doctrine\DBAL\ConnectionException;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(name: 'app:sync-from-owasp-samm')]
 class SyncFromOwaspSammYamlCommand extends Command
 {
     protected static $defaultName = 'app:sync-from-owasp-samm';
