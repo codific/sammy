@@ -1,6 +1,6 @@
 #!/bin/sh
 GITHUB_REPO=https://github.com/owaspsamm/core.git
-BRANCH=develop
+BRANCH=main
 
 if [ ! -d "private/core" ]; then
     mkdir -p private

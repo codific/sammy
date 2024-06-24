@@ -31,7 +31,7 @@ class SammToolboxImporterService extends ExcelImporter
     private const VERSION_20_IMPORT_ANSWERS_COL_START = 4;
     private const MAX_DIFFERENT_CHARACTERS_IN_QUESTION_TEXT = 1;
     private const VERSION_CELL_ADDRESS = [2, 3];
-    private const SHEET_INDEX = 3;
+    private const SHEET_INDEX = 4;
     private const INTERVIEW_SHEET_INDEX = 1;
 
     public function __construct(

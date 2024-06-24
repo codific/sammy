@@ -136,7 +136,7 @@ class YamlModelsToDbRecordsSyncer extends ModelToDbSyncer
         $added = $modified = 0;
         foreach ($practiceLevelFiles as $practiceLevel) {
             $parsedYamlFile = Yaml::parseFile($practiceLevelsFolderPath.'/'.$practiceLevel);
-            $entityStatus = $this->syncPracticeLevel($parsedYamlFile['id'], $parsedYamlFile['practice'], $parsedYamlFile['maturityLevel'], $parsedYamlFile['objective']);
+            $entityStatus = $this->syncPracticeLevel($parsedYamlFile['id'], $parsedYamlFile['practice'], $parsedYamlFile['maturitylevel'], $parsedYamlFile['objective']);
             if ($entityStatus === ModelEntitySyncEnum::ADDED) {
                 ++$added;
             } elseif ($entityStatus === ModelEntitySyncEnum::MODIFIED) {
@@ -223,7 +223,7 @@ class YamlModelsToDbRecordsSyncer extends ModelToDbSyncer
                 $parsedYamlFile['activity'],
                 $parsedYamlFile['text'],
                 $parsedYamlFile['quality'],
-                $parsedYamlFile['answerSet'],
+                $parsedYamlFile['answerset'],
                 $parsedYamlFile['order']
             );
 
