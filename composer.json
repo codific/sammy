@@ -80,7 +80,7 @@
     "phpstan/phpstan-symfony": "^1.2",
     "phpunit/phpunit": "9.*",
     "psr/log": "^2",
-    "spaze/phpstan-disallowed-calls": "2.*",
+    "spaze/phpstan-disallowed-calls": "3.*",
     "squizlabs/php_codesniffer": "*",
     "symfony/browser-kit": "*",
     "symfony/debug-bundle": "*",
