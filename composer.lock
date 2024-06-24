@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c5c8e99c2b1ac9989c5d494c84e45992",
+    "content-hash": "3488578b65a101c4f4d940cffa75b519",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -5126,36 +5126,38 @@
         },
         {
             "name": "scienta/doctrine-json-functions",
-            "version": "4.4.0",
+            "version": "6.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ScientaNL/DoctrineJsonFunctions.git",
-                "reference": "64c3f8875a46d4f33f807a2d3260335c2f5f2eea"
+                "reference": "0d9c01ab012e628b845191d2c3b369855308c457"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ScientaNL/DoctrineJsonFunctions/zipball/64c3f8875a46d4f33f807a2d3260335c2f5f2eea",
-                "reference": "64c3f8875a46d4f33f807a2d3260335c2f5f2eea",
+                "url": "https://api.github.com/repos/ScientaNL/DoctrineJsonFunctions/zipball/0d9c01ab012e628b845191d2c3b369855308c457",
+                "reference": "0d9c01ab012e628b845191d2c3b369855308c457",
                 "shasum": ""
             },
             "require": {
+                "doctrine/dbal": "^3.2 || ^4",
+                "doctrine/lexer": "^2.0 || ^3.0",
+                "doctrine/orm": "^2.19 || ^3",
                 "ext-pdo": "*",
-                "php": "^7.1 || ^8.0"
+                "php": "^8.1"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^8.0 || ^9.0",
-                "doctrine/orm": "^2.7",
-                "phpunit/phpunit": "^8.0 || ^9.0"
+                "doctrine/coding-standard": "^9.0 || ^10.0 || ^11.0 || ^12.0",
+                "phpunit/phpunit": "^10.1",
+                "psalm/plugin-phpunit": "^0.18",
+                "slevomat/coding-standard": "~8",
+                "symfony/cache": "^5.4 || ^6.4 || ^7",
+                "vimeo/psalm": "^5.2",
+                "webmozart/assert": "^1.11"
             },
             "suggest": {
                 "dunglas/doctrine-json-odm": "To serialize / deserialize objects as JSON documents."
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "4.1-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Scienta\\DoctrineJsonFunctions\\": "src/"
@@ -5171,7 +5173,7 @@
                     "homepage": "https://github.com/ScientaNL/DoctrineJsonFunctions/contributors"
                 }
             ],
-            "description": "A set of extensions to Doctrine 2 that add support for json query functions.",
+            "description": "A set of extensions to Doctrine that add support for json query functions.",
             "keywords": [
                 "database",
                 "doctrine",
@@ -5186,9 +5188,9 @@
             ],
             "support": {
                 "issues": "https://github.com/ScientaNL/DoctrineJsonFunctions/issues",
-                "source": "https://github.com/ScientaNL/DoctrineJsonFunctions/tree/4.4.0"
+                "source": "https://github.com/ScientaNL/DoctrineJsonFunctions/tree/6.1.0"
             },
-            "time": "2021-09-17T11:20:14+00:00"
+            "time": "2024-04-10T07:24:09+00:00"
         },
         {
             "name": "spomky-labs/otphp",

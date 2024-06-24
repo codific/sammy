@@ -33,7 +33,7 @@
     "scheb/2fa-bundle": "7.*",
     "scheb/2fa-google-authenticator": "7.*",
     "scheb/2fa-trusted-device": "7.*",
-    "scienta/doctrine-json-functions": "4.*",
+    "scienta/doctrine-json-functions": "6.*",
     "symfony/apache-pack": "*",
     "symfony/asset": "*",
     "symfony/console": "*",
