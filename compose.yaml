@@ -1,0 +1,38 @@
+services:
+  app:
+    build:
+      context: .
+    restart: unless-stopped
+    environment :
+      - DATABASE_URL=mysql://sammy:sammy@db:3306/sammy?serverVersion=11.3.2-MariaDB
+      - REDIS_HOST=redis
+    volumes :
+      - app_data:/var/www/private
+    ports :
+      - 8000:80
+    depends_on:
+      - db
+      - redis
+  db:
+    image: mariadb:latest
+    restart: unless-stopped
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    environment:
+      - MARIADB_DATABASE=sammy
+      - MARIADB_USER=sammy
+      - MARIADB_PASSWORD=sammy
+      - MARIADB_ROOT_PASSWORD=example
+  redis:
+    image: redis
+    restart: unless-stopped
+    command: redis-server --save 60 1 --loglevel warning
+    sysctls:
+      - net.core.somaxconn=65535
+    volumes:
+      - redis_data:/data
+
+volumes:
+  app_data:
+  mariadb_data:
+  redis_data:
