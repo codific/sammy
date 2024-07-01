@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8abf4923defd283a96e355c6e1fbf79a",
+    "content-hash": "6200a921317aec11955212d7718df74f",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -7680,16 +7680,16 @@
         },
         {
             "name": "symfony/notifier",
-            "version": "v7.1.1",
+            "version": "v7.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/notifier.git",
-                "reference": "49543dd84ba9c1344f57fb090d06c128f2668220"
+                "reference": "17079e564159b77f5314b7130a7516677afc075e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/notifier/zipball/49543dd84ba9c1344f57fb090d06c128f2668220",
-                "reference": "49543dd84ba9c1344f57fb090d06c128f2668220",
+                "url": "https://api.github.com/repos/symfony/notifier/zipball/17079e564159b77f5314b7130a7516677afc075e",
+                "reference": "17079e564159b77f5314b7130a7516677afc075e",
                 "shasum": ""
             },
             "require": {
@@ -7738,7 +7738,7 @@
                 "notifier"
             ],
             "support": {
-                "source": "https://github.com/symfony/notifier/tree/v7.1.1"
+                "source": "https://github.com/symfony/notifier/tree/v7.1.2"
             },
             "funding": [
                 {
@@ -7754,7 +7754,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-05-31T14:57:53+00:00"
+            "time": "2024-06-28T08:00:31+00:00"
         },
         {
             "name": "symfony/options-resolver",
