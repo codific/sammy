@@ -64,7 +64,7 @@ class ExcelExporter
         $objWriter = new Xlsx($this->spreadsheetObject);
         $objWriter->setIncludeCharts(true);
 
-        $path = $this->httpKernel->getProjectDir().'/private/userfiles/exports';
+        $path = $this->httpKernel->getProjectDir().'/private/exports';
         if (!$this->fileSystem->exists($path)) {
             $this->fileSystem->mkdir($path);
         }
