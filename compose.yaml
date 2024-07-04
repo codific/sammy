@@ -7,6 +7,7 @@ services:
       - DATABASE_URL=mysql://sammy:sammy@db:3306/sammy?serverVersion=11.3.2-MariaDB
       - REDIS_HOST=redis
     volumes :
+      - ./logs:/var/www/var/log
       - app_data:/var/www/private
     ports :
       - 8000:80
