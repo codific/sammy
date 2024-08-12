@@ -3,9 +3,9 @@
 
 
 "@babel/runtime@^7.12.0":
-  version "7.24.7"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.24.7.tgz#f4f0d5530e8dbdf59b3451b9b3e594b6ba082e12"
-  integrity sha512-UwgBRMjJP+xv857DCngvqXI3Iq6J4v0wXmwc6sapg+zyhbwmQX67LUEFrkK5tbyJ30jGuG3ZvWpBiB9LCy1kWw==
+  version "7.25.0"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.25.0.tgz#3af9a91c1b739c569d5d80cc917280919c544ecb"
+  integrity sha512-7dRy4DwXwtzBrPbZflqxnvfxLF8kdZXPkhymtDeFoFqE6ldzjQFgYTtYIFARcLEYDrqfBfYcZt1WqFxRoyC9Rw==
   dependencies:
     regenerator-runtime "^0.14.0"
 
@@ -59,9 +59,9 @@ chartjs-plugin-datalabels@2.*:
   integrity sha512-14ZU30lH7n89oq+A4bWaJPnAG8a7ZTk7dKf48YAzMvJjQtjrgg5Dpk9f+LbjCF6bpx3RAGTeL13IXpKQYyRvlw==
 
 chartjs-plugin-trendline@^2.*:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/chartjs-plugin-trendline/-/chartjs-plugin-trendline-2.1.0.tgz#2c03c1bec329ff990b5b60de69e7de6ed631821b"
-  integrity sha512-AxVW1/rekllvNmz0Ef+Z88LQ+T2C4poRlOVizi6Z6PsWH3kieugPGO34dthfiGxuG5llKnwle1VDKEHHB8mlyw==
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/chartjs-plugin-trendline/-/chartjs-plugin-trendline-2.1.2.tgz#ba3aeeb656525746b19d1dddbf8ecd5df29a9545"
+  integrity sha512-8XmGSI4I1tS3Balm0SsYWQjy4eNtY9aDSpErlD/Z+Zqlhfzir/p8U9zn3ahHsNolfVL/s35MgZ5jM+BCbCGP7A==
 
 datatables.net-bs4@1.11.*:
   version "1.11.5"
@@ -111,9 +111,9 @@ datatables.net@1.13.11, datatables.net@^1.13.0:
     jquery "1.8 - 4"
 
 datatables.net@>=1.11.3:
-  version "2.0.8"
-  resolved "https://registry.yarnpkg.com/datatables.net/-/datatables.net-2.0.8.tgz#5199f0f2c26d8bba653af74cea035e9e07166768"
-  integrity sha512-4/2dYx4vl975zQqZbyoVEm0huPe61qffjBRby7K7V+y9E+ORq4R8KavkgrNMmIgO6cl85Pg4AvCbVjvPCIT1Yg==
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/datatables.net/-/datatables.net-2.1.3.tgz#e6c7d01164118b10749a4b0e55629b824eb42e37"
+  integrity sha512-emlF55eF4fhzOUuE+0dEFZCDbuhXqjvdZagW0bLXaU4nDesCWrjYXj0NdtHTKLhVYyfZhTlA8mEDL2Wa64U0ig==
   dependencies:
     jquery ">=1.7"
 
