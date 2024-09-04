@@ -8,6 +8,7 @@ use App\DTO\NewUserDTO;
 use App\Entity\Group;
 use App\Entity\User;
 use App\Enum\Role;
+use App\Event\Admin\Create\UserCreatedEvent;
 use App\Exception\BadGroupForUserSuppliedException;
 use App\Exception\InvalidUserDataException;
 use App\Exception\ZeroSheetsProvidedForImportException;
@@ -127,6 +128,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $user = $userService->registerUser($userDTO, $form->get('groups')->getData());
+                $this->eventDispatcher->dispatch(new UserCreatedEvent($request, $user));
                 $this->addFlash('success', $this->translator->trans('application.user.save_success', ['user' => trim("$user")], 'application'), true);
             } catch (BadGroupForUserSuppliedException) {
                 $this->addFlash('error', $this->translator->trans('application.user.bad_groups', [], 'application'));
