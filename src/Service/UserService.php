@@ -44,10 +44,6 @@ class UserService
         $this->entityManager->persist($user);
         $this->addUserToGroupIds($user, $groupIds);
         $this->entityManager->flush();
-
-//        TODO: Decide how to welcome user based on DTO $welcomeMailType prop
-//        $this->welcomeService->welcomeUser($user, true);
-
         return $user;
     }
 
