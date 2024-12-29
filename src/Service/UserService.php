@@ -170,11 +170,6 @@ class UserService
         return true;
     }
 
-    public function userAcceptToa(User $user): void
-    {
-        $user->setAgreedToTerms(true);
-        $this->entityManager->flush();
-    }
 
     public function setUserTimeZone(User $user, ?string $timezone): void
     {

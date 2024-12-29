@@ -71,7 +71,7 @@ class DocumentationController extends AbstractController
             if ($form->isSubmitted() && $form->isValid()) {
                 /** @var DocumentationDTO $documentationDTO */
                 $documentationDTO = $form->getData();
-                $documentationDTO->setText($sanitizer->sanitizeWordValue($documentationDTO->getText(), 'img', false));
+                $documentationDTO->setText($sanitizer->sanitizeValue($documentationDTO->getText()));
                 if ($documentationDTO->getRemarkType() === RemarkType::VALIDATION) {
                     $remarkService->saveValidationRemark($documentationDTO, $assessmentStream, $currentUser);
                 } else {

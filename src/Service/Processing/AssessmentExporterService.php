@@ -36,7 +36,7 @@ class AssessmentExporterService extends ExcelExporter
      * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
-    public function getToolbox(Assessment $assessment, Project $project = null): string
+    public function getToolbox(Assessment $assessment, ?Project $project = null): string
     {
         $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
         $reader->setIncludeCharts(true);

@@ -490,7 +490,7 @@ class DocumentationControllerTest extends AbstractWebTestCase
             ],
             "Test with inserted <a> tag " => [
                 "this is a test insert2 -> <a href=\"www.google.com\">click here </a>", // html insert
-                "this is a test insert2 -> ", // expected input after sanitzation
+                "this is a test insert2 -> <a href=\"www.google.com\">click here </a>", // expected input after sanitzation
             ],
         ];
     }

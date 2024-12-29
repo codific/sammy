@@ -222,7 +222,7 @@ class Extensions extends AbstractExtension
     /**
      * Return a pretty print version for date.
      */
-    public function datePrettyPrint(?\DateTime $dateTime, string $format = 'd-m-Y', string $defaultDate = null): string
+    public function datePrettyPrint(?\DateTime $dateTime, string $format = 'd-m-Y', ?string $defaultDate = null): string
     {
         if ($defaultDate === null) {
             $defaultDate = $this->translator->trans('application.general.no_date', [], 'application');
@@ -248,7 +248,7 @@ class Extensions extends AbstractExtension
      *
      * @return array
      */
-    public function unset(array $array = [], string $key = null)
+    public function unset(array $array = [], ?string $key = null)
     {
         if (isset($array[$key])) {
             unset($array[$key]);

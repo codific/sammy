@@ -115,7 +115,7 @@ class ProjectController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $groups = $form->get(ProjectType::GROUPS)->getData();
             $project = $projectService->createProject(
-                $sanitizer->sanitizeWordValue($sanitizer->sanitizeHtmlChars($project->getName()), 'script'),
+                $sanitizer->sanitizeValue($project->getName()),
                 $project->getDescription(),
                 $groups,
                 $project->getMetamodel()->getId(),
@@ -147,7 +147,7 @@ class ProjectController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $project = $projectService->createProject(
-                $sanitizer->sanitizeWordValue($sanitizer->sanitizeHtmlChars($project->getName()), 'script'),
+                $sanitizer->sanitizeValue($project->getName()),
                 $project->getDescription(),
                 [],
                 $project->getMetamodel()->getId(),

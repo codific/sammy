@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Processors;
 
 use Monolog\Attribute\AsMonologProcessor;
-use Monolog\DateTimeImmutable;
+use Monolog\JsonSerializableDateTimeImmutable;
 use Monolog\Level;
 use Monolog\LogRecord;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -13,8 +13,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 #[AsMonologProcessor]
 class MainLogProcessor
 {
-    public function __construct(
-    ) {
+    public function __construct()
+    {
     }
 
     public function __invoke(LogRecord $record): LogRecord
@@ -29,7 +29,7 @@ class MainLogProcessor
 
             // returns an empty record, which will be written, instead of the 'Uncaught PHP Exception AccessDeniedHttpException'
             return new LogRecord(
-                new DateTimeImmutable(true),
+                new JsonSerializableDateTimeImmutable(true),
                 'skip',
                 Level::Info,
                 '',

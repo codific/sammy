@@ -6,7 +6,7 @@ namespace App\Handler;
 
 class Redis extends \Redis
 {
-    public function __construct($host, $port, string $password = null, string $prefix = '')
+    public function __construct($host, $port, ?string $password, string $prefix = '')
     {
         parent::__construct();
         $this->connect($host, (int) $port);

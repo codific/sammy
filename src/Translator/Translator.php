@@ -39,7 +39,7 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
         return $this;
     }
 
-    public function trans(string $id, array $parameters = [], string $domain = null, string $locale = null): string
+    public function trans(string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
     {
         if ($domain === null) {
             $domain = $this->defaultDomain;
@@ -75,7 +75,7 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
         }
     }
 
-    public function getCatalogue(string $locale = null): MessageCatalogueInterface
+    public function getCatalogue(?string $locale = null): MessageCatalogueInterface
     {
         return $this->translator->getCatalogue($locale);
     }
@@ -86,8 +86,9 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
     }
 
     #[Pure]
- public function getCatalogues(): array
- {
-     return $this->translator->getCatalogues();
- }
+    public function getCatalogues(): array
+    {
+        return $this->translator->getCatalogues();
+    }
+
 }

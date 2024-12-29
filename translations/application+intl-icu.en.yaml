@@ -166,7 +166,7 @@ application :
     accept : Accept
     decline : Decline
     toa_title : SAMMY terms of use
-    toa_text : <div class="text-center toa-container"><iframe src="https://docs.google.com/document/d/e/2PACX-1vRf8fr1MnPgoI1D29JUSz2aJbL6_i6gi1hdNkQ0Gw4xjRB3UOKGxZAR6rZm8wXLrtNNu07d0OAeDoXH/pub?embedded=true" class="col-sm-12 h-100"></iframe></div>
+    toa_text : <div class="text-center toa-container">This is an open source version of SAMMY hosted on prem.</div>
     change_password_title : Change password
     sso_invalid_link : Your link is incorrect or it has expired. You can request a new password reset from this page.
     sso_expired_hash : Your password reset link has expired. You can request a new password reset link on this page.

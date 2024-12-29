@@ -87,7 +87,7 @@ class AbstractController extends SymfonyAbstractController
 
     protected function addFlash(string $type, mixed $message, bool $escapeHtml = false): void
     {
-        parent::addFlash($type, ($escapeHtml) ? $this->sanitizer->sanitizeHtmlChars($message) : $message);
+        parent::addFlash($type, $message);
     }
 
     public function safeRedirect(Request $request, string $fallbackRoute, ?string $url = null, array $attributes = [], int $status = 302): RedirectResponse

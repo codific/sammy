@@ -2,14 +2,13 @@ includes:
     - vendor/spaze/phpstan-disallowed-calls/disallowed-dangerous-calls.neon
     - vendor/spaze/phpstan-disallowed-calls/disallowed-execution-calls.neon
     - phar://phpstan.phar/conf/bleedingEdge.neon
-    - extra-phpstan-rules/rules.neon
 parameters:
     level: 5
     paths:
         - src
     excludePaths:
             analyseAndScan:
-                - src/EventListener/EntityPreUpdateSubscriber.php
+                - src/EventSubscriber/EntityPreUpdateSubscriber.php
                 - src/Migrations/*
                 - src/Entity/User.php
                 - src/Repository/Abstraction/AbstractRepository.php

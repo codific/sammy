@@ -93,15 +93,7 @@ class ScoreService
         return $this->getScoreArrayByAssessmentStreams($assessmentStreams, $metamodel);
     }
 
-    public function getProjectedNotValidatedScoresByAssessment(Assessment $assessment): array
-    {
-        $metamodel = $assessment->getProject()->getMetamodel();
-        $assessmentStreams = $this->assessmentStreamRepository->findActiveByAssessment($assessment);
-
-        return $this->getProjectedScoreArrayByAssessmentStreams($assessmentStreams, $metamodel);
-    }
-
-    public function getProjectedScoresByAssessment(Assessment $assessment, \DateTime $improvementLastDate = null): array
+    public function getProjectedScoresByAssessment(Assessment $assessment, ?\DateTime $improvementLastDate = null): array
     {
         $metamodel = $assessment->getProject()->getMetamodel();
 
@@ -127,7 +119,7 @@ class ScoreService
      *              securityPractice: array
      * }
      */
-    private function getProjectedScoreArrayByAssessmentStreams(array $assessmentStreams, Metamodel $metamodel, \DateTime $improvementLastDate = null): array
+    private function getProjectedScoreArrayByAssessmentStreams(array $assessmentStreams, Metamodel $metamodel, ?\DateTime $improvementLastDate = null): array
     {
         return $this->getCompleteScoreArrayByAssessmentStreams($assessmentStreams, $metamodel, improvementLastDate: $improvementLastDate)[1];
     }
@@ -157,32 +149,6 @@ class ScoreService
         }
 
         return $scoresArray;
-    }
-
-    // TODO: write test
-    public function getProjectedScoresIndexedByAssessmentStream(array $assessmentStreams): array
-    {
-        $scoreIndexedByAssessmentStreamAndQuestion = $this->getProjectedScoresIndexedByAssessmentStreamAndQuestion($assessmentStreams);
-        $result = [];
-        foreach ($scoreIndexedByAssessmentStreamAndQuestion as $assessmentStreamId => $scoreArray) {
-            $result[$assessmentStreamId] = 0;
-            foreach ($scoreArray as $answerValue) {
-                $result[$assessmentStreamId] += $answerValue;
-            }
-        }
-
-        return $result;
-    }
-
-    public function getStreamScoresIndexedByExternalId(Assessment $assessment): array
-    {
-        $allAssessmentStreams = $this->assessmentStreamRepository->findActiveByAssessment($assessment);
-        $streamScores = [];
-        foreach ($allAssessmentStreams as $assessmentStream) {
-            $streamScores[$assessmentStream->getStream()->getExternalId()] = $assessmentStream->getScore();
-        }
-
-        return $streamScores;
     }
 
     public static function calculateMeanScore(array $scores): float
@@ -240,7 +206,7 @@ class ScoreService
         if ($currentAssessment->getProject()->getTemplateProject() !== null) {
             $targetPostureScores = $this->getTargetPostureScoresByAssessment($currentAssessment);
             $result['Target'] = self::calculateMeanScore($targetPostureScores['businessFunction']);
-        }else{
+        } else {
             $result['Target'] = 'null';
         }
 
@@ -381,7 +347,7 @@ class ScoreService
      * this ensures we have a complete dataset that we can aggregate safely.
      * If Desired score doesn't exist it defaults to the current score.
      */
-    private function getScoreAndDesiredScoreByQuestionSQL(\DateTime $improvementLastDate = null): string
+    private function getScoreAndDesiredScoreByQuestionSQL(?\DateTime $improvementLastDate = null): string
     {
         $dateCheck = $improvementLastDate !== null ? "STR_TO_DATE(stage.target_date, '%Y-%m-%d')<= '{$improvementLastDate->format('Y-m-d H:i:s')}'" : 'true';
 
@@ -422,7 +388,7 @@ class ScoreService
      *     [0] => currentScores
      *     [1] => desiredScores
      */
-    private function getCompleteScoreArrayByAssessmentStreams(array $assessmentStreams, ?Metamodel $metamodel, \DateTime $improvementLastDate = null): array
+    private function getCompleteScoreArrayByAssessmentStreams(array $assessmentStreams, ?Metamodel $metamodel, ?\DateTime $improvementLastDate = null): array
     {
         $assessmentStream = reset($assessmentStreams);
         $assessment = $assessmentStream ? $assessmentStream->getAssessment() : null;

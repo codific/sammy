@@ -165,13 +165,6 @@ class UserServiceTest extends AbstractKernelTestCase
         self::assertCount(1, $this->entityManager->getRepository(Mailing::class)->findBy(['email' => $email]));
     }
 
-    public function testUserAcceptToa()
-    {
-        $user = (new User());
-        $this->userService->userAcceptToa($user);
-        self::assertTrue($user->getAgreedToTerms());
-    }
-
     /**
      * @dataProvider setUserTimeZoneProvider
      */

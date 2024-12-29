@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Controller\Application;
 
-use App\Event\Application\ToaAcceptedEvent;
 use App\Repository\AssessmentAnswerRepository;
 use App\Repository\AssessmentRepository;
 use App\Service\AssessmentStreamService;
@@ -27,9 +26,6 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/dashboard', name: 'dashboard_')]
 class DashboardController extends AbstractController
 {
-    private const ACCEPTED_TOA = 'accept';
-    private const DECLINED_TOA = 'decline';
-
     /**
      * @throws NonUniqueResultException
      */
@@ -88,37 +84,6 @@ class DashboardController extends AbstractController
         }
 
         return $this->render('application/index/index.html.twig', $viewVars);
-    }
-
-    #[Route('/toa', name: 'toa', methods: ['GET', 'POST'])]
-    public function toa(
-        Request $request,
-        Security $security,
-        UserService $userService
-    ): RedirectResponse|Response {
-        $currentUser = $this->getUser();
-
-        if ($security->isGranted('IS_IMPERSONATOR')) {
-            return $this->redirectToRoute('app_dashboard_index');
-        }
-
-        if ($currentUser->getAgreedToTerms() === true) {
-            return $this->redirectToRoute('app_dashboard_index');
-        }
-
-        if ($request->isMethod('POST')) {
-            $term = $request->request->get('term');
-            if ($term === self::ACCEPTED_TOA) {
-                $userService->userAcceptToa($currentUser);
-                $this->eventDispatcher->dispatch(new ToaAcceptedEvent($request, $currentUser));
-
-                return $this->redirectToRoute('app_dashboard_index');
-            } elseif ($term === self::DECLINED_TOA) {
-                return $this->redirectToRoute('app_login_logout');
-            }
-        }
-
-        return $this->render('application/index/toa.html.twig');
     }
 
     /**

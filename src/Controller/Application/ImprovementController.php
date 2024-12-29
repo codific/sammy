@@ -99,7 +99,7 @@ class ImprovementController extends AbstractController
 
         $data = $form->getData();
         $targetDate = $data['targetDate'];
-        $plan = $sanitizer->sanitizeWordValue($data['plan'], 'img');
+        $plan = $sanitizer->sanitizeValue($data['plan']);
         $newDesiredAnswers = json_decode($data['newDesiredAnswers'], true);
 
         $buttonName = $form->getClickedButton()?->getName();

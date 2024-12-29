@@ -129,7 +129,7 @@ readonly class AssessmentService
         return AssessmentStreamFilterService::getActiveStreams($assessment, $sorted); // TODO
     }
 
-    public function getProgress(Assessment $assessment = null, int $savedAnswers = null): float
+    public function getProgress(?Assessment $assessment = null, ?int $savedAnswers = null): float
     {
         // TODO: Maybe use the number of assessmentStreams with status new instead of counting the answers.
         //  We could also store the status of the assessment as this is useless most of the time and can be skipped
@@ -163,7 +163,7 @@ readonly class AssessmentService
         }
 
         $validation = new Validation();
-        $validation->setComment($assessmentStream->getLastEvaluationStage()->getComment());
+        $validation->setComment($assessmentStream->getLastEvaluationStage()?->getComment());
         $this->stageService->addNewStage($assessmentStream, $validation, $user);
         if ($autoValidate) {
             $this->autoValidate($assessmentStream, $user);
@@ -282,7 +282,7 @@ readonly class AssessmentService
     public function validateStream(
         AssessmentStream $assessmentStream,
         User $user,
-        string $remark = null,
+        ?string $remark = null,
         ValidationStatus $status = \App\Enum\ValidationStatus::ACCEPTED
     ): void {
         $validation = $assessmentStream->getCurrentStage();

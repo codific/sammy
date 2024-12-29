@@ -39,17 +39,10 @@ class SanitizerService
         $sanitizer = $this->strictSanitizer;
         if ($sanitizeType === self::LIBERAL) {
             $sanitizer = $this->liberalSanitizer;
-
-            return $sanitizer->sanitize($value);
-        } else {
-            // Sanitizer is removing < symbol We will allow it only if it is followed by a space
-            $value = str_replace('< ', '&lt; ', $value);
-
-            $sanitizedValue = $sanitizer->sanitize($value);
-
-            // The sanitizer is doing HTML encode, we will reverse the process on some symbols.
-            return str_ireplace(array_values(self::ALLOWED_HTML_SYMBOLS), array_keys(self::ALLOWED_HTML_SYMBOLS), $sanitizedValue);
         }
+        $sanitizedValue = $sanitizer->sanitize($value);
+        // The sanitizer is doing HTML encode, we will reverse the process on some symbols.
+        return str_ireplace(array_values(self::ALLOWED_HTML_SYMBOLS), array_keys(self::ALLOWED_HTML_SYMBOLS), $sanitizedValue);
     }
 
     public function sanitizeEntityValue(?string $value, string $propertyName, AbstractEntity $entity): ?string
@@ -60,29 +53,8 @@ class SanitizerService
 
         if (in_array($propertyName, $entity->getLessPurifiedFields(), true)) {
             return $this->sanitizeValue($value, self::LIBERAL);
+        } else {
+            return $this->sanitizeValue($value);
         }
-
-        return $this->sanitizeValue($value, self::STRICT);
-    }
-
-    public function sanitizeWordValue(string|null $value, string $word, bool $stripHtmlChars = true): string
-    {
-        if ($value === null || strlen($value) < 1) {
-            return '';
-        }
-
-        $sanitizedValue = str_ireplace($word, '', $value);
-
-        if ($stripHtmlChars) {
-            // strips html tags
-            $sanitizedValue = htmlspecialchars($sanitizedValue, ENT_QUOTES | ENT_HTML5, 'UTF-8', true);
-        }
-
-        return $sanitizedValue;
-    }
-
-    public function sanitizeHtmlChars(string $value): string
-    {
-        return htmlspecialchars($value, ENT_QUOTES | ENT_HTML5, 'UTF-8', true);
     }
 }

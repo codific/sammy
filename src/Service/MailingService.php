@@ -58,7 +58,7 @@ class MailingService
         $this->addCustom($user, $mailTemplateEntity, $extraPlaceholders, $attachment);
     }
 
-    public function addCustom(User $user, MailTemplate $template = null, array $extraPlaceholders = [], string $attachment = ''): void
+    public function addCustom(User $user, ?MailTemplate $template, array $extraPlaceholders = [], string $attachment = ''): void
     {
         $mailing = new Mailing();
         $mailing->setEmail($user->getEmail());
@@ -110,7 +110,7 @@ class MailingService
         string $emailReceiver,
         string $nameReceiver,
         ?User $user,
-        MailTemplate $template = null,
+        ?MailTemplate $template = null,
         array $extraPlaceholders = []
     ): void {
         $mailing = new Mailing();

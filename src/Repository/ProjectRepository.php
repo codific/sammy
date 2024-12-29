@@ -87,7 +87,7 @@ class ProjectRepository extends AbstractRepository
      */
     public function findOptimized(
         ?bool $template = false,
-        string $indexBy = null,
+        ?string $indexBy = null,
         string $searchTerm = '',
         int $page = 1,
         int $pageSize = 10,

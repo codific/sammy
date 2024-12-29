@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace App\EventSubscriber;
 
 use App\Service\SanitizerService;
+use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
 
+#[AsDoctrineListener(event: Events::prePersist)]
+#[AsDoctrineListener(event: Events::preUpdate)]
 class EntityPreUpdateSubscriber implements EventSubscriber
 {
     public function __construct(private readonly SanitizerService $sanitizeService)
