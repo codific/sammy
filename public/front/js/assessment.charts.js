@@ -122,12 +122,12 @@ function loadMultiDatasetCharts() {
                 color(CHART_COLORS.green).rgbString(),
                 color(CHART_COLORS.grey).rgbString(),,
                 ];
-
+            let numericScores = scores.map(value => Number(value));
             let dataSets = [
                 {
                     label: "Overall",
                     backgroundColor: backgroundColors,
-                    data: scores.slice(0,scores.length - 1),
+                    data: numericScores.slice(0,numericScores.length - 1),
                     trendlineLinear: {
                         colorMin: "red",
                         colorMax: "red",
