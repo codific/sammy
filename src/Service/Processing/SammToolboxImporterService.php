@@ -31,8 +31,8 @@ class SammToolboxImporterService extends ExcelImporter
     private const VERSION_20_IMPORT_ANSWERS_COL_START = 4;
     private const MAX_DIFFERENT_CHARACTERS_IN_QUESTION_TEXT = 1;
     private const VERSION_CELL_ADDRESS = [2, 3];
-    private const SHEET_INDEX = 4;
-    private const INTERVIEW_SHEET_INDEX = 1;
+    private const ROADMAP_SHEET_NAME = "Roadmap";
+    private const INTERVIEW_SHEET_NAME = "Interview";
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
@@ -80,14 +80,8 @@ class SammToolboxImporterService extends ExcelImporter
 
     private function isQuestionPresentOnAddress(int $col, int $row, Worksheet $sheet, Question $question): bool
     {
-        $isQuestionTheSame = $sheet->getCell([$col, $row])->getCalculatedValue() === $question->getText();
-        if (!$isQuestionTheSame) {
-            $isQuestionAlmostTheSame = levenshtein($question->getText(), (string)$sheet->getCell([$col, $row])->getCalculatedValue()) === self::MAX_DIFFERENT_CHARACTERS_IN_QUESTION_TEXT;
-
-            return $isQuestionAlmostTheSame;
-        }
-
-        return true;
+        $questionNameKey = $question->getNameKey();
+        return $sheet->getCell([1, $row])->getCalculatedValue() === $questionNameKey || $sheet->getCell([1, $row])->getCalculatedValue() === substr($questionNameKey, 0, 5).strrev(substr($questionNameKey, 5, 3)).substr($questionNameKey, 8);
     }
 
     private function importSamm(Spreadsheet $spreadsheet, bool $autoValidate, User $submittedUser, int $metamodelId, int $col, int $row, string $projectTitle)
@@ -99,8 +93,8 @@ class SammToolboxImporterService extends ExcelImporter
             $metamodelId
         );
 
-        $sheet = $spreadsheet->getSheet(self::SHEET_INDEX);
-        $interviewSheet = $spreadsheet->getSheet(self::INTERVIEW_SHEET_INDEX);
+        $sheet = $spreadsheet->getSheetByName(self::ROADMAP_SHEET_NAME);
+        $interviewSheet = $spreadsheet->getSheetByName(self::INTERVIEW_SHEET_NAME);
         $questions = $this->questionRepository->findByMetamodel($project->getMetamodel());
         $assessmentStreams = $this->assessmentStreamRepository->findAllStreamsForAssessment($project->getAssessment(), 'assessmentStream.stream');
         $answersForStream = [];
@@ -140,7 +134,7 @@ class SammToolboxImporterService extends ExcelImporter
             if ($interviewSheet->getCell([$interviewRemarksColumn, $interviewRemarksRow])->getCalculatedValue() !== null) {
                 $validationRemarksForStream[$streamId] .= $interviewSheet->getCell([$interviewRemarksColumn, $interviewRemarksRow])->getCalculatedValue()."<br/>";
             }
-            if ($answerFromSheet !== null && $answerFromSheet !== '') {
+            if ($answerFromSheet !== null && $answerFromSheet !== '' && $answerFromSheet !== 0) {
                 $answerWasFound = false;
                 foreach ($question->getAnswers() as $answer) {
                     if ($answer->getText() === $answerFromSheet) {
