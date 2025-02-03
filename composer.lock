@@ -14431,16 +14431,16 @@
         },
         {
             "name": "symfony/panther",
-            "version": "v2.1.1",
+            "version": "v2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/panther.git",
-                "reference": "ef9a6f2393ac9679af03a93d3f508e4aa65c15b5"
+                "reference": "b7e0f834c9046918972edb3dde2ecc4a20f6155e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/panther/zipball/ef9a6f2393ac9679af03a93d3f508e4aa65c15b5",
-                "reference": "ef9a6f2393ac9679af03a93d3f508e4aa65c15b5",
+                "url": "https://api.github.com/repos/symfony/panther/zipball/b7e0f834c9046918972edb3dde2ecc4a20f6155e",
+                "reference": "b7e0f834c9046918972edb3dde2ecc4a20f6155e",
                 "shasum": ""
             },
             "require": {
@@ -14448,19 +14448,19 @@
                 "ext-libxml": "*",
                 "php": ">=8.0",
                 "php-webdriver/webdriver": "^1.8.2",
-                "symfony/browser-kit": "^5.3 || ^6.0 || ^7.0",
-                "symfony/dependency-injection": "^5.3 || ^6.0 || ^7.0",
+                "symfony/browser-kit": "^5.4 || ^6.4 || ^7.0",
+                "symfony/dependency-injection": "^5.4 || ^6.4 || ^7.0",
                 "symfony/deprecation-contracts": "^2.4 || ^3",
-                "symfony/dom-crawler": "^5.3 || ^6.0 || ^7.0",
-                "symfony/http-client": "^5.3 || ^6.0 || ^7.0",
-                "symfony/http-kernel": "^5.3 || ^6.0 || ^7.0",
-                "symfony/process": "^5.3 || ^6.0 || ^7.0"
+                "symfony/dom-crawler": "^5.4 || ^6.4 || ^7.0",
+                "symfony/http-client": "^6.4 || ^7.0",
+                "symfony/http-kernel": "^5.4 || ^6.4 || ^7.0",
+                "symfony/process": "^5.4 || ^6.4 || ^7.0"
             },
             "require-dev": {
-                "symfony/css-selector": "^5.3 || ^6.0 || ^7.0",
-                "symfony/framework-bundle": "^5.3 || ^6.0 || ^7.0",
-                "symfony/mime": "^5.3 || ^6.0 || ^7.0",
-                "symfony/phpunit-bridge": "^5.3 || ^6.0 || ^7.0"
+                "symfony/css-selector": "^5.4 || ^6.4 || ^7.0",
+                "symfony/framework-bundle": "^5.4 || ^6.4 || ^7.0",
+                "symfony/mime": "^5.4 || ^6.4 || ^7.0",
+                "symfony/phpunit-bridge": "^7.2.0"
             },
             "type": "library",
             "extra": {
@@ -14500,7 +14500,7 @@
             ],
             "support": {
                 "issues": "https://github.com/symfony/panther/issues",
-                "source": "https://github.com/symfony/panther/tree/v2.1.1"
+                "source": "https://github.com/symfony/panther/tree/v2.2.0"
             },
             "funding": [
                 {
@@ -14516,7 +14516,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-12-03T22:17:31+00:00"
+            "time": "2025-01-30T13:11:55+00:00"
         },
         {
             "name": "symfony/phpunit-bridge",
@@ -14735,7 +14735,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
@@ -14750,6 +14750,6 @@
         "ext-simplexml": "*",
         "ext-zip": "*"
     },
-    "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "platform-dev": [],
+    "plugin-api-version": "2.3.0"
 }
