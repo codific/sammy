@@ -1,3 +1,14 @@
+# 🚨 The project has been moved under OWASP and it is an OWASP Project called Open SAMMY 🚨
+
+The repo has been moved to:
+https://github.com/OWASP/open-sammy
+
+Please update your local clones to the new repository:
+
+```sh
+git remote set-url origin https://github.com/OWASP/open-sammy
+```
+
 # SAMMY Open Source v2
 
 This repository hosts the open source version of SAMMY - the OWASP SAMM tool.
